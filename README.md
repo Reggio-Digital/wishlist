@@ -14,8 +14,10 @@ A privacy-focused, self-hosted wishlist manager that allows you to:
 ## Current Status
 
 **Implemented:**
-- Basic Express server
-- Health check endpoint
+- ✅ Basic Express server with health check
+- ✅ Database setup (SQLite + Drizzle ORM)
+- ✅ JWT-based authentication system
+- ✅ Admin login/logout/refresh endpoints
 
 **In Progress:**
 See [TODO.md](TODO.md) for the full feature roadmap.
@@ -70,9 +72,17 @@ TZ=America/New_York
 ```
 wishlist-app/
 ├── src/
-│   └── server.ts          # Main server file
+│   ├── server.ts          # Main server file
+│   ├── auth/              # Authentication system
+│   │   ├── routes.ts      # Auth endpoints
+│   │   ├── middleware.ts  # Auth middleware
+│   │   └── utils.ts       # JWT & password utilities
+│   └── db/                # Database layer
+│       ├── schema.ts      # Database schema
+│       └── index.ts       # DB connection & initialization
+├── drizzle/               # Database migrations
 ├── data/                  # SQLite database (created at runtime)
-├── uploads/              # Uploaded images (created at runtime)
+├── uploads/               # Uploaded images (created at runtime)
 ├── package.json
 └── tsconfig.json
 ```
@@ -80,7 +90,16 @@ wishlist-app/
 ## API Endpoints
 
 ### Currently Available
+
+**Health:**
 - `GET /api/health` - Health check
+
+**Authentication:**
+- `POST /api/auth/login` - Login with username/password
+- `POST /api/auth/logout` - Logout (clears tokens)
+- `POST /api/auth/refresh` - Refresh access token
+- `GET /api/auth/me` - Get current user info (requires auth)
+- `PATCH /api/auth/password` - Change password (requires auth)
 
 ### Planned
 See [TODO.md](TODO.md) for the full API specification.

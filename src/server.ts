@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import { initializeDatabase } from './db/index.js';
+import authRoutes from './auth/routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -10,6 +12,10 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
+
+// Routes
+app.use('/api/auth', authRoutes);
 
 // Health check endpoint
 app.get('/api/health', (_req, res) => {
