@@ -751,8 +751,6 @@ Provide an XML template for Unraid Community Applications:
 - [ ] Multi-language support (i18n)
 - [ ] Custom themes/branding
 - [ ] Integration with Amazon wishlist import
-- [ ] Calendar integration (birthdays, events)
-- [ ] Gift recommendations based on interests
 
 ## Success Metrics
 
