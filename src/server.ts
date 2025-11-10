@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import { initializeDatabase } from './db/index.js';
 
 // Load environment variables
 dotenv.config();
@@ -24,8 +25,16 @@ app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/api/health`);
-});
+// Initialize database and start server
+try {
+  initializeDatabase();
+  console.log('✅ Database initialized successfully');
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+  });
+} catch (error) {
+  console.error('❌ Failed to start server:', error);
+  process.exit(1);
+}
