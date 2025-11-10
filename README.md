@@ -24,8 +24,8 @@ A modern, self-hosted wishlist application that allows users to create and share
 - **URL scraping**: Cheerio or Puppeteer for fetching product data from URLs
 
 ### Frontend
-- **Framework**: SvelteKit or Next.js 14+ (App Router)
-- **Styling**: Tailwind CSS
+- **Framework**: SvelteKit or Next.js 15+ (App Router)
+- **Styling**: Tailwind CSS v4
 - **Components**: Shadcn/ui or similar modern component library
 - **Icons**: Lucide icons
 - **State Management**: Built-in framework state management
@@ -40,21 +40,15 @@ A modern, self-hosted wishlist application that allows users to create and share
 
 ## Core Features
 
-### 1. User Management
+### 1. Authentication
 
-#### Registration & Authentication
-- Sign up with email and password
-- Email verification (optional, requires SMTP)
-- Password reset flow (with/without SMTP)
-- Invite-only mode option (admin can generate invite links)
-- First user becomes admin automatically
+#### Single User Login
 
-#### Profile Management
-- Profile picture upload
-- Display name
-- Email address
-- Password change
-- Account deletion
+- One admin user configured via environment variables
+- Username and password set in `.env` file
+- Simple login page (no registration)
+- JWT session management
+- Optional password change via settings page
 
 ### 2. Wishlist Management
 
@@ -97,96 +91,20 @@ A modern, self-hosted wishlist application that allows users to create and share
 ### 3. Sharing & Collaboration
 
 #### Sharing Wishlists
-- Generate shareable link for each list
-- Share with specific users (if they have accounts)
-- Public link option (no login required to view)
-- Link expiration option
-- Revoke access anytime
 
-#### Claiming Items
-- Other users can "claim" items to avoid duplicate purchases
-- Claimed items show "claimed by" (name hidden from list owner)
-- Claimer can mark item as "purchased"
-- Claimer can unclaim if plans change
+- Toggle list between private (only you can see) and public
+- Public lists get a unique shareable link
+- No login required to view public lists
+- Anyone with the link can view and claim items
+- Can switch back to private anytime
+
+#### Claiming Items (Public Lists)
+
+- Anyone with the link can "claim" items to avoid duplicate purchases
+- Claimers enter their name when claiming (no account needed)
+- Claimed items show as "claimed" (name hidden from list owner)
+- Claimers get a unique URL to manage their claims (unclaim if plans change)
 - List owner cannot see who claimed what (surprise preserved)
-
-#### Suggestions
-- Users can suggest items to add to someone else's list
-- Three suggestion modes:
-  1. **Approval required**: Suggestee must approve before item appears
-  2. **Auto-approve visible**: Item appears, suggestee can edit/delete
-  3. **Auto-approve hidden**: Item appears only for others, hidden from suggestee (surprise gifts)
-
-### 4. Groups
-
-#### Group Management
-- Create groups (e.g., "Family", "Friends", "Work Team")
-- Each group has its own set of wishlists
-- Group roles:
-  - **Owner**: Full control, can delete group
-  - **Manager**: Can invite users, manage members
-  - **Member**: Can view and interact with lists
-
-#### Group Features
-- Invite users to group via email or link
-- Remove users from group
-- Switch between groups via UI
-- Each group is completely isolated (separate wishlists)
-
-### 5. Registry Mode
-
-Special mode for events like weddings, baby showers:
-- Single list for the event
-- Public link sharing (no login required to view)
-- Guests can claim items by entering:
-  - Email or identifier
-  - Name (optional)
-- No account creation needed for guests
-- No way to unclaim (prevents confusion)
-- Owner can see total claimed/unclaimed stats
-
-### 6. Administration
-
-#### Admin Panel
-- User management:
-  - View all users
-  - Disable/enable accounts
-  - Reset passwords
-  - Delete users
-- Group management:
-  - View all groups
-  - Delete groups
-  - View group members
-- System settings:
-  - Enable/disable public registration
-  - Configure SMTP settings
-  - Set default currency
-  - Configure session timeout
-  - Enable/disable features (suggestions, groups, etc.)
-- Statistics:
-  - Total users
-  - Total wishlists
-  - Total items
-  - Storage usage
-
-### 7. Optional Features
-
-#### SMTP Configuration (Optional)
-- Send email invites
-- Password reset emails
-- Notification emails (configurable):
-  - When someone claims your item
-  - When someone suggests an item
-  - When someone shares a list with you
-
-#### OAuth/SSO Support (Optional)
-- OpenID Connect support
-- Works with: Authelia, Authentik, Keycloak, Google
-- Configuration via admin panel
-
-#### Proxy Authentication (Advanced)
-- Header-based authentication
-- For advanced users with reverse proxy SSO
 
 ## User Interface Design
 
@@ -207,58 +125,42 @@ Special mode for events like weddings, baby showers:
 ### Key Pages/Views
 
 #### Public Pages
-1. **Landing page**: Clean hero section explaining the app
-2. **Login page**: Email/password or OAuth buttons
-3. **Signup page**: Registration form
-4. **Public wishlist view**: View shared list without login
 
-#### Authenticated Pages
-1. **Dashboard/Home**:
-   - Quick stats
+1. **Public wishlist view**: View shared list without login, claim items
+2. **Claim management page**: Manage your claims with unique token URL
+
+#### Authenticated Pages (Single User)
+
+1. **Login page**: Simple username/password form
+
+2. **Dashboard/Home**:
+   - Quick stats (total lists, total items, claimed items)
    - Recent activity
-   - Your lists overview
-   - Lists shared with you
+   - Your lists overview with quick actions
 
-2. **My Wishlists**:
+3. **My Wishlists**:
    - Grid or list view toggle
    - Create new list button (prominent)
    - Search/filter lists
-   - Quick actions (share, edit, delete)
+   - Quick actions (toggle public/private, edit, delete, copy link)
 
-3. **Wishlist Detail**:
-   - List header (name, description, stats)
+4. **Wishlist Detail**:
+   - List header (name, description, stats, public toggle)
    - Add item button (floating or fixed)
    - Items displayed as cards or table rows
    - Filter by claimed/unclaimed
    - Sort options (priority, price, date added)
 
-4. **Add/Edit Item**:
+5. **Add/Edit Item**:
    - Form with all item fields
    - Image upload with preview
-   - URL paste with auto-fetch button
-   - Save draft option
+   - Save option
 
-5. **Browse Others' Lists**:
-   - See lists shared with you
-   - Group members' lists
-   - Claim/unclaim items
-   - Add suggestions
-
-6. **Profile Settings**:
-   - Profile info
+6. **Settings**:
    - Change password
-   - Notification preferences
+   - Default currency
    - Theme selection
-
-7. **Groups**:
-   - List of your groups
-   - Create group
-   - Group switcher (dropdown or modal)
-
-8. **Admin Panel** (admin only):
-   - Dashboard with stats
-   - User management table
-   - System settings form
+   - App preferences
 
 ### UI Components
 
@@ -287,32 +189,14 @@ Special mode for events like weddings, baby showers:
 
 ## Data Models
 
-### User
-```javascript
-{
-  id: string (uuid),
-  email: string (unique),
-  passwordHash: string,
-  name: string,
-  profilePicture: string (url),
-  isAdmin: boolean,
-  emailVerified: boolean,
-  createdAt: timestamp,
-  updatedAt: timestamp
-}
-```
-
 ### Wishlist
 ```javascript
 {
   id: string (uuid),
-  userId: string (foreign key),
-  groupId: string (foreign key, nullable),
   name: string,
   description: string (nullable),
   isPublic: boolean,
-  publicToken: string (unique, for sharing),
-  isRegistry: boolean,
+  publicToken: string (unique, for sharing when public),
   createdAt: timestamp,
   updatedAt: timestamp
 }
@@ -333,50 +217,13 @@ Special mode for events like weddings, baby showers:
   imageUrl: string (nullable),
   notes: string (nullable, private to owner),
   isArchived: boolean,
-  isSuggestion: boolean,
-  suggestionStatus: enum ('pending', 'approved', 'hidden'),
-  suggestedBy: string (foreign key, nullable),
-  claimedBy: string (foreign key, nullable),
+  claimedByName: string (nullable, name entered by claimer),
+  claimedByToken: string (unique, for managing claims),
   claimedAt: timestamp (nullable),
   isPurchased: boolean,
   sortOrder: integer,
   createdAt: timestamp,
   updatedAt: timestamp
-}
-```
-
-### Group
-```javascript
-{
-  id: string (uuid),
-  name: string,
-  ownerId: string (foreign key),
-  inviteCode: string (unique),
-  createdAt: timestamp,
-  updatedAt: timestamp
-}
-```
-
-### GroupMember
-```javascript
-{
-  id: string (uuid),
-  groupId: string (foreign key),
-  userId: string (foreign key),
-  role: enum ('owner', 'manager', 'member'),
-  joinedAt: timestamp
-}
-```
-
-### WishlistShare
-```javascript
-{
-  id: string (uuid),
-  wishlistId: string (foreign key),
-  sharedWithUserId: string (foreign key, nullable),
-  sharedByUserId: string (foreign key),
-  canSuggest: boolean,
-  sharedAt: timestamp
 }
 ```
 
@@ -392,71 +239,35 @@ Special mode for events like weddings, baby showers:
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login
+
+- `POST /api/auth/login` - Login with username/password from env
 - `POST /api/auth/logout` - Logout
 - `POST /api/auth/refresh` - Refresh JWT token
-- `POST /api/auth/forgot-password` - Request password reset
-- `POST /api/auth/reset-password` - Reset password with token
-- `GET /api/auth/verify-email/:token` - Verify email
-
-### Users
-- `GET /api/users/me` - Get current user profile
-- `PATCH /api/users/me` - Update profile
-- `POST /api/users/me/avatar` - Upload profile picture
-- `DELETE /api/users/me` - Delete account
-- `PATCH /api/users/me/password` - Change password
+- `PATCH /api/auth/password` - Change password (auth required)
 
 ### Wishlists
 - `GET /api/wishlists` - Get user's wishlists
 - `POST /api/wishlists` - Create wishlist
 - `GET /api/wishlists/:id` - Get wishlist details
-- `PATCH /api/wishlists/:id` - Update wishlist
+- `PATCH /api/wishlists/:id` - Update wishlist (including isPublic toggle)
 - `DELETE /api/wishlists/:id` - Delete wishlist
-- `GET /api/wishlists/:id/share` - Generate share link
-- `DELETE /api/wishlists/:id/share` - Revoke share link
-- `GET /api/wishlists/shared` - Get wishlists shared with user
-- `GET /api/wishlists/public/:token` - Get public wishlist (no auth)
+- `GET /api/public/:token` - Get public wishlist by token (no auth required)
 
 ### Wishlist Items
-- `GET /api/wishlists/:id/items` - Get items in wishlist
-- `POST /api/wishlists/:id/items` - Add item to wishlist
+
+- `GET /api/wishlists/:id/items` - Get items in wishlist (auth required for private lists)
+- `POST /api/wishlists/:id/items` - Add item to wishlist (auth required)
 - `GET /api/items/:id` - Get item details
-- `PATCH /api/items/:id` - Update item
-- `DELETE /api/items/:id` - Delete item
-- `POST /api/items/:id/claim` - Claim item
-- `DELETE /api/items/:id/claim` - Unclaim item
-- `POST /api/items/:id/purchase` - Mark as purchased
-- `POST /api/items/scrape` - Scrape product data from URL
-- `POST /api/items/:id/image` - Upload item image
+- `PATCH /api/items/:id` - Update item (auth required)
+- `DELETE /api/items/:id` - Delete item (auth required)
+- `POST /api/public/items/:id/claim` - Claim item on public list (no auth, provide name)
+- `DELETE /api/public/claims/:claimToken` - Unclaim item using claim token (no auth)
+- `POST /api/items/:id/image` - Upload item image (auth required)
 
-### Suggestions
-- `POST /api/wishlists/:id/suggest` - Suggest item to list
-- `GET /api/suggestions/pending` - Get pending suggestions
-- `POST /api/suggestions/:id/approve` - Approve suggestion
-- `DELETE /api/suggestions/:id` - Reject suggestion
+### App Settings
 
-### Groups
-- `GET /api/groups` - Get user's groups
-- `POST /api/groups` - Create group
-- `GET /api/groups/:id` - Get group details
-- `PATCH /api/groups/:id` - Update group
-- `DELETE /api/groups/:id` - Delete group
-- `POST /api/groups/:id/invite` - Invite user to group
-- `POST /api/groups/join/:inviteCode` - Join group via invite
-- `GET /api/groups/:id/members` - Get group members
-- `DELETE /api/groups/:id/members/:userId` - Remove member
-- `PATCH /api/groups/:id/members/:userId` - Update member role
-
-### Admin
-- `GET /api/admin/users` - Get all users
-- `PATCH /api/admin/users/:id` - Update user (disable/enable)
-- `DELETE /api/admin/users/:id` - Delete user
-- `GET /api/admin/groups` - Get all groups
-- `DELETE /api/admin/groups/:id` - Delete group
-- `GET /api/admin/stats` - Get system statistics
-- `GET /api/admin/settings` - Get system settings
-- `PATCH /api/admin/settings` - Update system settings
+- `GET /api/settings` - Get app settings (auth required)
+- `PATCH /api/settings` - Update app settings (auth required)
 
 ## Docker Deployment
 
@@ -477,6 +288,8 @@ services:
     environment:
       # Required
       - ORIGIN=http://localhost:3000  # URL users will connect to
+      - ADMIN_USERNAME=admin          # Admin login username
+      - ADMIN_PASSWORD=changeme       # Admin login password (change this!)
 
       # Optional - Authentication
       - JWT_SECRET=your-secret-key    # Auto-generated if not set
@@ -484,23 +297,8 @@ services:
       - REFRESH_TOKEN_EXPIRY_DAYS=30  # Default: 30 days
 
       # Optional - Features
-      - REGISTRATION_ENABLED=true     # Allow public registration
       - DEFAULT_CURRENCY=USD          # Default: USD
       - MAX_FILE_SIZE_MB=10           # Default: 10MB
-
-      # Optional - SMTP (for emails)
-      - SMTP_HOST=smtp.gmail.com
-      - SMTP_PORT=587
-      - SMTP_SECURE=false
-      - SMTP_USER=your-email@gmail.com
-      - SMTP_PASSWORD=your-password
-      - SMTP_FROM=noreply@yourdomain.com
-
-      # Optional - OAuth (OpenID Connect)
-      - OAUTH_ENABLED=false
-      - OAUTH_ISSUER_URL=
-      - OAUTH_CLIENT_ID=
-      - OAUTH_CLIENT_SECRET=
 
       # Optional - Advanced
       - NODE_ENV=production
@@ -523,47 +321,10 @@ services:
 - Use Docker buildx for multi-platform builds
 
 ### Volume Mounts
-- `/app/data` - SQLite database file (`wishlist.db`)
-- `/app/uploads` - User uploaded images and product images
+- `/app/data` - SQLite database file (`wishlist.db`) and User uploaded images and product images. Perhaps we can have /app/data/database and /app/data/images.
 - `/app/backups` - Automated SQLite backups (optional)
 
-### Reverse Proxy Configuration
-
-#### Nginx Example
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name wishlist.yourdomain.com;
-
-    ssl_certificate /path/to/cert.pem;
-    ssl_certificate_key /path/to/key.pem;
-
-    # Increase buffer sizes for large headers
-    proxy_buffer_size 128k;
-    proxy_buffers 4 256k;
-    proxy_busy_buffers_size 256k;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-```
-
-#### Traefik Example (labels)
-```yaml
-labels:
-  - "traefik.enable=true"
-  - "traefik.http.routers.wishlist.rule=Host(`wishlist.yourdomain.com`)"
-  - "traefik.http.routers.wishlist.entrypoints=websecure"
-  - "traefik.http.routers.wishlist.tls.certresolver=letsencrypt"
-  - "traefik.http.services.wishlist.loadbalancer.server.port=3000"
-```
-
-### Unraid Template
+## Unraid Template
 Provide an XML template for Unraid Community Applications:
 - Icon URL
 - Description
@@ -696,19 +457,3 @@ Provide an XML template for Unraid Community Applications:
 - Docker Hub images
 - Unraid template
 - Blog post/announcement
-
----
-
-## Getting Started (For Developers)
-
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Copy `.env.example` to `.env`
-4. Run migrations: `npm run db:migrate`
-5. Start dev server: `npm run dev`
-6. Build for production: `npm run build`
-7. Build Docker image: `docker build -t wishlist .`
-
-## License
-
-Choose an appropriate open-source license (MIT, GPL, Apache 2.0)
