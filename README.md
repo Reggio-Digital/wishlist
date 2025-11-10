@@ -395,7 +395,6 @@ This app uses a simple, transparent approach to handling purchase visibility tha
        - `X-Robots-Tag` headers
      - **Note**: These are for privacy-conscious family/friend instances, not commercial use
    - **Advanced**:
-     - Backup/restore database
      - Clear cache
      - Export data
 
@@ -558,8 +557,6 @@ This app uses a simple, transparent approach to handling purchase visibility tha
 - `time_format` - Time format ("12h", "24h"), default: "12h"
 - `block_search_engines` - Boolean, adds noindex/nofollow meta tags to public pages, default: false
 - `block_ai_crawlers` - Boolean, blocks AI crawlers via robots.txt and meta tags, default: false
-- `backup_enabled` - Boolean, enable automatic database backups, default: true
-- `backup_retention_days` - Integer, days to keep backups, default: 7
 
 ## API Endpoints
 
@@ -629,7 +626,6 @@ services:
     volumes:
       - ./data:/app/data              # SQLite database
       - ./uploads:/app/uploads        # User uploaded images
-      - ./backups:/app/backups        # Database backups (optional)
     environment:
       # Required
       - ORIGIN=http://localhost:3000  # URL users will connect to
@@ -650,8 +646,6 @@ services:
       # Optional - Advanced
       - NODE_ENV=production
       - LOG_LEVEL=info               # debug, info, warn, error
-      - DATABASE_BACKUP_ENABLED=true # Auto backup SQLite
-      - BACKUP_RETENTION_DAYS=7      # Keep backups for 7 days
 
     restart: unless-stopped
     healthcheck:
@@ -669,7 +663,6 @@ services:
 
 ### Volume Mounts
 - `/app/data` - SQLite database file (`wishlist.db`) and User uploaded images and product images. Perhaps we can have /app/data/database and /app/data/images.
-- `/app/backups` - Automated SQLite backups (optional)
 
 ## Unraid Template
 Provide an XML template for Unraid Community Applications:
@@ -758,14 +751,6 @@ Provide an XML template for Unraid Community Applications:
 - [ ] Multi-language support (i18n)
 - [ ] Custom themes/branding
 - [ ] Integration with Amazon wishlist import
-- [ ] Calendar integration (birthdays, events)
-- [ ] Gift recommendations based on interests
-- [ ] Social features (follow users, discover lists)
-- [ ] API for third-party integrations
-- [ ] Backup/restore functionality
-- [ ] LDAP/Active Directory support
-- [ ] Two-factor authentication (2FA)
-- [ ] Webhooks for notifications
 
 ## Success Metrics
 
