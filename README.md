@@ -753,9 +753,6 @@ Provide an XML template for Unraid Community Applications:
 - [ ] Integration with Amazon wishlist import
 - [ ] Calendar integration (birthdays, events)
 - [ ] Gift recommendations based on interests
-- [ ] Social features (follow users, discover lists)
-- [ ] API for third-party integrations
-- [ ] Webhooks for notifications
 
 ## Success Metrics
 
