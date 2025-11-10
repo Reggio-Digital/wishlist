@@ -50,22 +50,26 @@ npm start
 
 ### Environment Variables
 
-Create a `.env` file:
+Create a `.env` file with your admin credentials:
 
 ```env
-PORT=3000
-NODE_ENV=development
-
-# Required for production
+# Required
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=changeme
-JWT_SECRET=your-secret-key
 
 # Optional
+PORT=3000
+NODE_ENV=development
 ACCESS_PASSWORD=
 DEFAULT_CURRENCY=USD
 TZ=America/New_York
+
+# JWT secrets are auto-generated and saved to data/secrets.json
+# Only set SECRET manually for multi-instance deployments
+# SECRET=your-secret-here
 ```
+
+**Note:** JWT secrets are automatically generated and persisted on first run. You don't need to configure them unless running multiple instances.
 
 ## Project Structure
 

@@ -1,9 +1,11 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
 
-// Get JWT secret from environment or use a default for development
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production';
-const REFRESH_SECRET = process.env.REFRESH_SECRET || 'dev-refresh-secret-change-in-production';
+// Initialize secrets (auto-generate if not provided)
+const secrets = initializeSecrets();
 
 // Token expiry times
 const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY_HOURS
@@ -12,6 +14,54 @@ const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY_HOURS
 const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY_DAYS
   ? `${process.env.REFRESH_TOKEN_EXPIRY_DAYS}d`
   : '30d';
+
+/**
+ * Initialize JWT secrets - auto-generate and persist if not provided in environment
+ */
+function initializeSecrets(): { secret: string; refreshSecret: string } {
+  const dataDir = path.join(process.cwd(), 'data');
+  const secretsFile = path.join(dataDir, 'secrets.json');
+
+  // If provided in environment, use those
+  if (process.env.SECRET) {
+    return {
+      secret: process.env.SECRET,
+      refreshSecret: process.env.REFRESH_SECRET || process.env.SECRET, // Use same secret if refresh not provided
+    };
+  }
+
+  // Ensure data directory exists
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+
+  // Try to load existing secrets
+  if (fs.existsSync(secretsFile)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(secretsFile, 'utf-8'));
+      console.log('✅ Loaded existing JWT secrets from file');
+      return data;
+    } catch (error) {
+      console.warn('⚠️  Failed to load secrets file, generating new ones');
+    }
+  }
+
+  // Generate new secrets
+  const newSecrets = {
+    secret: crypto.randomBytes(64).toString('hex'),
+    refreshSecret: crypto.randomBytes(64).toString('hex'),
+  };
+
+  // Save to file
+  try {
+    fs.writeFileSync(secretsFile, JSON.stringify(newSecrets, null, 2));
+    console.log('✅ Generated and saved new JWT secrets');
+  } catch (error) {
+    console.error('⚠️  Failed to save secrets file:', error);
+  }
+
+  return newSecrets;
+}
 
 export interface TokenPayload {
   username: string;
@@ -24,7 +74,7 @@ export interface TokenPayload {
 export function generateAccessToken(username: string): string {
   return jwt.sign(
     { username, type: 'access' } as TokenPayload,
-    JWT_SECRET,
+    secrets.secret,
     { expiresIn: TOKEN_EXPIRY }
   );
 }
@@ -35,7 +85,7 @@ export function generateAccessToken(username: string): string {
 export function generateRefreshToken(username: string): string {
   return jwt.sign(
     { username, type: 'refresh' } as TokenPayload,
-    REFRESH_SECRET,
+    secrets.refreshSecret,
     { expiresIn: REFRESH_TOKEN_EXPIRY }
   );
 }
@@ -45,7 +95,7 @@ export function generateRefreshToken(username: string): string {
  */
 export function verifyAccessToken(token: string): TokenPayload | null {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as TokenPayload;
+    const payload = jwt.verify(token, secrets.secret) as TokenPayload;
     if (payload.type !== 'access') {
       return null;
     }
@@ -60,7 +110,7 @@ export function verifyAccessToken(token: string): TokenPayload | null {
  */
 export function verifyRefreshToken(token: string): TokenPayload | null {
   try {
-    const payload = jwt.verify(token, REFRESH_SECRET) as TokenPayload;
+    const payload = jwt.verify(token, secrets.refreshSecret) as TokenPayload;
     if (payload.type !== 'refresh') {
       return null;
     }
