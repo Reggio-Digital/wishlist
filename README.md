@@ -252,7 +252,9 @@ This app uses a simple, transparent approach to handling purchase visibility tha
 - Admin can fully manage lists without spoilers
 
 **Detailed List View (when viewing as public visitor):**
-- Items display with full details including "✓ Claimed by [Name]" badges
+- **By default**: Shows only unclaimed items (claimed items hidden)
+- **Toggle "Show Claimed"**: Reveals claimed items with "✓ Claimed by [Name]" badges
+- **Claimer notes**: Hidden by default, click "💬 Note" button to reveal coordination messages
 - Visitors can see who claimed what to coordinate gift purchases
 - Prevents duplicate purchases
 
@@ -269,11 +271,13 @@ This app uses a simple, transparent approach to handling purchase visibility tha
 5. **Simpler Implementation**: No complex server-side filtering based on user identity, no half-measures that provide false security.
 
 **Alternative Considered (and Rejected):**
+- **Server-side filtering**: Backend could filter out `claimed: true` items when the list owner requests their own list. However, this adds complexity for marginal benefit—ultimately, if someone wants to spoil their surprise badly enough, they'd inspect the database directly (SQLite file is accessible in the Docker volume).
 
 **For Other Users (Gift Buyers):**
-- Always see full claim status to prevent duplicate purchases
-- Can see who claimed what (names are visible to other gift buyers)
-- No restrictions—they need this info to coordinate
+- Can toggle to see claimed items when needed
+- Can see who claimed what (names visible with "Show Claimed" enabled)
+- Can click to reveal coordination notes ("💬 Note" button)
+- No restrictions on claim data—they need this info to coordinate
 
 ## User Interface Design
 
