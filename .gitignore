@@ -4,6 +4,7 @@ node_modules/
 # Build output
 dist/
 build/
+src/public/css/output.css
 
 # Environment
 .env
