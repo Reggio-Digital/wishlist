@@ -108,6 +108,27 @@ wishlist-app/
 ### Planned
 See [TODO.md](TODO.md) for the full API specification.
 
+## Security
+
+### JWT Secrets
+- **Auto-generated**: Cryptographically secure 512-bit secrets using `crypto.randomBytes(64)`
+- **Persistent**: Saved to `data/secrets.json` with file permissions `0600` (owner read/write only)
+- **Gitignored**: `data/` directory is excluded from version control
+- **Rotation**: To rotate secrets, delete `data/secrets.json` and restart (invalidates all existing tokens)
+
+### Deployment Security Checklist
+- [ ] Set strong `ADMIN_PASSWORD` in production
+- [ ] Ensure `data/` directory is not publicly accessible
+- [ ] Use HTTPS in production (set `NODE_ENV=production`)
+- [ ] Consider setting `SECRET` manually for multi-instance deployments
+- [ ] Keep dependencies updated (`npm audit` and `npm update`)
+- [ ] Review file permissions on `data/` directory
+
+### Password Storage
+- Admin password is stored in environment variables (not hashed in this simple auth model)
+- Ensure `.env` file has restricted permissions: `chmod 600 .env`
+- Never commit `.env` file to version control
+
 ## Contributing
 
 This is a self-hosted project. See [TODO.md](TODO.md) for planned features and implementation details.

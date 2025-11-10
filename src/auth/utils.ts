@@ -46,18 +46,20 @@ function initializeSecrets(): { secret: string; refreshSecret: string } {
     }
   }
 
-  // Generate new secrets
+  // Generate new cryptographically secure secrets (512 bits each)
   const newSecrets = {
     secret: crypto.randomBytes(64).toString('hex'),
     refreshSecret: crypto.randomBytes(64).toString('hex'),
   };
 
-  // Save to file
+  // Save to file with restricted permissions
   try {
-    fs.writeFileSync(secretsFile, JSON.stringify(newSecrets, null, 2));
-    console.log('✅ Generated and saved new JWT secrets');
+    fs.writeFileSync(secretsFile, JSON.stringify(newSecrets, null, 2), { mode: 0o600 });
+    console.log('✅ Generated and saved new JWT secrets (cryptographically secure)');
+    console.log('🔒 Secrets saved to data/secrets.json (ensure data/ is in .gitignore)');
   } catch (error) {
     console.error('⚠️  Failed to save secrets file:', error);
+    console.error('⚠️  WARNING: Using in-memory secrets - tokens will be invalid after restart!');
   }
 
   return newSecrets;
