@@ -93,6 +93,68 @@ npm run build
 npm start
 ```
 
+### Docker Deployment (Recommended)
+
+The easiest way to deploy is using Docker Compose:
+
+**Quick Start:**
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd wishlist-app
+
+# 2. Create .env file
+cp .env.example .env
+# Edit .env and set ADMIN_USERNAME and ADMIN_PASSWORD
+
+# 3. Start with Docker Compose
+docker-compose up -d
+
+# 4. Access the application
+# Frontend: http://localhost:3001
+# Backend API: http://localhost:3000
+```
+
+**Production Deployment with Nginx:**
+```bash
+# 1. Uncomment nginx service in docker-compose.yml
+
+# 2. Configure SSL (optional but recommended)
+# See nginx/README.md for SSL setup instructions
+
+# 3. Update nginx.conf with your domain
+
+# 4. Start the stack
+docker-compose up -d
+
+# 5. Your app is now available at http://your-domain.com
+```
+
+**Docker Commands:**
+```bash
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Rebuild after code changes
+docker-compose up -d --build
+
+# Backup database
+docker cp wishlist-backend:/app/data/wishlist.db ./backup.db
+```
+
+**Environment Variables for Docker:**
+
+Set these in your `.env` file or in `docker-compose.yml`:
+- `ADMIN_USERNAME` - Admin login username
+- `ADMIN_PASSWORD` - Admin login password
+- `DEFAULT_CURRENCY` - Default currency (e.g., USD)
+- `TZ` - Timezone (e.g., America/New_York)
+
+See `.env.example` for all available options.
+
 ### Environment Variables
 
 Create a `.env` file with your admin credentials:
@@ -131,9 +193,16 @@ wishlist-app/
 ├── frontend/              # Frontend (Next.js)
 │   ├── app/               # App router pages
 │   ├── components/        # React components
-│   └── lib/               # API client & utilities
+│   ├── lib/               # API client & utilities
+│   └── Dockerfile         # Frontend Docker image
+├── nginx/                 # Reverse proxy configs
+│   ├── nginx.conf         # Nginx configuration
+│   └── Caddyfile.example  # Caddy configuration
 ├── drizzle/               # Database migrations
 ├── data/                  # SQLite database (runtime)
+├── Dockerfile             # Backend Docker image
+├── docker-compose.yml     # Docker orchestration
+├── .env.example           # Environment template
 ├── package.json           # Backend dependencies
 └── tsconfig.json          # Backend TypeScript config
 ```
