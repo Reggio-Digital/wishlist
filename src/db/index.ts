@@ -34,40 +34,11 @@ export function initializeDatabase() {
       console.log('⚠️  No migrations folder found - skipping migrations');
     }
 
-    // Initialize default settings if they don't exist
-    initializeDefaultSettings();
-
     return true;
   } catch (error) {
     console.error('❌ Database initialization failed:', error);
     throw error;
   }
-}
-
-// Initialize default settings
-function initializeDefaultSettings() {
-  const defaultSettings = [
-    { key: 'default_currency', value: JSON.stringify('USD') },
-    { key: 'timezone', value: JSON.stringify('America/New_York') },
-    { key: 'theme_toggle_enabled', value: JSON.stringify(true) },
-    { key: 'default_theme', value: JSON.stringify('auto') },
-    { key: 'accent_color', value: JSON.stringify('#3b82f6') },
-    { key: 'date_format', value: JSON.stringify('MM/DD/YYYY') },
-    { key: 'time_format', value: JSON.stringify('12h') },
-    { key: 'block_search_engines', value: JSON.stringify(false) },
-    { key: 'block_ai_crawlers', value: JSON.stringify(false) },
-  ];
-
-  const stmt = sqlite.prepare(`
-    INSERT OR IGNORE INTO settings (key, value, updated_at)
-    VALUES (?, ?, unixepoch())
-  `);
-
-  for (const setting of defaultSettings) {
-    stmt.run(setting.key, setting.value);
-  }
-
-  console.log('✅ Default settings initialized');
 }
 
 // Export schema for use in other files

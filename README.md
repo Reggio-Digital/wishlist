@@ -136,6 +136,11 @@ See [TODO.md](TODO.md) for the full API specification.
 - Ensure `.env` file has restricted permissions: `chmod 600 .env`
 - Never commit `.env` file to version control
 
+### Database Migrations
+- Migrations are in `drizzle/` directory
+- Run automatically on server start
+- Migration 0001 removes the old Settings table (now using env vars)
+
 ## Contributing
 
 This is a self-hosted project. See [TODO.md](TODO.md) for planned features and implementation details.

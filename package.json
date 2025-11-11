@@ -1,7 +1,7 @@
 {
   "name": "wishlist-app",
   "version": "0.1.0",
-  "description": "Self-hosted wishlist application with slug-based sharing",
+  "description": "Simple self-hosted wishlist app for families with honor-system claiming",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:css\"",
@@ -19,7 +19,10 @@
   "keywords": [
     "wishlist",
     "self-hosted",
-    "express"
+    "family",
+    "gift-registry",
+    "express",
+    "sqlite"
   ],
   "author": "",
   "license": "MIT",
