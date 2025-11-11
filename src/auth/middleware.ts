@@ -50,6 +50,43 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
 }
 
 /**
+ * Optional authentication middleware
+ * Attaches user to request if valid token is present, but doesn't fail if missing
+ */
+export function optionalAuthenticate(req: Request, res: Response, next: NextFunction) {
+  try {
+    // Get token from Authorization header or cookies
+    let token: string | undefined;
+
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    } else if (req.cookies && req.cookies.access_token) {
+      token = req.cookies.access_token;
+    }
+
+    // If no token, just continue without authentication
+    if (!token) {
+      next();
+      return;
+    }
+
+    // Verify token if present
+    const payload = verifyAccessToken(token);
+    if (payload) {
+      // Attach user to request if token is valid
+      req.user = { username: payload.username };
+    }
+
+    // Continue regardless of token validity
+    next();
+  } catch (error) {
+    // Don't fail on errors, just continue without authentication
+    next();
+  }
+}
+
+/**
  * Optional middleware to check for global access password
  */
 export function checkAccessPassword(req: Request, res: Response, next: NextFunction) {
