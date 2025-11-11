@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
-import * as schema from './schema';
+import * as schema from './schema.js';
 import path from 'path';
 import fs from 'fs';
 
@@ -42,4 +42,4 @@ export function initializeDatabase() {
 }
 
 // Export schema for use in other files
-export * from './schema';
+export * from './schema.js';
