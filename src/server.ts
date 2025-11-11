@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { initializeDatabase } from './db/index.js';
 import authRoutes from './auth/routes.js';
+import wishlistRoutes from './wishlists/routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -38,10 +39,13 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
-// Homepage
+// Homepage (must come before /:slug route)
 app.get('/', (_req, res) => {
   res.render('index', { title: 'Home - Wishlist App' });
 });
+
+// Wishlist routes (/:slug route must come after other routes)
+app.use(wishlistRoutes);
 
 // 404 handler
 app.use((_req, res) => {

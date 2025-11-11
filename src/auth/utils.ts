@@ -77,7 +77,7 @@ export function generateAccessToken(username: string): string {
   return jwt.sign(
     { username, type: 'access' } as TokenPayload,
     secrets.secret,
-    { expiresIn: TOKEN_EXPIRY }
+    { expiresIn: TOKEN_EXPIRY } as jwt.SignOptions
   );
 }
 
@@ -88,7 +88,7 @@ export function generateRefreshToken(username: string): string {
   return jwt.sign(
     { username, type: 'refresh' } as TokenPayload,
     secrets.refreshSecret,
-    { expiresIn: REFRESH_TOKEN_EXPIRY }
+    { expiresIn: REFRESH_TOKEN_EXPIRY } as jwt.SignOptions
   );
 }
 
