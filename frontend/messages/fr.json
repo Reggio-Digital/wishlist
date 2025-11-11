@@ -1,0 +1,99 @@
+{
+  "common": {
+    "appName": "Application de Liste de Souhaits",
+    "appDescription": "Application de liste de souhaits auto-hébergée pour les familles",
+    "tagline": "Créez des listes de souhaits, partagez-les avec vos amis et votre famille, et laissez-les réclamer des articles avec notre système basé sur l'honneur",
+    "openSource": "Open source • Auto-hébergé • Conçu pour les familles"
+  },
+  "home": {
+    "title": "Application de Liste de Souhaits",
+    "subtitle": "Application de liste de souhaits auto-hébergée pour les familles",
+    "adminLogin": "Connexion Admin",
+    "myClaims": "Mes Réclamations",
+    "feature1Title": "Créer des Listes",
+    "feature1Description": "Organisez vos souhaits en plusieurs listes avec des identifiants personnalisés et partagez-les facilement",
+    "feature2Title": "Réclamer des Articles",
+    "feature2Description": "Permettez aux autres de réclamer des articles avec notre système basé sur l'honneur - aucun compte requis",
+    "feature3Title": "Axé sur la Confidentialité",
+    "feature3Description": "Auto-hébergé et sécurisé. Vous possédez vos données et contrôlez qui voit quoi"
+  },
+  "admin": {
+    "dashboard": "Tableau de Bord",
+    "wishlists": "Listes de Souhaits",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "welcomeBack": "Bienvenue",
+    "loginPrompt": "Veuillez vous connecter à votre compte",
+    "totalWishlists": "Total des Listes",
+    "totalItems": "Total des Articles",
+    "claimedItems": "Articles Réclamés",
+    "recentActivity": "Activité Récente"
+  },
+  "wishlist": {
+    "title": "Liste de Souhaits",
+    "name": "Nom",
+    "slug": "Identifiant",
+    "description": "Description",
+    "create": "Créer une Liste",
+    "edit": "Modifier la Liste",
+    "delete": "Supprimer la Liste",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "noWishlists": "Aucune liste trouvée",
+    "createFirst": "Créez votre première liste pour commencer"
+  },
+  "item": {
+    "title": "Article",
+    "name": "Nom",
+    "description": "Description",
+    "price": "Prix",
+    "url": "URL",
+    "image": "Image",
+    "create": "Ajouter un Article",
+    "edit": "Modifier l'Article",
+    "delete": "Supprimer l'Article",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "claim": "Réclamer",
+    "unclaim": "Annuler la Réclamation",
+    "claimed": "Réclamé",
+    "available": "Disponible",
+    "noItems": "Aucun article trouvé",
+    "addFirst": "Ajoutez votre premier article à cette liste"
+  },
+  "claims": {
+    "title": "Mes Réclamations",
+    "noClaimsYet": "Vous n'avez pas encore réclamé d'articles",
+    "browseWishlists": "Parcourez les listes pour réclamer des articles",
+    "claimedBy": "Réclamé par",
+    "claimedOn": "Réclamé le",
+    "enterEmail": "Entrez votre email pour voir vos réclamations",
+    "emailPlaceholder": "votre.email@exemple.com",
+    "viewClaims": "Voir Mes Réclamations"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "general": "Paramètres Généraux",
+    "defaultCurrency": "Devise par Défaut",
+    "timezone": "Fuseau Horaire",
+    "language": "Langue",
+    "save": "Enregistrer les Paramètres",
+    "saved": "Paramètres enregistrés avec succès"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Veuillez entrer une adresse email valide",
+    "invalidUrl": "Veuillez entrer une URL valide",
+    "minLength": "La longueur minimale est de {min} caractères",
+    "maxLength": "La longueur maximale est de {max} caractères"
+  },
+  "errors": {
+    "generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "notFound": "Non trouvé",
+    "unauthorized": "Accès non autorisé",
+    "serverError": "Erreur du serveur. Veuillez réessayer plus tard."
+  }
+}

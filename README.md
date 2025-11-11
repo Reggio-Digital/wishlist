@@ -10,6 +10,7 @@ A privacy-focused, self-hosted wishlist manager designed for families. Simple an
 - Allow others to claim items (honor system - no account required)
 - Manage items with image URLs, prices, and purchase links
 - Single admin user model - keep it simple and secure
+- **Multi-language support** - Available in English, Spanish, French, and German
 - Lightweight and easy to self-host
 
 ## Current Status
@@ -28,6 +29,7 @@ A privacy-focused, self-hosted wishlist manager designed for families. Simple an
 - ✅ **Admin dashboard and management interface**
 - ✅ **Public wishlist viewing and claiming**
 - ✅ **Responsive design for mobile and desktop**
+- ✅ **Multi-language support (i18n) with Docker ENV configuration**
 
 **Next Up:**
 - 🚧 Docker deployment configuration
@@ -151,6 +153,7 @@ Set these in your `.env` file or in `docker-compose.yml`:
 - `ADMIN_USERNAME` - Admin login username
 - `ADMIN_PASSWORD` - Admin login password
 - `DEFAULT_CURRENCY` - Default currency (e.g., USD)
+- `DEFAULT_LANGUAGE` - Default language (en, es, fr, de - defaults to en)
 - `TZ` - Timezone (e.g., America/New_York)
 
 See `.env.example` for all available options.
@@ -169,6 +172,7 @@ PORT=3000
 NODE_ENV=development
 ACCESS_PASSWORD=
 DEFAULT_CURRENCY=USD
+DEFAULT_LANGUAGE=en
 TZ=America/New_York
 
 # JWT secrets are auto-generated and saved to data/secrets.json
@@ -177,6 +181,20 @@ TZ=America/New_York
 ```
 
 **Note:** JWT secrets are automatically generated and persisted on first run. You don't need to configure them unless running multiple instances.
+
+## Multi-Language Support
+
+The application supports multiple languages (English, Spanish, French, and German). See [I18N.md](I18N.md) for detailed information about:
+- Setting the default language via `DEFAULT_LANGUAGE` environment variable
+- Accessing the app in different languages via URL paths (e.g., `/es`, `/fr`, `/de`)
+- Adding new language translations
+- Translation file structure
+
+**Quick Example:**
+```bash
+# Set Spanish as default language
+DEFAULT_LANGUAGE=es docker-compose up -d
+```
 
 ## Project Structure
 
@@ -194,6 +212,7 @@ wishlist-app/
 │   ├── app/               # App router pages
 │   ├── components/        # React components
 │   ├── lib/               # API client & utilities
+│   ├── messages/          # i18n translation files
 │   └── Dockerfile         # Frontend Docker image
 ├── nginx/                 # Reverse proxy configs
 │   ├── nginx.conf         # Nginx configuration
@@ -203,6 +222,7 @@ wishlist-app/
 ├── Dockerfile             # Backend Docker image
 ├── docker-compose.yml     # Docker orchestration
 ├── .env.example           # Environment template
+├── I18N.md                # Multi-language documentation
 ├── package.json           # Backend dependencies
 └── tsconfig.json          # Backend TypeScript config
 ```

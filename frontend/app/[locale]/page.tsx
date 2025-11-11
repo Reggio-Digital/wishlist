@@ -1,18 +1,22 @@
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function Home() {
+  const t = useTranslations('home');
+  const tCommon = useTranslations('common');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
       <div className="max-w-3xl w-full text-center space-y-8">
         <div className="space-y-4">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
-            Wishlist App
+            {t('title')}
           </h1>
           <p className="text-xl text-gray-600">
-            Self-hosted wishlist application for families
+            {t('subtitle')}
           </p>
           <p className="text-gray-500">
-            Create wishlists, share them with friends and family, and let them claim items with our honor-based system
+            {tCommon('tagline')}
           </p>
         </div>
 
@@ -21,13 +25,13 @@ export default function Home() {
             href="/admin/login"
             className="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg"
           >
-            Admin Login
+            {t('adminLogin')}
           </Link>
           <Link
             href="/my-claims"
             className="w-full sm:w-auto px-8 py-3 bg-white text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg border border-gray-200"
           >
-            My Claims
+            {t('myClaims')}
           </Link>
         </div>
 
@@ -35,37 +39,37 @@ export default function Home() {
           <div className="bg-white rounded-lg p-6 shadow-md">
             <div className="text-3xl mb-3">📋</div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Create Wishlists
+              {t('feature1Title')}
             </h3>
             <p className="text-sm text-gray-600">
-              Organize your wishes into multiple lists with custom slugs and share them easily
+              {t('feature1Description')}
             </p>
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-md">
             <div className="text-3xl mb-3">🎁</div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Claim Items
+              {t('feature2Title')}
             </h3>
             <p className="text-sm text-gray-600">
-              Let others claim items with our honor-based system - no account required
+              {t('feature2Description')}
             </p>
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-md">
             <div className="text-3xl mb-3">🔒</div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Privacy Focused
+              {t('feature3Title')}
             </h3>
             <p className="text-sm text-gray-600">
-              Self-hosted and secure. You own your data and control who sees what
+              {t('feature3Description')}
             </p>
           </div>
         </div>
 
         <div className="pt-8">
           <p className="text-sm text-gray-500">
-            Open source • Self-hosted • Built for families
+            {tCommon('openSource')}
           </p>
         </div>
       </div>

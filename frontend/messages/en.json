@@ -1,0 +1,99 @@
+{
+  "common": {
+    "appName": "Wishlist App",
+    "appDescription": "Self-hosted wishlist application for families",
+    "tagline": "Create wishlists, share them with friends and family, and let them claim items with our honor-based system",
+    "openSource": "Open source • Self-hosted • Built for families"
+  },
+  "home": {
+    "title": "Wishlist App",
+    "subtitle": "Self-hosted wishlist application for families",
+    "adminLogin": "Admin Login",
+    "myClaims": "My Claims",
+    "feature1Title": "Create Wishlists",
+    "feature1Description": "Organize your wishes into multiple lists with custom slugs and share them easily",
+    "feature2Title": "Claim Items",
+    "feature2Description": "Let others claim items with our honor-based system - no account required",
+    "feature3Title": "Privacy Focused",
+    "feature3Description": "Self-hosted and secure. You own your data and control who sees what"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "wishlists": "Wishlists",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "welcomeBack": "Welcome back",
+    "loginPrompt": "Please sign in to your account",
+    "totalWishlists": "Total Wishlists",
+    "totalItems": "Total Items",
+    "claimedItems": "Claimed Items",
+    "recentActivity": "Recent Activity"
+  },
+  "wishlist": {
+    "title": "Wishlist",
+    "name": "Name",
+    "slug": "Slug",
+    "description": "Description",
+    "create": "Create Wishlist",
+    "edit": "Edit Wishlist",
+    "delete": "Delete Wishlist",
+    "save": "Save",
+    "cancel": "Cancel",
+    "noWishlists": "No wishlists found",
+    "createFirst": "Create your first wishlist to get started"
+  },
+  "item": {
+    "title": "Item",
+    "name": "Name",
+    "description": "Description",
+    "price": "Price",
+    "url": "URL",
+    "image": "Image",
+    "create": "Add Item",
+    "edit": "Edit Item",
+    "delete": "Delete Item",
+    "save": "Save",
+    "cancel": "Cancel",
+    "claim": "Claim",
+    "unclaim": "Unclaim",
+    "claimed": "Claimed",
+    "available": "Available",
+    "noItems": "No items found",
+    "addFirst": "Add your first item to this wishlist"
+  },
+  "claims": {
+    "title": "My Claims",
+    "noClaimsYet": "You haven't claimed any items yet",
+    "browseWishlists": "Browse wishlists to claim items",
+    "claimedBy": "Claimed by",
+    "claimedOn": "Claimed on",
+    "enterEmail": "Enter your email to view your claims",
+    "emailPlaceholder": "your.email@example.com",
+    "viewClaims": "View My Claims"
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General Settings",
+    "defaultCurrency": "Default Currency",
+    "timezone": "Timezone",
+    "language": "Language",
+    "save": "Save Settings",
+    "saved": "Settings saved successfully"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidUrl": "Please enter a valid URL",
+    "minLength": "Minimum length is {min} characters",
+    "maxLength": "Maximum length is {max} characters"
+  },
+  "errors": {
+    "generic": "An error occurred. Please try again.",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized access",
+    "serverError": "Server error. Please try again later."
+  }
+}

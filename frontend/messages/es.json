@@ -1,0 +1,99 @@
+{
+  "common": {
+    "appName": "Aplicación de Lista de Deseos",
+    "appDescription": "Aplicación de lista de deseos autoalojada para familias",
+    "tagline": "Crea listas de deseos, compártelas con amigos y familiares, y déjales reclamar artículos con nuestro sistema basado en honor",
+    "openSource": "Código abierto • Autoalojado • Construido para familias"
+  },
+  "home": {
+    "title": "Aplicación de Lista de Deseos",
+    "subtitle": "Aplicación de lista de deseos autoalojada para familias",
+    "adminLogin": "Inicio de Sesión Admin",
+    "myClaims": "Mis Reclamaciones",
+    "feature1Title": "Crear Listas de Deseos",
+    "feature1Description": "Organiza tus deseos en múltiples listas con identificadores personalizados y compártelas fácilmente",
+    "feature2Title": "Reclamar Artículos",
+    "feature2Description": "Permite que otros reclamen artículos con nuestro sistema basado en honor - no se requiere cuenta",
+    "feature3Title": "Enfocado en Privacidad",
+    "feature3Description": "Autoalojado y seguro. Tú posees tus datos y controlas quién ve qué"
+  },
+  "admin": {
+    "dashboard": "Panel de Control",
+    "wishlists": "Listas de Deseos",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión",
+    "login": "Iniciar Sesión",
+    "username": "Nombre de Usuario",
+    "password": "Contraseña",
+    "welcomeBack": "Bienvenido de nuevo",
+    "loginPrompt": "Por favor inicia sesión en tu cuenta",
+    "totalWishlists": "Total de Listas",
+    "totalItems": "Total de Artículos",
+    "claimedItems": "Artículos Reclamados",
+    "recentActivity": "Actividad Reciente"
+  },
+  "wishlist": {
+    "title": "Lista de Deseos",
+    "name": "Nombre",
+    "slug": "Identificador",
+    "description": "Descripción",
+    "create": "Crear Lista",
+    "edit": "Editar Lista",
+    "delete": "Eliminar Lista",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "noWishlists": "No se encontraron listas",
+    "createFirst": "Crea tu primera lista para comenzar"
+  },
+  "item": {
+    "title": "Artículo",
+    "name": "Nombre",
+    "description": "Descripción",
+    "price": "Precio",
+    "url": "URL",
+    "image": "Imagen",
+    "create": "Agregar Artículo",
+    "edit": "Editar Artículo",
+    "delete": "Eliminar Artículo",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "claim": "Reclamar",
+    "unclaim": "Desreclamar",
+    "claimed": "Reclamado",
+    "available": "Disponible",
+    "noItems": "No se encontraron artículos",
+    "addFirst": "Agrega tu primer artículo a esta lista"
+  },
+  "claims": {
+    "title": "Mis Reclamaciones",
+    "noClaimsYet": "Aún no has reclamado ningún artículo",
+    "browseWishlists": "Navega las listas para reclamar artículos",
+    "claimedBy": "Reclamado por",
+    "claimedOn": "Reclamado el",
+    "enterEmail": "Ingresa tu correo para ver tus reclamaciones",
+    "emailPlaceholder": "tu.correo@ejemplo.com",
+    "viewClaims": "Ver Mis Reclamaciones"
+  },
+  "settings": {
+    "title": "Configuración",
+    "general": "Configuración General",
+    "defaultCurrency": "Moneda Predeterminada",
+    "timezone": "Zona Horaria",
+    "language": "Idioma",
+    "save": "Guardar Configuración",
+    "saved": "Configuración guardada exitosamente"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "invalidEmail": "Por favor ingresa un correo electrónico válido",
+    "invalidUrl": "Por favor ingresa una URL válida",
+    "minLength": "La longitud mínima es {min} caracteres",
+    "maxLength": "La longitud máxima es {max} caracteres"
+  },
+  "errors": {
+    "generic": "Ocurrió un error. Por favor intenta de nuevo.",
+    "notFound": "No encontrado",
+    "unauthorized": "Acceso no autorizado",
+    "serverError": "Error del servidor. Por favor intenta más tarde."
+  }
+}

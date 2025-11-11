@@ -1,0 +1,99 @@
+{
+  "common": {
+    "appName": "Wunschliste App",
+    "appDescription": "Selbst-gehostete Wunschlisten-Anwendung für Familien",
+    "tagline": "Erstellen Sie Wunschlisten, teilen Sie sie mit Freunden und Familie, und lassen Sie sie Artikel mit unserem ehrbasierten System beanspruchen",
+    "openSource": "Open Source • Selbst-gehostet • Für Familien entwickelt"
+  },
+  "home": {
+    "title": "Wunschliste App",
+    "subtitle": "Selbst-gehostete Wunschlisten-Anwendung für Familien",
+    "adminLogin": "Admin-Anmeldung",
+    "myClaims": "Meine Ansprüche",
+    "feature1Title": "Wunschlisten Erstellen",
+    "feature1Description": "Organisieren Sie Ihre Wünsche in mehreren Listen mit benutzerdefinierten Kennungen und teilen Sie sie einfach",
+    "feature2Title": "Artikel Beanspruchen",
+    "feature2Description": "Lassen Sie andere Artikel mit unserem ehrbasierten System beanspruchen - kein Konto erforderlich",
+    "feature3Title": "Datenschutzorientiert",
+    "feature3Description": "Selbst-gehostet und sicher. Sie besitzen Ihre Daten und kontrollieren, wer was sieht"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "wishlists": "Wunschlisten",
+    "settings": "Einstellungen",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "welcomeBack": "Willkommen zurück",
+    "loginPrompt": "Bitte melden Sie sich bei Ihrem Konto an",
+    "totalWishlists": "Gesamte Listen",
+    "totalItems": "Gesamte Artikel",
+    "claimedItems": "Beanspruchte Artikel",
+    "recentActivity": "Letzte Aktivität"
+  },
+  "wishlist": {
+    "title": "Wunschliste",
+    "name": "Name",
+    "slug": "Kennung",
+    "description": "Beschreibung",
+    "create": "Liste Erstellen",
+    "edit": "Liste Bearbeiten",
+    "delete": "Liste Löschen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "noWishlists": "Keine Listen gefunden",
+    "createFirst": "Erstellen Sie Ihre erste Liste, um zu beginnen"
+  },
+  "item": {
+    "title": "Artikel",
+    "name": "Name",
+    "description": "Beschreibung",
+    "price": "Preis",
+    "url": "URL",
+    "image": "Bild",
+    "create": "Artikel Hinzufügen",
+    "edit": "Artikel Bearbeiten",
+    "delete": "Artikel Löschen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "claim": "Beanspruchen",
+    "unclaim": "Anspruch Aufheben",
+    "claimed": "Beansprucht",
+    "available": "Verfügbar",
+    "noItems": "Keine Artikel gefunden",
+    "addFirst": "Fügen Sie Ihren ersten Artikel zu dieser Liste hinzu"
+  },
+  "claims": {
+    "title": "Meine Ansprüche",
+    "noClaimsYet": "Sie haben noch keine Artikel beansprucht",
+    "browseWishlists": "Durchsuchen Sie Listen, um Artikel zu beanspruchen",
+    "claimedBy": "Beansprucht von",
+    "claimedOn": "Beansprucht am",
+    "enterEmail": "Geben Sie Ihre E-Mail ein, um Ihre Ansprüche zu sehen",
+    "emailPlaceholder": "ihre.email@beispiel.com",
+    "viewClaims": "Meine Ansprüche Anzeigen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "general": "Allgemeine Einstellungen",
+    "defaultCurrency": "Standardwährung",
+    "timezone": "Zeitzone",
+    "language": "Sprache",
+    "save": "Einstellungen Speichern",
+    "saved": "Einstellungen erfolgreich gespeichert"
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "invalidUrl": "Bitte geben Sie eine gültige URL ein",
+    "minLength": "Mindestlänge ist {min} Zeichen",
+    "maxLength": "Maximale Länge ist {max} Zeichen"
+  },
+  "errors": {
+    "generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "notFound": "Nicht gefunden",
+    "unauthorized": "Unbefugter Zugriff",
+    "serverError": "Serverfehler. Bitte versuchen Sie es später erneut."
+  }
+}
