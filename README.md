@@ -19,11 +19,13 @@ A privacy-focused, self-hosted wishlist manager designed for families. Simple an
 - ✅ Database setup (SQLite + Drizzle ORM) - simplified schema
 - ✅ JWT-based authentication system with auto-generated secrets
 - ✅ Admin login/logout/refresh/password change endpoints
+- ✅ Wishlists CRUD API endpoints (admin + public)
+- ✅ Items CRUD API endpoints (admin + public)
+- ✅ Drag-and-drop reordering for items
 - ✅ Tailwind CSS and EJS templating configured
 
 **Next Up:**
-- 🚧 Wishlists & Items CRUD API endpoints
-- 🚧 Public claiming system
+- 🚧 Public claiming system (claim/unclaim/update claim)
 - 🚧 URL scraping for auto-filling item details
 - 🚧 Frontend pages (admin dashboard + public views)
 
@@ -111,6 +113,22 @@ wishlist-app/
 - `POST /api/auth/refresh` - Refresh access token
 - `GET /api/auth/me` - Get current user info (requires auth)
 - `PATCH /api/auth/password` - Change password (requires auth)
+
+**Wishlists:**
+- `GET /api/wishlists` - List all wishlists (admin only)
+- `POST /api/wishlists` - Create wishlist (admin only)
+- `GET /api/wishlists/:id` - Get single wishlist (admin only)
+- `PATCH /api/wishlists/:id` - Update wishlist (admin only)
+- `DELETE /api/wishlists/:id` - Delete wishlist (admin only)
+- `GET /:slug` - Public wishlist view (no auth required if public)
+
+**Items:**
+- `GET /api/wishlists/:id/items` - List items (public if wishlist is public)
+- `POST /api/wishlists/:id/items` - Create item (admin only)
+- `GET /api/items/:id` - Get single item (public if wishlist is public)
+- `PATCH /api/items/:id` - Update item (admin only)
+- `DELETE /api/items/:id` - Delete item (admin only)
+- `POST /api/items/:id/reorder` - Reorder item for drag-and-drop (admin only)
 
 ### Planned
 See [TODO.md](TODO.md) for the full API specification.
