@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import ProtectedRoute from '@/components/protected-route';
 import AdminNav from '@/components/admin-nav';
 import { useAuth } from '@/lib/auth-context';
@@ -8,6 +9,8 @@ import { authApi } from '@/lib/api';
 
 export default function SettingsPage() {
   const { accessToken } = useAuth();
+  const tAdmin = useTranslations('admin');
+  const tCommon = useTranslations('common');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,12 +24,12 @@ export default function SettingsPage() {
     setSuccess('');
 
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      setError(tAdmin('passwordsNoMatch'));
       return;
     }
 
     if (newPassword.length < 8) {
-      setError('New password must be at least 8 characters');
+      setError(tAdmin('passwordMinLengthError'));
       return;
     }
 
@@ -36,12 +39,12 @@ export default function SettingsPage() {
 
     try {
       await authApi.changePassword(accessToken, currentPassword, newPassword);
-      setSuccess('Password changed successfully!');
+      setSuccess(tAdmin('passwordChanged'));
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (err: any) {
-      setError(err.message || 'Failed to change password');
+      setError(err.message || tAdmin('failedToChangePassword'));
     } finally {
       setIsSubmitting(false);
     }
@@ -53,12 +56,12 @@ export default function SettingsPage() {
         <AdminNav />
         <div className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
-            <h1 className="text-3xl font-bold text-gray-900 mb-8">Settings</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-8">{tAdmin('settings')}</h1>
 
             {/* Change Password Section */}
             <div className="bg-white shadow rounded-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                Change Password
+                {tAdmin('changePassword')}
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
@@ -76,7 +79,7 @@ export default function SettingsPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Current Password
+                    {tAdmin('currentPassword')}
                   </label>
                   <input
                     type="password"
@@ -89,7 +92,7 @@ export default function SettingsPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    New Password
+                    {tAdmin('newPassword')}
                   </label>
                   <input
                     type="password"
@@ -100,13 +103,13 @@ export default function SettingsPage() {
                     onChange={(e) => setNewPassword(e.target.value)}
                   />
                   <p className="mt-1 text-sm text-gray-500">
-                    Must be at least 8 characters
+                    {tAdmin('passwordMinLength')}
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Confirm New Password
+                    {tAdmin('confirmPassword')}
                   </label>
                   <input
                     type="password"
@@ -124,7 +127,7 @@ export default function SettingsPage() {
                     disabled={isSubmitting}
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
                   >
-                    {isSubmitting ? 'Changing Password...' : 'Change Password'}
+                    {isSubmitting ? tAdmin('changingPassword') : tAdmin('changePassword')}
                   </button>
                 </div>
               </form>
@@ -133,14 +136,14 @@ export default function SettingsPage() {
             {/* App Information */}
             <div className="mt-6 bg-white shadow rounded-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Application Information
+                {tAdmin('appInfo')}
               </h2>
               <div className="space-y-2 text-sm text-gray-600">
                 <p>
-                  <strong>Version:</strong> 0.1.0
+                  <strong>{tAdmin('version')}</strong> 0.1.0
                 </p>
                 <p>
-                  <strong>Environment:</strong>{' '}
+                  <strong>{tAdmin('environment')}</strong>{' '}
                   {process.env.NODE_ENV || 'development'}
                 </p>
               </div>
