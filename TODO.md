@@ -2,32 +2,31 @@
 
 This document tracks all planned features and implementation tasks for the Wishlist App.
 
+**Note:** This is a simplified family-focused self-hosted app. We're keeping it lean and practical.
+
 ## Phase 1: Core Backend Infrastructure
 
 ### Database Setup
-- [ ] Install Drizzle ORM and better-sqlite3
-- [ ] Create database schema with migrations
-- [ ] Implement database connection and initialization
-- [ ] Create Wishlist model
-- [ ] Create WishlistItem model
-- [ ] Create Settings model
+- [x] Install Drizzle ORM and better-sqlite3
+- [x] Create database schema with migrations
+- [x] Implement database connection and initialization
+- [x] Create Wishlist model
+- [x] Create WishlistItem model
 - [ ] Add database seed script for development
 
 ### Authentication System
-- [ ] Install JWT, bcrypt, and related dependencies
-- [ ] Implement admin user authentication
-- [ ] Create JWT token generation and validation
-- [ ] Implement refresh token rotation
-- [ ] Add rate limiting on auth endpoints
-- [ ] Add account lockout mechanism
-- [ ] Optional: Global access password middleware
-- [ ] Create auth middleware for protected routes
+- [x] Install JWT, bcrypt, and related dependencies
+- [x] Implement admin user authentication
+- [x] Create JWT token generation and validation
+- [x] Implement refresh token rotation
+- [x] Optional: Global access password middleware
+- [x] Create auth middleware for protected routes
 
 ### API Endpoints - Authentication
-- [ ] POST /api/auth/login
-- [ ] POST /api/auth/logout
-- [ ] POST /api/auth/refresh
-- [ ] PATCH /api/auth/password
+- [x] POST /api/auth/login
+- [x] POST /api/auth/logout
+- [x] POST /api/auth/refresh
+- [x] PATCH /api/auth/password
 
 ### API Endpoints - Wishlists
 - [ ] GET /api/wishlists (authenticated)
@@ -50,26 +49,10 @@ This document tracks all planned features and implementation tasks for the Wishl
 - [ ] DELETE /api/public/claims/:claimToken (no auth)
 - [ ] PATCH /api/public/claims/:claimToken (no auth, update name/note)
 
-### API Endpoints - File Uploads
-- [ ] POST /api/items/:id/image (authenticated)
-- [ ] POST /api/lists/:id/cover (authenticated)
-- [ ] Implement Multer for file upload handling
-- [ ] Add file validation (type, size limits)
-- [ ] Add image optimization with Sharp
-- [ ] File cleanup on item/list deletion
-
-### API Endpoints - Settings
-- [ ] GET /api/settings (authenticated)
-- [ ] PATCH /api/settings (authenticated)
-- [ ] Implement settings defaults
-
-### Security Hardening
+### Security Hardening (Keep It Simple)
 - [ ] Add Helmet.js for security headers
 - [ ] Implement input sanitization (XSS prevention)
-- [ ] Add CSRF protection
-- [ ] Parameterized queries (SQL injection prevention)
-- [ ] File upload validation
-- [ ] Set bcrypt cost to 12
+- [ ] Parameterized queries (already done via Drizzle)
 - [ ] Implement proper error handling without leaking details
 
 ## Phase 2: URL Scraping
@@ -131,16 +114,13 @@ This document tracks all planned features and implementation tasks for the Wishl
   - [ ] Archive items
   - [ ] Items appear unclaimed (no claim data visible)
 - [ ] Add/Edit item page (/admin/items/new or /admin/items/:id)
-  - [ ] Form fields
-  - [ ] URL scraping integration
-  - [ ] Image upload/URL
-  - [ ] Multiple purchase URLs
-- [ ] Settings page (/admin/settings)
-  - [ ] Account settings (change password)
-  - [ ] Security (display ACCESS_PASSWORD status)
-  - [ ] Preferences (currency, timezone, theme, date/time format)
-  - [ ] Privacy (block search engines, AI crawlers)
-  - [ ] Advanced (clear cache, export data)
+  - [ ] Form fields (name, description, price, image URL, purchase URL)
+  - [ ] URL scraping integration (auto-fill from scraped data)
+  - [ ] Simple image URL input (no uploads for MVP)
+  - [ ] 1-2 purchase URLs max
+- [ ] Simple settings page (/admin/settings)
+  - [ ] Change password
+  - [ ] Display ACCESS_PASSWORD status
 
 ### UI Components
 - [ ] Item Card component
@@ -159,12 +139,11 @@ This document tracks all planned features and implementation tasks for the Wishl
 - [ ] Theme switcher component (Light/Dark/Auto)
 - [ ] Navigation components (desktop/mobile)
 
-### Theme System
+### Theme System (Client-Side Only)
 - [ ] Implement light/dark/auto theme switching
-- [ ] Store theme preference in localStorage
+- [ ] Store theme preference in localStorage (no backend needed)
 - [ ] Respect system preference
-- [ ] Apply admin-configured accent color
-- [ ] Conditional theme toggle visibility
+- [ ] Simple hardcoded color scheme (no dynamic accent colors)
 
 ### Mobile Optimizations
 - [ ] Bottom navigation
@@ -284,25 +263,26 @@ This document tracks all planned features and implementation tasks for the Wishl
   name: string,
   description: string (nullable),
   price: decimal (nullable),
-  currency: string (ISO code, default: 'USD'),
+  currency: string (ISO code, default from env: 'USD'),
   quantity: integer (default: 1),
   priority: enum ('low', 'medium', 'high'),
 
+  // Simplified: Just image URLs (no uploads in MVP)
   images: [
     {
-      type: 'upload' | 'url',
+      type: 'url',  // 'upload' type deferred
       url: string,
       isPrimary: boolean,
       order: integer
     }
   ] (nullable),
 
+  // Simplified: 1-2 purchase URLs, no tracking flags
   purchaseUrls: [
     {
-      label: string,
+      label: string (e.g., "Amazon", "Target"),
       url: string,
-      isPrimary: boolean,
-      wasUsedForPurchase: boolean
+      isPrimary: boolean
     }
   ] (nullable),
 
@@ -321,26 +301,17 @@ This document tracks all planned features and implementation tasks for the Wishl
 }
 ```
 
-### Settings
-```javascript
-{
-  key: string (primary key),
-  value: string (JSON),
-  updatedAt: timestamp
-}
-```
+## Configuration (Environment Variables)
 
-## Settings Keys Reference
+Simple configuration via `.env` file - no database settings table needed:
 
-- `default_currency` - e.g., "USD"
-- `timezone` - e.g., "America/New_York"
-- `theme_toggle_enabled` - boolean, default: true
-- `default_theme` - "light", "dark", "auto", default: "auto"
-- `accent_color` - hex code, default: "#3b82f6"
-- `date_format` - "MM/DD/YYYY", "DD/MM/YYYY", "YYYY-MM-DD"
-- `time_format` - "12h", "24h"
-- `block_search_engines` - boolean
-- `block_ai_crawlers` - boolean
+- `ADMIN_USERNAME` - Admin login username
+- `ADMIN_PASSWORD` - Admin login password
+- `ACCESS_PASSWORD` - Optional global password for public access
+- `DEFAULT_CURRENCY` - e.g., "USD" (default)
+- `TZ` - Timezone, e.g., "America/New_York"
+- `PORT` - Server port (default: 3000)
+- `NODE_ENV` - "development" or "production"
 
 ## Feature Notes
 
@@ -355,9 +326,7 @@ This document tracks all planned features and implementation tasks for the Wishl
 - Click "💬 Note" to reveal coordination messages
 
 ### URL Scraping
-- Scraping happens ONCE during item creation
+- Scraping happens ONCE during item creation/edit
+- Used to auto-fill: title, price, image URL, description
 - Additional URLs added manually (no re-scraping)
-
-### Supported Languages
-- en, es, fr, de, it, pt, ja, zh-CN, zh-TW, ko, ru, ar
-- Set via DEFAULT_LANGUAGE environment variable
+- Keeps it simple - just grab the data once and let admin edit

@@ -2,6 +2,15 @@ import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
 import { createId } from '@paralleldrive/cuid2';
 import { sql } from 'drizzle-orm';
 
+/**
+ * Database schema for family wishlist app
+ *
+ * Simplified for self-hosted family use:
+ * - No Settings table (use env vars instead)
+ * - Image URLs only (no upload handling in MVP)
+ * - Simplified purchase URLs (no usage tracking)
+ */
+
 // Wishlists table
 export const wishlists = sqliteTable('wishlists', {
   id: text('id').primaryKey().$defaultFn(() => createId()),
@@ -39,7 +48,6 @@ export const wishlistItems = sqliteTable('wishlist_items', {
     label: string;
     url: string;
     isPrimary: boolean;
-    wasUsedForPurchase: boolean;
   }>>(),
 
   notes: text('notes'), // Private admin-only notes
@@ -57,19 +65,9 @@ export const wishlistItems = sqliteTable('wishlist_items', {
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 });
 
-// Settings table (key-value store)
-export const settings = sqliteTable('settings', {
-  key: text('key').primaryKey(),
-  value: text('value').notNull(), // Store as JSON
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-});
-
 // Type exports
 export type Wishlist = typeof wishlists.$inferSelect;
 export type NewWishlist = typeof wishlists.$inferInsert;
 
 export type WishlistItem = typeof wishlistItems.$inferSelect;
 export type NewWishlistItem = typeof wishlistItems.$inferInsert;
-
-export type Setting = typeof settings.$inferSelect;
-export type NewSetting = typeof settings.$inferInsert;

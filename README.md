@@ -4,23 +4,30 @@ Self-hosted wishlist application with slug-based public sharing and claim tracki
 
 ## About
 
-A privacy-focused, self-hosted wishlist manager that allows you to:
-- Create multiple wishlists with custom slugs
+A privacy-focused, self-hosted wishlist manager designed for families. Simple and practical:
+- Create multiple wishlists with custom slugs (e.g., /christmas-2024)
 - Share public wishlists via simple URLs
-- Allow others to claim items (honor system)
-- Manage items with images, prices, and purchase URLs
-- Single admin user model - simple and secure
+- Allow others to claim items (honor system - no account required)
+- Manage items with image URLs, prices, and purchase links
+- Single admin user model - keep it simple and secure
+- Lightweight and easy to self-host
 
 ## Current Status
 
 **Implemented:**
 - ✅ Basic Express server with health check
-- ✅ Database setup (SQLite + Drizzle ORM)
-- ✅ JWT-based authentication system
-- ✅ Admin login/logout/refresh endpoints
+- ✅ Database setup (SQLite + Drizzle ORM) - simplified schema
+- ✅ JWT-based authentication system with auto-generated secrets
+- ✅ Admin login/logout/refresh/password change endpoints
+- ✅ Tailwind CSS and EJS templating configured
 
-**In Progress:**
-See [TODO.md](TODO.md) for the full feature roadmap.
+**Next Up:**
+- 🚧 Wishlists & Items CRUD API endpoints
+- 🚧 Public claiming system
+- 🚧 URL scraping for auto-filling item details
+- 🚧 Frontend pages (admin dashboard + public views)
+
+See [TODO.md](TODO.md) for the full feature roadmap (simplified for family use).
 
 ## Tech Stack
 
