@@ -7,6 +7,7 @@ import { initializeDatabase } from './db/index.js';
 import authRoutes from './auth/routes.js';
 import wishlistRoutes from './wishlists/routes.js';
 import itemRoutes from './items/routes.js';
+import claimingRoutes from './claiming/routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -44,6 +45,9 @@ app.get('/api/health', (_req, res) => {
 app.get('/', (_req, res) => {
   res.render('index', { title: 'Home - Wishlist App' });
 });
+
+// Claiming routes (public claiming system)
+app.use(claimingRoutes);
 
 // Item routes (must come before wishlist routes for proper route matching)
 app.use(itemRoutes);
