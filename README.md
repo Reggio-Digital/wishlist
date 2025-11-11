@@ -23,10 +23,10 @@ A privacy-focused, self-hosted wishlist manager designed for families. Simple an
 - ✅ Items CRUD API endpoints (admin + public)
 - ✅ Drag-and-drop reordering for items
 - ✅ Public claiming system (honor-based, no auth required)
+- ✅ URL scraping for auto-filling item details (Amazon, Target, Walmart, Best Buy, generic)
 - ✅ Tailwind CSS and EJS templating configured
 
 **Next Up:**
-- 🚧 URL scraping for auto-filling item details
 - 🚧 Frontend pages (admin dashboard + public views)
 
 See [TODO.md](TODO.md) for the full feature roadmap (simplified for family use).
@@ -134,6 +134,10 @@ wishlist-app/
 - `POST /api/public/items/:id/claim` - Claim an item (returns claim token)
 - `DELETE /api/public/claims/:claimToken` - Unclaim an item
 - `PATCH /api/public/claims/:claimToken` - Update claim info (name, note, isPurchased)
+
+**Scraping (Admin only):**
+- `POST /api/scrape` - Scrape product info from URL (returns title, description, price, currency, imageUrl)
+  - Supports: Amazon, Target, Walmart, Best Buy, and generic sites via Open Graph tags
 
 ### Planned
 See [TODO.md](TODO.md) for the full API specification.
