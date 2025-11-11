@@ -217,7 +217,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
             value={formData.priority}
             onChange={(e) =>
-              setFormData((prev) => ({ ...prev, priority: e.target.value }))
+              setFormData((prev) => ({ ...prev, priority: e.target.value as 'low' | 'medium' | 'high' }))
             }
           >
             <option value="low">{t('priorityLow')}</option>

@@ -1,19 +1,22 @@
 # Wishlist App
 
-Self-hosted wishlist application with slug-based public sharing and claim tracking using an honor system.
+A simple, self-hosted wishlist manager for families and friends. Create wishlists, share them with a link, and let people claim items without needing accounts.
 
-## About
+## Why?
 
-A privacy-focused, self-hosted wishlist manager designed for families. Simple and practical:
-- Create multiple wishlists with custom slugs (e.g., /christmas-2024)
-- Share public wishlists via simple URLs
-- Allow others to claim items (honor system - no account required)
-- Manage items with image URLs, prices, and purchase links
-- Single admin user model - keep it simple and secure
+Ever wanted to share a wishlist for birthdays, holidays, or weddings without giving your data to a company? This is for you. It's designed to be dead simple to self-host and use.
+
+**Features:**
+- Create unlimited wishlists with custom URLs (e.g., yoursite.com/christmas-2024)
+- Share lists publicly with a simple link
+- People can claim items using the honor system - no accounts needed
+- Paste a product URL and auto-fill details (works with Amazon, Target, Walmart, etc.)
+- Drag-and-drop to reorder items
 - **Multi-language support** - Available in English, Spanish, French, and German
-- Lightweight and easy to self-host
+- Works great on mobile and desktop
+- One admin user (you), keeps things simple
 
-## Current Status
+**Built with:** Node.js, Express, SQLite, Next.js, Tailwind CSS
 
 **Implemented:**
 - ✅ Backend Express server with full REST API
@@ -31,156 +34,96 @@ A privacy-focused, self-hosted wishlist manager designed for families. Simple an
 - ✅ **Responsive design for mobile and desktop**
 - ✅ **Multi-language support (i18n) with Docker ENV configuration**
 
-**Next Up:**
-- 🚧 Docker deployment configuration
-- 🚧 Testing and security hardening
+## Quick Start
 
-See [TODO.md](TODO.md) for the full feature roadmap.
+### Docker (Recommended)
 
-## Tech Stack
-
-- **Backend:** Node.js 20+, Express.js, SQLite, Drizzle ORM
-- **Frontend:** Next.js 15, React 19, Tailwind CSS 4
-- **Deployment:** Docker (planned)
-
-## Getting Started
-
-### Prerequisites
-- Node.js 20+
-- npm or yarn
-
-### Installation
-
-This project has both a backend and frontend that need to be run separately.
-
-**Backend Setup:**
 ```bash
-# Install backend dependencies
-npm install
-
-# Create .env file with admin credentials
-cp .env.example .env
-# Edit .env and set ADMIN_USERNAME and ADMIN_PASSWORD
-
-# Run backend server (port 3000)
-npm run dev
-```
-
-**Frontend Setup:**
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install frontend dependencies
-npm install
-
-# Run frontend server (port 3001)
-npm run dev
-```
-
-**Access the application:**
-- Frontend: http://localhost:3001
-- Backend API: http://localhost:3000
-- Admin login: http://localhost:3001/admin/login
-
-**Production Build:**
-```bash
-# Build backend
-npm run build
-npm start
-
-# Build frontend (from frontend directory)
-cd frontend
-npm run build
-npm start
-```
-
-### Docker Deployment (Recommended)
-
-The easiest way to deploy is using Docker Compose:
-
-**Quick Start:**
-```bash
-# 1. Clone the repository
+# Clone and setup
 git clone <repository-url>
 cd wishlist-app
 
-# 2. Create .env file
+# Set your admin credentials
 cp .env.example .env
-# Edit .env and set ADMIN_USERNAME and ADMIN_PASSWORD
+nano .env  # Edit ADMIN_USERNAME and ADMIN_PASSWORD
 
-# 3. Start with Docker Compose
+# Start it up
 docker-compose up -d
 
-# 4. Access the application
-# Frontend: http://localhost:3001
-# Backend API: http://localhost:3000
+# Visit http://localhost:3001
 ```
 
-**Production Deployment with Nginx:**
+That's it! Your wishlist app is running.
+
+**Useful commands:**
 ```bash
-# 1. Uncomment nginx service in docker-compose.yml
+docker-compose logs -f              # View logs
+docker-compose down                 # Stop everything
+docker-compose up -d --build        # Rebuild after updates
 
-# 2. Configure SSL (optional but recommended)
-# See nginx/README.md for SSL setup instructions
-
-# 3. Update nginx.conf with your domain
-
-# 4. Start the stack
-docker-compose up -d
-
-# 5. Your app is now available at http://your-domain.com
-```
-
-**Docker Commands:**
-```bash
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-
-# Rebuild after code changes
-docker-compose up -d --build
-
-# Backup database
+# Backup your database
 docker cp wishlist-backend:/app/data/wishlist.db ./backup.db
 ```
 
-**Environment Variables for Docker:**
+**Using Nginx for production?** Uncomment the nginx service in `docker-compose.yml` and see `nginx/README.md` for SSL setup.
 
-Set these in your `.env` file or in `docker-compose.yml`:
-- `ADMIN_USERNAME` - Admin login username
-- `ADMIN_PASSWORD` - Admin login password
-- `DEFAULT_CURRENCY` - Default currency (e.g., USD)
-- `DEFAULT_LANGUAGE` - Default language (en, es, fr, de - defaults to en)
-- `TZ` - Timezone (e.g., America/New_York)
+### Manual Setup (without Docker)
 
-See `.env.example` for all available options.
+If you prefer to run it directly:
 
-### Environment Variables
+```bash
+# Install dependencies
+npm install
+cd frontend && npm install && cd ..
 
-Create a `.env` file with your admin credentials:
+# Setup environment
+cp .env.example .env
+nano .env  # Set ADMIN_USERNAME and ADMIN_PASSWORD
 
+# Run backend (terminal 1)
+npm run dev
+
+# Run frontend (terminal 2)
+cd frontend && npm run dev
+```
+
+Visit http://localhost:3001 to use the app.
+
+### Configuration
+
+Your `.env` file needs at minimum:
 ```env
-# Required
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=changeme
+ADMIN_PASSWORD=your-secure-password
+```
 
-# Optional
+Optional settings:
+```env
+# Server configuration
 PORT=3000
 NODE_ENV=development
-ACCESS_PASSWORD=
-DEFAULT_CURRENCY=USD
-DEFAULT_LANGUAGE=en
-TZ=America/New_York
+
+# Access control
+ACCESS_PASSWORD=                    # Add a password for public access if you want
+
+# Localization
+DEFAULT_CURRENCY=USD                # Currency for prices
+DEFAULT_LANGUAGE=en                 # Default language (en, es, fr, de)
+TZ=America/New_York                 # Your timezone
 
 # JWT secrets are auto-generated and saved to data/secrets.json
 # Only set SECRET manually for multi-instance deployments
 # SECRET=your-secret-here
 ```
 
-**Note:** JWT secrets are automatically generated and persisted on first run. You don't need to configure them unless running multiple instances.
+Environment variables you can set:
+- `ADMIN_USERNAME` - Admin login username
+- `ADMIN_PASSWORD` - Admin login password
+- `DEFAULT_CURRENCY` - Default currency (e.g., USD)
+- `DEFAULT_LANGUAGE` - Default language (en, es, fr, de - defaults to en)
+- `TZ` - Timezone (e.g., America/New_York)
+
+JWT secrets are auto-generated on first run and saved to `data/secrets.json`.
 
 ## Multi-Language Support
 
@@ -195,6 +138,22 @@ The application supports multiple languages (English, Spanish, French, and Germa
 # Set Spanish as default language
 DEFAULT_LANGUAGE=es docker-compose up -d
 ```
+
+## How It Works
+
+**For admins (you):**
+1. Log in at `/admin/login`
+2. Create wishlists and add items
+3. Share the wishlist URL with family/friends
+4. Items always appear unclaimed to you (honor system works both ways!)
+
+**For everyone else:**
+1. Visit the shared wishlist URL (no login needed)
+2. See what's available and what's already claimed
+3. Claim an item by adding your name
+4. Get a special URL to manage your claims later
+
+The claiming system runs on trust - perfect for families and close friends.
 
 ## Project Structure
 
@@ -227,78 +186,29 @@ wishlist-app/
 └── tsconfig.json          # Backend TypeScript config
 ```
 
-## API Endpoints
+## A Few Tips
 
-### Currently Available
+**Security basics:**
+- Use a strong admin password
+- Run behind HTTPS in production (use Caddy or Let's Encrypt with nginx)
+- Keep your `.env` file private (it's gitignored by default)
+- Back up your `data/` folder - that's where your database lives
 
-**Health:**
-- `GET /api/health` - Health check
+**Updating:**
+```bash
+git pull
+docker-compose up -d --build
+```
 
-**Authentication:**
-- `POST /api/auth/login` - Login with username/password
-- `POST /api/auth/logout` - Logout (clears tokens)
-- `POST /api/auth/refresh` - Refresh access token
-- `GET /api/auth/me` - Get current user info (requires auth)
-- `PATCH /api/auth/password` - Change password (requires auth)
-
-**Wishlists:**
-- `GET /api/wishlists` - List all wishlists (admin only)
-- `POST /api/wishlists` - Create wishlist (admin only)
-- `GET /api/wishlists/:id` - Get single wishlist (admin only)
-- `PATCH /api/wishlists/:id` - Update wishlist (admin only)
-- `DELETE /api/wishlists/:id` - Delete wishlist (admin only)
-- `GET /:slug` - Public wishlist view (no auth required if public)
-
-**Items:**
-- `GET /api/wishlists/:id/items` - List items (public if wishlist is public)
-- `POST /api/wishlists/:id/items` - Create item (admin only)
-- `GET /api/items/:id` - Get single item (public if wishlist is public)
-- `PATCH /api/items/:id` - Update item (admin only)
-- `DELETE /api/items/:id` - Delete item (admin only)
-- `POST /api/items/:id/reorder` - Reorder item for drag-and-drop (admin only)
-
-**Claiming (Public, no auth required):**
-- `POST /api/public/items/:id/claim` - Claim an item (returns claim token)
-- `DELETE /api/public/claims/:claimToken` - Unclaim an item
-- `PATCH /api/public/claims/:claimToken` - Update claim info (name, note, isPurchased)
-
-**Scraping (Admin only):**
-- `POST /api/scrape` - Scrape product info from URL (returns title, description, price, currency, imageUrl)
-  - Supports: Amazon, Target, Walmart, Best Buy, and generic sites via Open Graph tags
-
-### Planned
-See [TODO.md](TODO.md) for the full API specification.
-
-## Security
-
-### JWT Secrets
-- **Auto-generated**: Cryptographically secure 512-bit secrets using `crypto.randomBytes(64)`
-- **Persistent**: Saved to `data/secrets.json` with file permissions `0600` (owner read/write only)
-- **Gitignored**: `data/` directory is excluded from version control
-- **Rotation**: To rotate secrets, delete `data/secrets.json` and restart (invalidates all existing tokens)
-
-### Deployment Security Checklist
-- [ ] Set strong `ADMIN_PASSWORD` in production
-- [ ] Ensure `data/` directory is not publicly accessible
-- [ ] Use HTTPS in production (set `NODE_ENV=production`)
-- [ ] Consider setting `SECRET` manually for multi-instance deployments
-- [ ] Keep dependencies updated (`npm audit` and `npm update`)
-- [ ] Review file permissions on `data/` directory
-
-### Password Storage
-- Admin password is stored in environment variables (not hashed in this simple auth model)
-- Ensure `.env` file has restricted permissions: `chmod 600 .env`
-- Never commit `.env` file to version control
-
-### Database Migrations
-- Migrations are in `drizzle/` directory
-- Run automatically on server start
-- Migration 0001 removes the old Settings table (now using env vars)
+**If something breaks:**
+- Check logs: `docker-compose logs -f`
+- Make sure your `.env` file is set up correctly
+- Database is SQLite, stored in `data/wishlist.db` - you can inspect it with any SQLite tool
 
 ## Contributing
 
-This is a self-hosted project. See [TODO.md](TODO.md) for planned features and implementation details.
+This is a simple self-hosted app built for personal use. If you find bugs or want to add features, feel free to open an issue or PR. See [TODO.md](TODO.md) for ideas.
 
 ## License
 
-MIT
+MIT - use it however you want!
