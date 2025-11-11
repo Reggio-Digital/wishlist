@@ -22,10 +22,10 @@ A privacy-focused, self-hosted wishlist manager designed for families. Simple an
 - ✅ Wishlists CRUD API endpoints (admin + public)
 - ✅ Items CRUD API endpoints (admin + public)
 - ✅ Drag-and-drop reordering for items
+- ✅ Public claiming system (honor-based, no auth required)
 - ✅ Tailwind CSS and EJS templating configured
 
 **Next Up:**
-- 🚧 Public claiming system (claim/unclaim/update claim)
 - 🚧 URL scraping for auto-filling item details
 - 🚧 Frontend pages (admin dashboard + public views)
 
@@ -129,6 +129,11 @@ wishlist-app/
 - `PATCH /api/items/:id` - Update item (admin only)
 - `DELETE /api/items/:id` - Delete item (admin only)
 - `POST /api/items/:id/reorder` - Reorder item for drag-and-drop (admin only)
+
+**Claiming (Public, no auth required):**
+- `POST /api/public/items/:id/claim` - Claim an item (returns claim token)
+- `DELETE /api/public/claims/:claimToken` - Unclaim an item
+- `PATCH /api/public/claims/:claimToken` - Update claim info (name, note, isPurchased)
 
 ### Planned
 See [TODO.md](TODO.md) for the full API specification.
