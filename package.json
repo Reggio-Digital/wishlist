@@ -28,8 +28,10 @@
   "license": "MIT",
   "dependencies": {
     "@paralleldrive/cuid2": "^3.0.4",
+    "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.4.1",
+    "cheerio": "^1.1.2",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.44.7",

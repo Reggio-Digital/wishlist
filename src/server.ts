@@ -8,6 +8,7 @@ import authRoutes from './auth/routes.js';
 import wishlistRoutes from './wishlists/routes.js';
 import itemRoutes from './items/routes.js';
 import claimingRoutes from './claiming/routes.js';
+import scrapingRoutes from './scraping/routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -45,6 +46,9 @@ app.get('/api/health', (_req, res) => {
 app.get('/', (_req, res) => {
   res.render('index', { title: 'Home - Wishlist App' });
 });
+
+// Scraping routes (admin only)
+app.use(scrapingRoutes);
 
 // Claiming routes (public claiming system)
 app.use(claimingRoutes);
