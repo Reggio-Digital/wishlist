@@ -15,27 +15,31 @@ A privacy-focused, self-hosted wishlist manager designed for families. Simple an
 ## Current Status
 
 **Implemented:**
-- ✅ Basic Express server with health check
-- ✅ Database setup (SQLite + Drizzle ORM) - simplified schema
-- ✅ JWT-based authentication system with auto-generated secrets
-- ✅ Admin login/logout/refresh/password change endpoints
-- ✅ Wishlists CRUD API endpoints (admin + public)
-- ✅ Items CRUD API endpoints (admin + public)
-- ✅ Drag-and-drop reordering for items
-- ✅ Public claiming system (honor-based, no auth required)
-- ✅ URL scraping for auto-filling item details (Amazon, Target, Walmart, Best Buy, generic)
-- ✅ Tailwind CSS and EJS templating configured
+- ✅ Backend Express server with full REST API
+- ✅ Database setup (SQLite + Drizzle ORM)
+- ✅ JWT-based authentication system
+- ✅ Admin authentication and password management
+- ✅ Wishlists CRUD (admin + public)
+- ✅ Items CRUD (admin + public)
+- ✅ Drag-and-drop item reordering
+- ✅ Public claiming system (honor-based, no auth)
+- ✅ URL scraping for auto-filling item details
+- ✅ **Next.js 15 frontend with full UI**
+- ✅ **Admin dashboard and management interface**
+- ✅ **Public wishlist viewing and claiming**
+- ✅ **Responsive design for mobile and desktop**
 
 **Next Up:**
-- 🚧 Frontend pages (admin dashboard + public views)
+- 🚧 Docker deployment configuration
+- 🚧 Testing and security hardening
 
-See [TODO.md](TODO.md) for the full feature roadmap (simplified for family use).
+See [TODO.md](TODO.md) for the full feature roadmap.
 
 ## Tech Stack
 
 - **Backend:** Node.js 20+, Express.js, SQLite, Drizzle ORM
-- **Frontend:** (Planned: SvelteKit or Next.js)
-- **Deployment:** Docker with multi-arch support
+- **Frontend:** Next.js 15, React 19, Tailwind CSS 4
+- **Deployment:** Docker (planned)
 
 ## Getting Started
 
@@ -45,17 +49,111 @@ See [TODO.md](TODO.md) for the full feature roadmap (simplified for family use).
 
 ### Installation
 
+This project has both a backend and frontend that need to be run separately.
+
+**Backend Setup:**
 ```bash
-# Install dependencies
+# Install backend dependencies
 npm install
 
-# Run in development mode
-npm run dev
+# Create .env file with admin credentials
+cp .env.example .env
+# Edit .env and set ADMIN_USERNAME and ADMIN_PASSWORD
 
-# Build for production
+# Run backend server (port 3000)
+npm run dev
+```
+
+**Frontend Setup:**
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install frontend dependencies
+npm install
+
+# Run frontend server (port 3001)
+npm run dev
+```
+
+**Access the application:**
+- Frontend: http://localhost:3001
+- Backend API: http://localhost:3000
+- Admin login: http://localhost:3001/admin/login
+
+**Production Build:**
+```bash
+# Build backend
+npm run build
+npm start
+
+# Build frontend (from frontend directory)
+cd frontend
 npm run build
 npm start
 ```
+
+### Docker Deployment (Recommended)
+
+The easiest way to deploy is using Docker Compose:
+
+**Quick Start:**
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd wishlist-app
+
+# 2. Create .env file
+cp .env.example .env
+# Edit .env and set ADMIN_USERNAME and ADMIN_PASSWORD
+
+# 3. Start with Docker Compose
+docker-compose up -d
+
+# 4. Access the application
+# Frontend: http://localhost:3001
+# Backend API: http://localhost:3000
+```
+
+**Production Deployment with Nginx:**
+```bash
+# 1. Uncomment nginx service in docker-compose.yml
+
+# 2. Configure SSL (optional but recommended)
+# See nginx/README.md for SSL setup instructions
+
+# 3. Update nginx.conf with your domain
+
+# 4. Start the stack
+docker-compose up -d
+
+# 5. Your app is now available at http://your-domain.com
+```
+
+**Docker Commands:**
+```bash
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Rebuild after code changes
+docker-compose up -d --build
+
+# Backup database
+docker cp wishlist-backend:/app/data/wishlist.db ./backup.db
+```
+
+**Environment Variables for Docker:**
+
+Set these in your `.env` file or in `docker-compose.yml`:
+- `ADMIN_USERNAME` - Admin login username
+- `ADMIN_PASSWORD` - Admin login password
+- `DEFAULT_CURRENCY` - Default currency (e.g., USD)
+- `TZ` - Timezone (e.g., America/New_York)
+
+See `.env.example` for all available options.
 
 ### Environment Variables
 
@@ -84,20 +182,29 @@ TZ=America/New_York
 
 ```
 wishlist-app/
-├── src/
+├── src/                   # Backend (Express API)
 │   ├── server.ts          # Main server file
 │   ├── auth/              # Authentication system
-│   │   ├── routes.ts      # Auth endpoints
-│   │   ├── middleware.ts  # Auth middleware
-│   │   └── utils.ts       # JWT & password utilities
+│   ├── wishlists/         # Wishlist routes
+│   ├── items/             # Item routes
+│   ├── claiming/          # Public claiming system
+│   ├── scraping/          # URL scraping service
 │   └── db/                # Database layer
-│       ├── schema.ts      # Database schema
-│       └── index.ts       # DB connection & initialization
+├── frontend/              # Frontend (Next.js)
+│   ├── app/               # App router pages
+│   ├── components/        # React components
+│   ├── lib/               # API client & utilities
+│   └── Dockerfile         # Frontend Docker image
+├── nginx/                 # Reverse proxy configs
+│   ├── nginx.conf         # Nginx configuration
+│   └── Caddyfile.example  # Caddy configuration
 ├── drizzle/               # Database migrations
-├── data/                  # SQLite database (created at runtime)
-├── uploads/               # Uploaded images (created at runtime)
-├── package.json
-└── tsconfig.json
+├── data/                  # SQLite database (runtime)
+├── Dockerfile             # Backend Docker image
+├── docker-compose.yml     # Docker orchestration
+├── .env.example           # Environment template
+├── package.json           # Backend dependencies
+└── tsconfig.json          # Backend TypeScript config
 ```
 
 ## API Endpoints

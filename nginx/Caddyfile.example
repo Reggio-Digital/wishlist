@@ -1,0 +1,58 @@
+# Caddy Reverse Proxy Configuration for Wishlist App
+# Caddy automatically handles HTTPS with Let's Encrypt
+
+# Replace with your domain
+your-domain.com {
+    # Automatic HTTPS with Let's Encrypt
+    # Caddy handles certificate renewal automatically
+
+    # Rate limiting (requires caddy-ratelimit plugin)
+    # rate_limit {
+    #     zone api {
+    #         key {remote_host}
+    #         events 10
+    #         window 1s
+    #     }
+    # }
+
+    # Security headers
+    header {
+        # Enable HSTS
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        # Prevent clickjacking
+        X-Frame-Options "SAMEORIGIN"
+        # Prevent MIME sniffing
+        X-Content-Type-Options "nosniff"
+        # XSS Protection
+        X-XSS-Protection "1; mode=block"
+        # Remove Server header
+        -Server
+    }
+
+    # API endpoints - proxy to backend
+    handle /api/* {
+        reverse_proxy backend:3000
+    }
+
+    # Everything else - proxy to frontend
+    handle {
+        reverse_proxy frontend:3001
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/wishlist-access.log
+        format json
+    }
+}
+
+# Development configuration (HTTP only)
+# :80 {
+#     handle /api/* {
+#         reverse_proxy backend:3000
+#     }
+#
+#     handle {
+#         reverse_proxy frontend:3001
+#     }
+# }
