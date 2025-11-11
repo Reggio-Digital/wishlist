@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { wishlistsApi, itemsApi, claimingApi, type Wishlist, type Item } from '@/lib/api';
 
 export default function PublicWishlistPage() {
   const params = useParams();
+  const t = useTranslations('wishlist');
+  const tItem = useTranslations('item');
+  const tCommon = useTranslations('common');
   const [wishlist, setWishlist] = useState<Wishlist | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [showClaimed, setShowClaimed] = useState(false);
@@ -104,7 +108,7 @@ export default function PublicWishlistPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-600">Loading wishlist...</p>
+        <p className="text-gray-600">{tCommon('loading')}</p>
       </div>
     );
   }
@@ -113,8 +117,8 @@ export default function PublicWishlistPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Wishlist Not Found</h1>
-          <p className="text-gray-600">{error || 'This wishlist does not exist or is not public.'}</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('notFound')}</h1>
+          <p className="text-gray-600">{error || t('notFoundDescription')}</p>
         </div>
       </div>
     );
@@ -145,11 +149,11 @@ export default function PublicWishlistPage() {
                   onChange={(e) => setShowClaimed(e.target.checked)}
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                 />
-                <span className="ml-2 text-sm text-gray-700">Show claimed items</span>
+                <span className="ml-2 text-sm text-gray-700">{t('showClaimed')}</span>
               </label>
             </div>
             <div className="text-sm text-gray-600">
-              {filteredItems.length} of {items.length} items
+              {t('itemsCount', {count: filteredItems.length, total: items.length})}
             </div>
           </div>
 
@@ -157,7 +161,7 @@ export default function PublicWishlistPage() {
           {filteredItems.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-lg shadow">
               <p className="text-gray-500">
-                {showClaimed ? 'No items in this wishlist yet' : 'All items have been claimed!'}
+                {showClaimed ? t('noItemsYet') : t('allClaimed')}
               </p>
             </div>
           ) : (
@@ -192,7 +196,7 @@ export default function PublicWishlistPage() {
                         </span>
                       )}
                       {item.quantity > 1 && (
-                        <span className="text-sm text-gray-600">Qty: {item.quantity}</span>
+                        <span className="text-sm text-gray-600">{tItem('qty', {quantity: item.quantity})}</span>
                       )}
                     </div>
 
@@ -217,16 +221,16 @@ export default function PublicWishlistPage() {
                     {item.claimedByName ? (
                       <div className="bg-green-50 border border-green-200 rounded p-3">
                         <p className="text-sm font-medium text-green-800">
-                          Claimed by {item.claimedByName}
+                          {tItem('claimedByName', {name: item.claimedByName})}
                         </p>
                         {item.claimedByNote && (
                           <p className="text-xs text-green-700 mt-1">
-                            Note: {item.claimedByNote}
+                            {tItem('claimedNote', {note: item.claimedByNote})}
                           </p>
                         )}
                         {item.isPurchased && (
                           <p className="text-xs text-green-700 mt-1 font-medium">
-                            ✓ Purchased
+                            ✓ {tItem('purchased')}
                           </p>
                         )}
                       </div>
@@ -235,7 +239,7 @@ export default function PublicWishlistPage() {
                         onClick={() => handleClaimItem(item)}
                         className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
                       >
-                        Claim This Item
+                        {tItem('claim')}
                       </button>
                     )}
                   </div>
@@ -250,9 +254,9 @@ export default function PublicWishlistPage() {
       {showClaimModal && selectedItem && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h2 className="text-xl font-bold mb-4">Claim Item</h2>
+            <h2 className="text-xl font-bold mb-4">{tItem('claimItem')}</h2>
             <p className="text-gray-700 mb-4">
-              You're claiming: <strong>{selectedItem.name}</strong>
+              {tItem('youAreClaiming', {item: selectedItem.name})}
             </p>
 
             <form onSubmit={handleSubmitClaim}>
@@ -265,11 +269,11 @@ export default function PublicWishlistPage() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Name (optional)
+                    {tItem('yourNameOptional')}
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g., John"
+                    placeholder={tItem('yourNamePlaceholder')}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     value={claimName}
                     onChange={(e) => setClaimName(e.target.value)}
@@ -278,11 +282,11 @@ export default function PublicWishlistPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Coordination Note (optional, visible to other gift buyers)
+                    {tItem('coordinationNote')}
                   </label>
                   <textarea
                     rows={3}
-                    placeholder="e.g., Getting the blue one"
+                    placeholder={tItem('coordinationPlaceholder')}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     value={claimNote}
                     onChange={(e) => setClaimNote(e.target.value)}
@@ -300,14 +304,14 @@ export default function PublicWishlistPage() {
                   }}
                   className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
-                  Cancel
+                  {tItem('cancel')}
                 </button>
                 <button
                   type="submit"
                   disabled={isClaiming}
                   className="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {isClaiming ? 'Claiming...' : 'Claim Item'}
+                  {isClaiming ? tItem('claiming') : tItem('claimItem')}
                 </button>
               </div>
             </form>
@@ -318,7 +322,7 @@ export default function PublicWishlistPage() {
       {/* Footer */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <p className="text-center text-sm text-gray-500">
-          Powered by Wishlist App
+          {tCommon('poweredBy')}
         </p>
       </div>
     </div>

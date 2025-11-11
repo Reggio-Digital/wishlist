@@ -3,15 +3,18 @@
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function AdminNav() {
   const { username, logout } = useAuth();
   const pathname = usePathname();
+  const t = useTranslations('admin');
+  const tCommon = useTranslations('common');
 
   const navLinks = [
-    { href: '/admin/dashboard', label: 'Dashboard' },
-    { href: '/admin/wishlists', label: 'Wishlists' },
-    { href: '/admin/settings', label: 'Settings' },
+    { href: '/admin/dashboard', label: t('dashboard') },
+    { href: '/admin/wishlists', label: t('wishlists') },
+    { href: '/admin/settings', label: t('settings') },
   ];
 
   return (
@@ -21,7 +24,7 @@ export default function AdminNav() {
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <Link href="/admin/dashboard" className="text-xl font-bold text-gray-900">
-                Wishlist Admin
+                {t('wishlistAdmin')}
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -44,12 +47,12 @@ export default function AdminNav() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">Hello, {username}</span>
+            <span className="text-sm text-gray-600">{tCommon('hello')}, {username}</span>
             <button
               onClick={logout}
               className="text-sm text-gray-600 hover:text-gray-900 font-medium"
             >
-              Logout
+              {t('logout')}
             </button>
           </div>
         </div>

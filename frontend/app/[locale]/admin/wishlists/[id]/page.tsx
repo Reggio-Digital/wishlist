@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import ProtectedRoute from '@/components/protected-route';
 import AdminNav from '@/components/admin-nav';
 import { useAuth } from '@/lib/auth-context';
@@ -12,6 +13,10 @@ export default function WishlistDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { accessToken } = useAuth();
+  const tAdmin = useTranslations('admin');
+  const tWishlist = useTranslations('wishlist');
+  const tItem = useTranslations('item');
+  const tCommon = useTranslations('common');
   const [wishlist, setWishlist] = useState<Wishlist | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +51,7 @@ export default function WishlistDetailPage() {
       setItems(itemsData.sort((a, b) => a.sortOrder - b.sortOrder));
     } catch (error) {
       console.error('Failed to fetch wishlist:', error);
-      alert('Failed to load wishlist');
+      alert(tAdmin('failedToLoadWishlist'));
       router.push('/admin/wishlists');
     } finally {
       setIsLoading(false);
@@ -62,19 +67,19 @@ export default function WishlistDetailPage() {
       setIsEditingWishlist(false);
       fetchData();
     } catch (error: any) {
-      alert(error.message || 'Failed to update wishlist');
+      alert(error.message || tAdmin('failedToUpdateWishlist'));
     }
   };
 
   const handleDeleteItem = async (itemId: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) return;
+    if (!confirm(tAdmin('deleteItemConfirm'))) return;
     if (!accessToken) return;
 
     try {
       await itemsApi.delete(accessToken, itemId);
       fetchData();
     } catch (error) {
-      alert('Failed to delete item');
+      alert(tAdmin('failedToDeleteItem'));
     }
   };
 
@@ -106,7 +111,7 @@ export default function WishlistDetailPage() {
           <AdminNav />
           <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <div className="text-center py-12">
-              <p className="text-gray-600">Loading...</p>
+              <p className="text-gray-600">{tCommon('loading')}</p>
             </div>
           </div>
         </div>
@@ -130,7 +135,7 @@ export default function WishlistDetailPage() {
                 href="/admin/wishlists"
                 className="text-blue-600 hover:text-blue-700 text-sm"
               >
-                ← Back to Wishlists
+                {tAdmin('backToWishlists')}
               </Link>
             </div>
 
@@ -141,7 +146,7 @@ export default function WishlistDetailPage() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Name *
+                        {tWishlist('nameRequired')}
                       </label>
                       <input
                         type="text"
@@ -155,7 +160,7 @@ export default function WishlistDetailPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Slug *
+                        {tWishlist('slugRequired')}
                       </label>
                       <input
                         type="text"
@@ -169,7 +174,7 @@ export default function WishlistDetailPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Description (public)
+                        {tWishlist('publicDescription')}
                       </label>
                       <textarea
                         rows={3}
@@ -185,7 +190,7 @@ export default function WishlistDetailPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Private Notes (admin only)
+                        {tWishlist('privateNotesAdminOnly')}
                       </label>
                       <textarea
                         rows={2}
@@ -210,7 +215,7 @@ export default function WishlistDetailPage() {
                         }
                       />
                       <label htmlFor="isPublic" className="ml-2 text-sm text-gray-700">
-                        Make this wishlist public
+                        {tAdmin('makePublic')}
                       </label>
                     </div>
                   </div>
@@ -220,13 +225,13 @@ export default function WishlistDetailPage() {
                       onClick={() => setIsEditingWishlist(false)}
                       className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
                     >
-                      Cancel
+                      {tWishlist('cancel')}
                     </button>
                     <button
                       type="submit"
                       className="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
                     >
-                      Save Changes
+                      {tAdmin('saveChanges')}
                     </button>
                   </div>
                 </form>
@@ -247,13 +252,13 @@ export default function WishlistDetailPage() {
                             : 'bg-gray-100 text-gray-800'
                         }`}
                       >
-                        {wishlist.isPublic ? 'Public' : 'Private'}
+                        {wishlist.isPublic ? tAdmin('public') : tAdmin('private')}
                       </span>
                       <button
                         onClick={() => setIsEditingWishlist(true)}
                         className="px-3 py-1 text-sm text-blue-600 hover:text-blue-700 font-medium"
                       >
-                        Edit Details
+                        {tAdmin('editDetails')}
                       </button>
                     </div>
                   </div>
@@ -263,7 +268,7 @@ export default function WishlistDetailPage() {
                   {wishlist.notes && (
                     <div className="mt-3 p-3 bg-yellow-50 rounded-md">
                       <p className="text-sm text-gray-700">
-                        <strong>Private notes:</strong> {wishlist.notes}
+                        <strong>{tAdmin('privateNotesLabel')}</strong> {wishlist.notes}
                       </p>
                     </div>
                   )}
@@ -275,7 +280,7 @@ export default function WishlistDetailPage() {
                         rel="noopener noreferrer"
                         className="text-sm text-blue-600 hover:text-blue-700"
                       >
-                        View public page →
+                        {tAdmin('viewPublicPage')}
                       </a>
                     </div>
                   )}
@@ -287,24 +292,24 @@ export default function WishlistDetailPage() {
             <div className="bg-white shadow rounded-lg p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  Items ({items.length})
+                  {tWishlist('itemsCountSimple', { count: items.length })}
                 </h2>
                 <Link
                   href={`/admin/wishlists/${params.id}/items/new`}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                 >
-                  + Add Item
+                  {tAdmin('addItem')}
                 </Link>
               </div>
 
               {items.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-gray-500 mb-4">No items yet</p>
+                  <p className="text-gray-500 mb-4">{tWishlist('noItemsYet')}</p>
                   <Link
                     href={`/admin/wishlists/${params.id}/items/new`}
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                   >
-                    Add your first item
+                    {tItem('addFirst')}
                   </Link>
                 </div>
               ) : (
@@ -330,7 +335,7 @@ export default function WishlistDetailPage() {
                               </h3>
                               <p className="text-sm text-gray-600">
                                 {formatPrice(item.price, item.currency)} •{' '}
-                                Qty: {item.quantity}
+                                {tItem('qty', { quantity: item.quantity })}
                               </p>
                             </div>
                             <span
@@ -356,7 +361,7 @@ export default function WishlistDetailPage() {
                                   rel="noopener noreferrer"
                                   className="text-xs text-blue-600 hover:text-blue-700"
                                 >
-                                  {url.label || 'Link'} →
+                                  {url.label || tWishlist('link')} →
                                 </a>
                               ))}
                             </div>
@@ -366,13 +371,13 @@ export default function WishlistDetailPage() {
                               href={`/admin/wishlists/${params.id}/items/${item.id}/edit`}
                               className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                             >
-                              Edit
+                              {tAdmin('edit')}
                             </Link>
                             <button
                               onClick={() => handleDeleteItem(item.id)}
                               className="text-sm text-red-600 hover:text-red-700 font-medium"
                             >
-                              Delete
+                              {tAdmin('delete')}
                             </button>
                           </div>
                         </div>

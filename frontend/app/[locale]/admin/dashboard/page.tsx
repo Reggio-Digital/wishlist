@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import ProtectedRoute from '@/components/protected-route';
 import AdminNav from '@/components/admin-nav';
 import { useAuth } from '@/lib/auth-context';
@@ -8,6 +9,8 @@ import { wishlistsApi, itemsApi, type Wishlist, type Item } from '@/lib/api';
 import Link from 'next/link';
 
 export default function DashboardPage() {
+  const t = useTranslations('admin');
+  const tCommon = useTranslations('common');
   const { accessToken } = useAuth();
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [allItems, setAllItems] = useState<Item[]>([]);
@@ -51,11 +54,11 @@ export default function DashboardPage() {
         <AdminNav />
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
-            <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-8">{t('dashboard')}</h1>
 
             {isLoading ? (
               <div className="text-center py-12">
-                <p className="text-gray-600">Loading...</p>
+                <p className="text-gray-600">{tCommon('loading')}</p>
               </div>
             ) : (
               <>
@@ -70,7 +73,7 @@ export default function DashboardPage() {
                         <div className="ml-5 w-0 flex-1">
                           <dl>
                             <dt className="text-sm font-medium text-gray-500 truncate">
-                              Total Wishlists
+                              {t('totalWishlists')}
                             </dt>
                             <dd className="text-2xl font-semibold text-gray-900">
                               {stats.totalWishlists}
@@ -90,7 +93,7 @@ export default function DashboardPage() {
                         <div className="ml-5 w-0 flex-1">
                           <dl>
                             <dt className="text-sm font-medium text-gray-500 truncate">
-                              Public Wishlists
+                              {t('publicWishlists')}
                             </dt>
                             <dd className="text-2xl font-semibold text-gray-900">
                               {stats.publicWishlists}
@@ -110,7 +113,7 @@ export default function DashboardPage() {
                         <div className="ml-5 w-0 flex-1">
                           <dl>
                             <dt className="text-sm font-medium text-gray-500 truncate">
-                              Total Items
+                              {t('totalItems')}
                             </dt>
                             <dd className="text-2xl font-semibold text-gray-900">
                               {stats.totalItems}
@@ -130,7 +133,7 @@ export default function DashboardPage() {
                         <div className="ml-5 w-0 flex-1">
                           <dl>
                             <dt className="text-sm font-medium text-gray-500 truncate">
-                              Claimed Items
+                              {t('claimedItems')}
                             </dt>
                             <dd className="text-2xl font-semibold text-gray-900">
                               {stats.claimedItems}
@@ -146,23 +149,23 @@ export default function DashboardPage() {
                 <div className="bg-white shadow rounded-lg p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-semibold text-gray-900">
-                      Recent Wishlists
+                      {t('recentWishlists')}
                     </h2>
                     <Link
                       href="/admin/wishlists"
                       className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                     >
-                      View all
+                      {t('viewAll')}
                     </Link>
                   </div>
                   {wishlists.length === 0 ? (
                     <div className="text-center py-8">
-                      <p className="text-gray-500 mb-4">No wishlists yet</p>
+                      <p className="text-gray-500 mb-4">{t('noWishlistsYet')}</p>
                       <Link
                         href="/admin/wishlists"
                         className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                       >
-                        Create your first wishlist
+                        {t('createFirstWishlist')}
                       </Link>
                     </div>
                   ) : (
@@ -183,8 +186,8 @@ export default function DashboardPage() {
                                   {wishlist.name}
                                 </h3>
                                 <p className="text-sm text-gray-500">
-                                  {wishlist.slug} • {itemCount} items •{' '}
-                                  {wishlist.isPublic ? 'Public' : 'Private'}
+                                  {wishlist.slug} • {itemCount} {t('items')} •{' '}
+                                  {wishlist.isPublic ? t('public') : t('private')}
                                 </p>
                               </div>
                               <div className="text-gray-400">→</div>

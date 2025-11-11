@@ -12,10 +12,27 @@ Ever wanted to share a wishlist for birthdays, holidays, or weddings without giv
 - People can claim items using the honor system - no accounts needed
 - Paste a product URL and auto-fill details (works with Amazon, Target, Walmart, etc.)
 - Drag-and-drop to reorder items
+- **Multi-language support** - Available in English, Spanish, French, and German
 - Works great on mobile and desktop
 - One admin user (you), keeps things simple
 
 **Built with:** Node.js, Express, SQLite, Next.js, Tailwind CSS
+
+**Implemented:**
+- ✅ Backend Express server with full REST API
+- ✅ Database setup (SQLite + Drizzle ORM)
+- ✅ JWT-based authentication system
+- ✅ Admin authentication and password management
+- ✅ Wishlists CRUD (admin + public)
+- ✅ Items CRUD (admin + public)
+- ✅ Drag-and-drop item reordering
+- ✅ Public claiming system (honor-based, no auth)
+- ✅ URL scraping for auto-filling item details
+- ✅ **Next.js 15 frontend with full UI**
+- ✅ **Admin dashboard and management interface**
+- ✅ **Public wishlist viewing and claiming**
+- ✅ **Responsive design for mobile and desktop**
+- ✅ **Multi-language support (i18n) with Docker ENV configuration**
 
 ## Quick Start
 
@@ -81,11 +98,46 @@ ADMIN_PASSWORD=your-secure-password
 ```
 
 Optional settings:
-- `DEFAULT_CURRENCY=USD` - Currency for prices
-- `TZ=America/New_York` - Your timezone
-- `ACCESS_PASSWORD=` - Add a password for public access if you want
+```env
+# Server configuration
+PORT=3000
+NODE_ENV=development
+
+# Access control
+ACCESS_PASSWORD=                    # Add a password for public access if you want
+
+# Localization
+DEFAULT_CURRENCY=USD                # Currency for prices
+DEFAULT_LANGUAGE=en                 # Default language (en, es, fr, de)
+TZ=America/New_York                 # Your timezone
+
+# JWT secrets are auto-generated and saved to data/secrets.json
+# Only set SECRET manually for multi-instance deployments
+# SECRET=your-secret-here
+```
+
+Environment variables you can set:
+- `ADMIN_USERNAME` - Admin login username
+- `ADMIN_PASSWORD` - Admin login password
+- `DEFAULT_CURRENCY` - Default currency (e.g., USD)
+- `DEFAULT_LANGUAGE` - Default language (en, es, fr, de - defaults to en)
+- `TZ` - Timezone (e.g., America/New_York)
 
 JWT secrets are auto-generated on first run and saved to `data/secrets.json`.
+
+## Multi-Language Support
+
+The application supports multiple languages (English, Spanish, French, and German). See [I18N.md](I18N.md) for detailed information about:
+- Setting the default language via `DEFAULT_LANGUAGE` environment variable
+- Accessing the app in different languages via URL paths (e.g., `/es`, `/fr`, `/de`)
+- Adding new language translations
+- Translation file structure
+
+**Quick Example:**
+```bash
+# Set Spanish as default language
+DEFAULT_LANGUAGE=es docker-compose up -d
+```
 
 ## How It Works
 
@@ -102,6 +154,37 @@ JWT secrets are auto-generated on first run and saved to `data/secrets.json`.
 4. Get a special URL to manage your claims later
 
 The claiming system runs on trust - perfect for families and close friends.
+
+## Project Structure
+
+```
+wishlist-app/
+├── src/                   # Backend (Express API)
+│   ├── server.ts          # Main server file
+│   ├── auth/              # Authentication system
+│   ├── wishlists/         # Wishlist routes
+│   ├── items/             # Item routes
+│   ├── claiming/          # Public claiming system
+│   ├── scraping/          # URL scraping service
+│   └── db/                # Database layer
+├── frontend/              # Frontend (Next.js)
+│   ├── app/               # App router pages
+│   ├── components/        # React components
+│   ├── lib/               # API client & utilities
+│   ├── messages/          # i18n translation files
+│   └── Dockerfile         # Frontend Docker image
+├── nginx/                 # Reverse proxy configs
+│   ├── nginx.conf         # Nginx configuration
+│   └── Caddyfile.example  # Caddy configuration
+├── drizzle/               # Database migrations
+├── data/                  # SQLite database (runtime)
+├── Dockerfile             # Backend Docker image
+├── docker-compose.yml     # Docker orchestration
+├── .env.example           # Environment template
+├── I18N.md                # Multi-language documentation
+├── package.json           # Backend dependencies
+└── tsconfig.json          # Backend TypeScript config
+```
 
 ## A Few Tips
 
