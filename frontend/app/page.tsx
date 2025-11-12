@@ -36,31 +36,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Wishlist App</h1>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/my-claims"
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              My Claims
-            </Link>
-            <Link
-              href="/admin/login"
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              Admin Login
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Wishlists</h2>
+      <div className="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-0">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Wishlists</h1>
 
           {isLoading ? (
             <div className="text-center py-12">
@@ -98,12 +77,24 @@ export default function Home() {
 
       {/* Footer */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center gap-3 text-sm text-gray-500">
-          <p>Powered by Wishlist App</p>
-          <span>•</span>
+        <div className="flex flex-col items-center gap-2 text-sm">
+          <div className="flex items-center gap-3 text-gray-500">
+            <p>Built for families</p>
+            <span>•</span>
+            <p>Made with love by{' '}
+              <a
+                href="https://reggiodigital.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Reggio Digital
+              </a>
+            </p>
+          </div>
           <a
             href="/admin/login"
-            className="text-gray-400 hover:text-gray-600 text-xs"
+            className="text-gray-400 hover:text-gray-600"
           >
             Admin
           </a>

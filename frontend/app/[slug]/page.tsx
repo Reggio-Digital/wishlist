@@ -122,19 +122,15 @@ export default function PublicWishlistPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900">{wishlist.name}</h1>
-          {wishlist.description && (
-            <p className="mt-2 text-gray-600">{wishlist.description}</p>
-          )}
-        </div>
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
+      <div className="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-0">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">{wishlist.name}</h1>
+            {wishlist.description && (
+              <p className="mt-2 text-gray-600">{wishlist.description}</p>
+            )}
+          </div>
           {/* Controls */}
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -317,12 +313,24 @@ export default function PublicWishlistPage() {
 
       {/* Footer */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center gap-3 text-sm text-gray-500">
-          <p>Powered by Wishlist App</p>
-          <span>•</span>
+        <div className="flex flex-col items-center gap-2 text-sm">
+          <div className="flex items-center gap-3 text-gray-500">
+            <p>Built for families</p>
+            <span>•</span>
+            <p>Made with love by{' '}
+              <a
+                href="https://reggiodigital.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Reggio Digital
+              </a>
+            </p>
+          </div>
           <a
             href="/admin/login"
-            className="text-gray-400 hover:text-gray-600 text-xs"
+            className="text-gray-400 hover:text-gray-600"
           >
             Admin
           </a>
