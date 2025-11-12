@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: ./frontend
+      context: .
       dockerfile: Dockerfile
     container_name: wishlist-app
     restart: unless-stopped
