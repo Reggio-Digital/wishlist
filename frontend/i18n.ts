@@ -8,14 +8,17 @@ export type Locale = (typeof locales)[number];
 // Default locale - can be overridden by NEXT_PUBLIC_DEFAULT_LOCALE env var
 export const defaultLocale: Locale = (process.env.NEXT_PUBLIC_DEFAULT_LOCALE as Locale) || 'en';
 
-export default getRequestConfig(async ({ locale }) => {
-  // Validate that the incoming `locale` parameter is valid
+export default getRequestConfig(async ({ requestLocale }) => {
+  // In Next.js 16, we need to await requestLocale instead of using locale
+  let locale = await requestLocale;
+
+  // Ensure that the incoming locale is valid, fallback to default instead of notFound()
   if (!locale || !locales.includes(locale as Locale)) {
-    notFound();
+    locale = defaultLocale;
   }
 
   return {
-    locale: locale as string,
+    locale,
     messages: (await import(`./messages/${locale}.json`)).default
   };
 });

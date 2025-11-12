@@ -13,7 +13,7 @@ const intlMiddleware = createMiddleware({
   localePrefix: 'always'
 });
 
-export default function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   return intlMiddleware(request);
 }
 
