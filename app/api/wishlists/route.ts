@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, slug, description, notes, coverImageType, coverImageUrl, isPublic } = body;
+    const { name, slug, description, notes, isPublic } = body;
 
     // Validation
     if (!name || !slug) {
@@ -92,8 +92,6 @@ export async function POST(request: NextRequest) {
         slug,
         description: description || null,
         notes: notes || null,
-        coverImageType: coverImageType || null,
-        coverImageUrl: coverImageUrl || null,
         isPublic: isPublic !== undefined ? isPublic : false,
       })
       .returning();

@@ -11,7 +11,6 @@ export default function AdminNav() {
   const navLinks = [
     { href: '/admin/dashboard', label: 'Dashboard' },
     { href: '/admin/wishlists', label: 'Wishlists' },
-    { href: '/admin/settings', label: 'Settings' },
   ];
 
   return (

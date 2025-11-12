@@ -18,8 +18,6 @@ export const wishlists = sqliteTable('wishlists', {
   slug: text('slug').notNull().unique(),
   description: text('description'),
   notes: text('notes'), // Private admin-only notes
-  coverImageType: text('cover_image_type', { enum: ['upload', 'url'] }),
-  coverImageUrl: text('cover_image_url'),
   isPublic: integer('is_public', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
@@ -35,15 +33,6 @@ export const wishlistItems = sqliteTable('wishlist_items', {
   currency: text('currency').notNull().default('USD'),
   quantity: integer('quantity').notNull().default(1),
   priority: text('priority', { enum: ['low', 'medium', 'high'] }).notNull().default('medium'),
-
-  // Store as JSON arrays
-  images: text('images', { mode: 'json' }).$type<Array<{
-    type: 'upload' | 'url';
-    url: string;
-    isPrimary: boolean;
-    order: number;
-  }>>(),
-
   purchaseUrls: text('purchase_urls', { mode: 'json' }).$type<Array<{
     label: string;
     url: string;
@@ -67,7 +56,4 @@ export const wishlistItems = sqliteTable('wishlist_items', {
 
 // Type exports
 export type Wishlist = typeof wishlists.$inferSelect;
-export type NewWishlist = typeof wishlists.$inferInsert;
-
 export type WishlistItem = typeof wishlistItems.$inferSelect;
-export type NewWishlistItem = typeof wishlistItems.$inferInsert;

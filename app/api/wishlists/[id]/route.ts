@@ -77,7 +77,7 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await request.json();
-    const { name, slug, description, notes, coverImageType, coverImageUrl, isPublic } = body;
+    const { name, slug, description, notes, isPublic } = body;
 
     // Check if wishlist exists
     const existingWishlist = await db
@@ -118,8 +118,6 @@ export async function PATCH(
     if (slug !== undefined) updateData.slug = slug;
     if (description !== undefined) updateData.description = description;
     if (notes !== undefined) updateData.notes = notes;
-    if (coverImageType !== undefined) updateData.coverImageType = coverImageType;
-    if (coverImageUrl !== undefined) updateData.coverImageUrl = coverImageUrl;
     if (isPublic !== undefined) updateData.isPublic = isPublic;
 
     // Update wishlist

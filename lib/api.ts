@@ -53,19 +53,6 @@ export const authApi = {
     });
     return handleResponse<{ username: string }>(response);
   },
-
-  async changePassword(token: string, currentPassword: string, newPassword: string) {
-    const response = await fetch(`${API_BASE_URL}/auth/password`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: 'include',
-      body: JSON.stringify({ currentPassword, newPassword }),
-    });
-    return handleResponse<{ message: string }>(response);
-  },
 };
 
 // Wishlist types

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { wishlistsApi, itemsApi, claimingApi, type Wishlist, type Item } from '@/lib/api';
+import Footer from '@/components/footer';
 
 export default function PublicWishlistPage() {
   const params = useParams();
@@ -303,31 +304,7 @@ export default function PublicWishlistPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center gap-2 text-sm">
-          <div className="flex items-center gap-3 text-gray-500">
-            <p>Built for families</p>
-            <span>•</span>
-            <p>Made with love by{' '}
-              <a
-                href="https://reggiodigital.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 font-medium"
-              >
-                Reggio Digital
-              </a>
-            </p>
-          </div>
-          <a
-            href="/admin/login"
-            className="text-gray-400 hover:text-gray-600"
-          >
-            Admin
-          </a>
-        </div>
-      </div>
+      <Footer />
     </div>
   );
 }

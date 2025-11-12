@@ -42,7 +42,7 @@ export async function seedDatabase() {
         sortOrder: 0,
         purchaseUrls: [
           { label: 'Amazon', url: 'https://amazon.com', isPrimary: true },
-        ] as any,
+        ],
       },
       {
         wishlistId: dadWishlist.id,
