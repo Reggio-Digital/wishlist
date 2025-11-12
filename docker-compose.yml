@@ -9,11 +9,10 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - PORT=3000
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
-      - DEFAULT_CURRENCY=${DEFAULT_CURRENCY:-USD}
-      - TZ=${TZ:-America/New_York}
+      - SECRET=${SECRET:-}
+      - REFRESH_SECRET=${REFRESH_SECRET:-}
     volumes:
       - wishlist-data:/app/data
     healthcheck:
