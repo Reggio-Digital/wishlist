@@ -34,7 +34,7 @@ This guide covers deploying the Wishlist App in production.
    TZ=America/New_York
    ```
 
-3. **Start Services**
+3. **Start Service**
    ```bash
    docker-compose up -d
    ```
@@ -47,39 +47,11 @@ This guide covers deploying the Wishlist App in production.
    # View logs
    docker-compose logs -f
 
-   # Test health endpoints
+   # Test health endpoint
    curl http://localhost:3000/api/health
-   curl http://localhost:3001/
    ```
 
-### Production with Nginx
-
-1. **Enable Nginx in docker-compose.yml**
-   - Uncomment the `nginx` service section
-
-2. **Configure SSL Certificates**
-   ```bash
-   # Option 1: Let's Encrypt
-   sudo certbot certonly --standalone -d your-domain.com
-   sudo cp /etc/letsencrypt/live/your-domain.com/fullchain.pem nginx/ssl/cert.pem
-   sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem nginx/ssl/key.pem
-
-   # Option 2: Self-signed (development only)
-   mkdir -p nginx/ssl
-   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-     -keyout nginx/ssl/key.pem -out nginx/ssl/cert.pem
-   ```
-
-3. **Update nginx.conf**
-   - Set your domain in `server_name`
-   - Uncomment HTTPS server block
-   - Configure SSL paths
-
-4. **Deploy**
-   ```bash
-   docker-compose down
-   docker-compose up -d
-   ```
+The app runs on port 3000. For production, use a reverse proxy (Nginx or Caddy) with SSL - see [Reverse Proxy Setup](#reverse-proxy-setup) below.
 
 ## Manual Deployment
 
@@ -88,7 +60,7 @@ This guide covers deploying the Wishlist App in production.
 - Process manager (PM2 recommended)
 - Nginx or Apache (optional)
 
-### Backend Setup
+### Setup
 
 1. **Install Dependencies**
    ```bash
@@ -109,35 +81,14 @@ This guide covers deploying the Wishlist App in production.
 4. **Start with PM2**
    ```bash
    npm install -g pm2
-   pm2 start dist/server.js --name wishlist-backend
+   pm2 start npm --name wishlist-app -- start
    pm2 save
    pm2 startup
-   ```
-
-### Frontend Setup
-
-1. **Install Dependencies**
-   ```bash
-   cd frontend
-   npm ci --only=production
-   ```
-
-2. **Build**
-   ```bash
-   npm run build
-   ```
-
-3. **Start with PM2**
-   ```bash
-   pm2 start npm --name wishlist-frontend -- start
-   pm2 save
    ```
 
 ## Reverse Proxy Setup
 
 ### Nginx
-
-See `nginx/nginx.conf` for a complete configuration example.
 
 **Basic setup:**
 ```nginx
@@ -146,39 +97,29 @@ server {
     server_name your-domain.com;
 
     location / {
-        proxy_pass http://localhost:3001;
+        proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
-    }
-
-    location /api/ {
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
 ```
 
 ### Caddy
 
-See `nginx/Caddyfile.example` for configuration.
-
 **Basic setup:**
 ```caddy
 your-domain.com {
-    handle /api/* {
-        reverse_proxy localhost:3000
-    }
-
-    handle {
-        reverse_proxy localhost:3001
-    }
+    reverse_proxy localhost:3000
 }
 ```
+
+Caddy automatically handles HTTPS with Let's Encrypt!
 
 ## SSL/TLS Configuration
 
@@ -205,7 +146,7 @@ Caddy automatically obtains and renews SSL certificates. Just use your domain in
 ```caddy
 your-domain.com {
     # Caddy handles HTTPS automatically
-    reverse_proxy localhost:3001
+    reverse_proxy localhost:3000
 }
 ```
 
@@ -216,11 +157,11 @@ your-domain.com {
 **Manual Backup:**
 ```bash
 # Backup database
-docker cp wishlist-backend:/app/data/wishlist.db ./backup-$(date +%Y%m%d).db
+docker cp wishlist-app:/app/data/wishlist.db ./backup-$(date +%Y%m%d).db
 
 # Restore database
-docker cp ./backup.db wishlist-backend:/app/data/wishlist.db
-docker-compose restart backend
+docker cp ./backup.db wishlist-app:/app/data/wishlist.db
+docker-compose restart
 ```
 
 **Automated Backup Script:**
@@ -230,7 +171,7 @@ docker-compose restart backend
 BACKUP_DIR="/path/to/backups"
 DATE=$(date +%Y%m%d_%H%M%S)
 
-docker cp wishlist-backend:/app/data/wishlist.db \
+docker cp wishlist-app:/app/data/wishlist.db \
   "$BACKUP_DIR/wishlist-$DATE.db"
 
 # Keep only last 30 days
@@ -250,21 +191,15 @@ cp data/wishlist.db backups/wishlist-$(date +%Y%m%d).db
 
 # Restore
 cp backups/wishlist-backup.db data/wishlist.db
-pm2 restart all
+pm2 restart wishlist-app
 ```
 
 ## Monitoring
 
 ### Health Checks
 
-**Backend:**
 ```bash
 curl http://localhost:3000/api/health
-```
-
-**Frontend:**
-```bash
-curl http://localhost:3001/
 ```
 
 ### Docker Health Status
@@ -277,7 +212,7 @@ docker-compose ps
 docker-compose logs -f
 
 # Check resource usage
-docker stats wishlist-backend wishlist-frontend
+docker stats wishlist-app
 ```
 
 ### PM2 Monitoring
@@ -287,7 +222,7 @@ docker stats wishlist-backend wishlist-frontend
 pm2 status
 
 # Logs
-pm2 logs
+pm2 logs wishlist-app
 
 # Monitoring dashboard
 pm2 monit
@@ -321,7 +256,6 @@ pm2 set pm2-logrotate:retain 7
 ```bash
 # Find process using port
 sudo lsof -i :3000
-sudo lsof -i :3001
 
 # Kill process
 kill -9 <PID>
@@ -329,15 +263,15 @@ kill -9 <PID>
 
 ### Database Locked
 ```bash
-# Stop all services
+# Stop service
 docker-compose down
 # Or
-pm2 stop all
+pm2 stop wishlist-app
 
 # Restart
 docker-compose up -d
 # Or
-pm2 start all
+pm2 start wishlist-app
 ```
 
 ### Permission Issues
@@ -347,7 +281,7 @@ sudo chown -R $(whoami):$(whoami) data/
 
 # Docker: ensure volume permissions
 docker-compose down
-docker volume rm wishlist_wishlist-data
+docker volume rm wishlist-app_wishlist-data
 docker-compose up -d
 ```
 
@@ -382,8 +316,29 @@ docker-compose up -d
 - Configure caching headers
 - Use HTTP/2
 
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `ADMIN_USERNAME` | Yes | `admin` | Admin login username |
+| `ADMIN_PASSWORD` | Yes | `changeme` | Admin login password |
+| `DEFAULT_CURRENCY` | No | `USD` | Default currency for items |
+| `TZ` | No | `America/New_York` | Timezone for logs |
+| `SECRET` | No | auto-generated | JWT access token secret |
+| `REFRESH_SECRET` | No | auto-generated | JWT refresh token secret |
+| `NODE_ENV` | No | `production` | Node environment |
+| `PORT` | No | `3000` | Server port |
+
+## Architecture
+
+This is a **single-service application**:
+- Next.js 16 (App Router) handles both frontend and API routes
+- SQLite database stored in `/app/data` volume
+- Port 3000 serves everything (HTML pages + API endpoints)
+- Standalone Next.js build for optimized Docker deployment
+
 ## Support
 
 For issues and questions:
 - GitHub Issues: <repository-url>/issues
-- Documentation: See README.md and TODO.md
+- Documentation: See README.md
