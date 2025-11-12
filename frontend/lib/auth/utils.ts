@@ -8,12 +8,8 @@ import path from 'path';
 const secrets = initializeSecrets();
 
 // Token expiry times
-const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY_HOURS
-  ? `${process.env.TOKEN_EXPIRY_HOURS}h`
-  : '72h';
-const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY_DAYS
-  ? `${process.env.REFRESH_TOKEN_EXPIRY_DAYS}d`
-  : '30d';
+const TOKEN_EXPIRY = '72h';
+const REFRESH_TOKEN_EXPIRY = '30d';
 
 /**
  * Initialize JWT secrets - auto-generate and persist if not provided in environment

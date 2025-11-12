@@ -12,9 +12,8 @@ export default function PublicWishlistPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Claim modal state
-  const [showClaimModal, setShowClaimModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  // Claim form state
+  const [claimingItemId, setClaimingItemId] = useState<string | null>(null);
   const [claimName, setClaimName] = useState('');
   const [claimNote, setClaimNote] = useState('');
   const [isClaiming, setIsClaiming] = useState(false);
@@ -40,34 +39,33 @@ export default function PublicWishlistPage() {
     }
   };
 
-  const handleClaimItem = (item: Item) => {
-    setSelectedItem(item);
-    setShowClaimModal(true);
+  const handleClaimItem = (itemId: string) => {
+    setClaimingItemId(itemId);
     setClaimError('');
+    setClaimName('');
+    setClaimNote('');
   };
 
-  const handleSubmitClaim = async (e: React.FormEvent) => {
+  const handleSubmitClaim = async (e: React.FormEvent, itemId: string, itemName: string) => {
     e.preventDefault();
-    if (!selectedItem) return;
 
     setIsClaiming(true);
     setClaimError('');
 
     try {
-      const result = await claimingApi.claim(selectedItem.id, claimName, claimNote);
+      const result = await claimingApi.claim(itemId, claimName, claimNote);
       // Store claim token in localStorage for later management
       const claims = JSON.parse(localStorage.getItem('myClaims') || '{}');
-      claims[selectedItem.id] = {
+      claims[itemId] = {
         token: result.claimToken,
-        itemName: selectedItem.name,
+        itemName: itemName,
         wishlistSlug: params.slug,
       };
       localStorage.setItem('myClaims', JSON.stringify(claims));
 
-      setShowClaimModal(false);
+      setClaimingItemId(null);
       setClaimName('');
       setClaimNote('');
-      setSelectedItem(null);
       fetchWishlist();
     } catch (err: any) {
       setClaimError(err.message || 'Failed to claim item');
@@ -194,22 +192,32 @@ export default function PublicWishlistPage() {
 
                     {/* Purchase Links */}
                     {item.purchaseUrls && item.purchaseUrls.length > 0 && (
-                      <div className="mb-3 flex flex-wrap gap-2">
-                        {item.purchaseUrls.map((url, idx) => (
-                          <a
-                            key={idx}
-                            href={url.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200"
-                          >
-                            {url.label} →
-                          </a>
-                        ))}
+                      <div className="mb-3 border border-gray-200 rounded-md overflow-hidden">
+                        <table className="w-full text-sm">
+                          <tbody className="divide-y divide-gray-200">
+                            {item.purchaseUrls.map((url, idx) => (
+                              <tr key={idx}>
+                                <td className="p-0">
+                                  <a
+                                    href={url.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex justify-between items-center w-full px-3 py-2 hover:bg-blue-50 transition-colors"
+                                  >
+                                    <span className="text-gray-900 font-medium">{url.label}</span>
+                                    <span className="text-gray-700">
+                                      {item.price && formatPrice(item.price, item.currency)}
+                                    </span>
+                                  </a>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
                     )}
 
-                    {/* Claimed Badge or Claim Button */}
+                    {/* Claimed Badge or Claim Button/Form */}
                     {item.claimedByName ? (
                       <div className="bg-green-50 border border-green-200 rounded p-3">
                         <p className="text-sm font-medium text-green-800">
@@ -227,12 +235,65 @@ export default function PublicWishlistPage() {
                         )}
                       </div>
                     ) : (
-                      <button
-                        onClick={() => handleClaimItem(item)}
-                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
-                      >
-                        Claim This Item
-                      </button>
+                      <>
+                        <button
+                          onClick={() => handleClaimItem(item.id)}
+                          className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+                        >
+                          Claim This Item
+                        </button>
+
+                        {/* Inline Claim Form */}
+                        {claimingItemId === item.id && (
+                          <form onSubmit={(e) => handleSubmitClaim(e, item.id, item.name)} className="mt-3 space-y-3 p-3 bg-gray-50 rounded-md border border-gray-200">
+                            {claimError && (
+                              <div className="p-2 bg-red-50 text-red-800 rounded text-xs">
+                                {claimError}
+                              </div>
+                            )}
+
+                            <div>
+                              <input
+                                type="text"
+                                placeholder="Your name (optional)"
+                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={claimName}
+                                onChange={(e) => setClaimName(e.target.value)}
+                              />
+                            </div>
+
+                            <div>
+                              <input
+                                type="text"
+                                placeholder="Coordination note (optional)"
+                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={claimNote}
+                                onChange={(e) => setClaimNote(e.target.value)}
+                              />
+                            </div>
+
+                            <div className="flex justify-end space-x-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setClaimingItemId(null);
+                                  setClaimError('');
+                                }}
+                                className="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                type="submit"
+                                disabled={isClaiming}
+                                className="px-3 py-1.5 text-sm border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+                              >
+                                {isClaiming ? 'Claiming...' : 'Confirm Claim'}
+                              </button>
+                            </div>
+                          </form>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -241,75 +302,6 @@ export default function PublicWishlistPage() {
           )}
         </div>
       </div>
-
-      {/* Claim Modal */}
-      {showClaimModal && selectedItem && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h2 className="text-xl font-bold mb-4">Claim Item</h2>
-            <p className="text-gray-700 mb-4">
-              You're claiming: {selectedItem.name}
-            </p>
-
-            <form onSubmit={handleSubmitClaim}>
-              {claimError && (
-                <div className="mb-4 p-3 bg-red-50 text-red-800 rounded text-sm">
-                  {claimError}
-                </div>
-              )}
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Name (optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g., John"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    value={claimName}
-                    onChange={(e) => setClaimName(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Coordination Note (optional, visible to other gift buyers)
-                  </label>
-                  <textarea
-                    rows={3}
-                    placeholder="e.g., Getting the blue one"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    value={claimNote}
-                    onChange={(e) => setClaimNote(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="mt-6 flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowClaimModal(false);
-                    setSelectedItem(null);
-                    setClaimError('');
-                  }}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isClaiming}
-                  className="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {isClaiming ? 'Claiming...' : 'Claim Item'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Footer */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
