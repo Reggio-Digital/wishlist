@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { locales } from '@/i18n';
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
 
 export const metadata: Metadata = {
   title: "Wishlist App",
@@ -32,7 +26,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${inter.variable} font-sans antialiased bg-gray-50`}>
+      <body className="font-sans antialiased bg-gray-50">
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>{children}</AuthProvider>
         </NextIntlClientProvider>

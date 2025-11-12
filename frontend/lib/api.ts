@@ -15,7 +15,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
   // Handle empty responses
   const text = await response.text();
-  return text ? JSON.parse(text) : null;
+  return text ? JSON.parse(text) : ({} as T);
 }
 
 // Auth API
