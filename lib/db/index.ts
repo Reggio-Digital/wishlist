@@ -29,9 +29,6 @@ export async function initializeDatabase() {
     // Only run migrations if the folder exists
     if (fs.existsSync(migrationsFolder)) {
       migrate(db, { migrationsFolder });
-      console.log('✅ Database migrations completed');
-    } else {
-      console.log('⚠️  No migrations folder found - skipping migrations');
     }
 
     // Auto-seed database if empty

@@ -35,10 +35,9 @@ function initializeSecrets(): { secret: string; refreshSecret: string } {
   if (fs.existsSync(secretsFile)) {
     try {
       const data = JSON.parse(fs.readFileSync(secretsFile, 'utf-8'));
-      console.log('✅ Loaded existing JWT secrets from file');
       return data;
-    } catch (error) {
-      console.warn('⚠️  Failed to load secrets file, generating new ones');
+    } catch {
+      // Failed to load, will generate new ones
     }
   }
 
@@ -51,8 +50,6 @@ function initializeSecrets(): { secret: string; refreshSecret: string } {
   // Save to file with restricted permissions
   try {
     fs.writeFileSync(secretsFile, JSON.stringify(newSecrets, null, 2), { mode: 0o600 });
-    console.log('✅ Generated and saved new JWT secrets (cryptographically secure)');
-    console.log('🔒 Secrets saved to data/secrets.json (ensure data/ is in .gitignore)');
   } catch (error) {
     console.error('⚠️  Failed to save secrets file:', error);
     console.error('⚠️  WARNING: Using in-memory secrets - tokens will be invalid after restart!');

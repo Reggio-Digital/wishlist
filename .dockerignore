@@ -37,6 +37,3 @@ coverage/
 .cache/
 temp/
 tmp/
-
-# Documentation
-README.md

@@ -8,12 +8,9 @@ import { eq } from 'drizzle-orm';
  */
 export async function seedDatabase() {
   try {
-    console.log('🌱 Starting database seed...');
-
     // Check if data already exists
     const existingWishlists = await db.select().from(wishlists).limit(1);
     if (existingWishlists.length > 0) {
-      console.log('⚠️  Database already has data - skipping seed');
       return;
     }
 
@@ -31,8 +28,6 @@ export async function seedDatabase() {
       description: 'Things I would love!',
       isPublic: true,
     }).returning();
-
-    console.log('✅ Created sample wishlists');
 
     // Create sample items for Dad's wishlist
     await db.insert(wishlistItems).values([
@@ -142,15 +137,6 @@ export async function seedDatabase() {
         sortOrder: 4,
       },
     ]);
-
-    console.log('✅ Created sample wishlist items');
-    console.log('🎉 Database seeding complete!');
-    console.log('');
-    console.log('Sample wishlists created:');
-    console.log(`  - Dad's Wishlist (slug: dads-wishlist) - 5 items`);
-    console.log(`  - Mom's Wishlist (slug: moms-wishlist) - 5 items`);
-    console.log('');
-    console.log('All wishlists are set to public and ready to view!');
 
     return true;
   } catch (error) {

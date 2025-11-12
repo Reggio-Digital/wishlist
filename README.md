@@ -45,11 +45,6 @@ ADMIN_PASSWORD=changeme
 # Optional - JWT Secrets (auto-generated if not provided)
 SECRET=
 REFRESH_SECRET=
-
-# Optional - Defaults
-NODE_ENV=production
-DEFAULT_CURRENCY=USD
-TZ=America/New_York
 ```
 
 ## Features
