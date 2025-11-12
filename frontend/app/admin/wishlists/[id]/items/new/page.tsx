@@ -1,7 +1,6 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import ProtectedRoute from '@/components/protected-route';
 import AdminNav from '@/components/admin-nav';
 import ItemForm from '@/components/item-form';
@@ -13,7 +12,6 @@ export default function NewItemPage() {
   const params = useParams();
   const router = useRouter();
   const { accessToken } = useAuth();
-  const tAdmin = useTranslations('admin');
 
   const handleSubmit = async (data: Partial<Item>) => {
     if (!accessToken || !params.id) return;
@@ -37,12 +35,12 @@ export default function NewItemPage() {
                 href={`/admin/wishlists/${params.id}`}
                 className="text-blue-600 hover:text-blue-700 text-sm"
               >
-                {tAdmin('backToWishlist')}
+                Back to Wishlist
               </Link>
             </div>
 
             <div className="bg-white shadow rounded-lg p-6">
-              <h1 className="text-2xl font-bold text-gray-900 mb-6">{tAdmin('addNewItem')}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-6">Add New Item</h1>
               <ItemForm onSubmit={handleSubmit} onCancel={handleCancel} />
             </div>
           </div>

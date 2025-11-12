@@ -2,14 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { wishlistsApi, itemsApi, type Wishlist } from '@/lib/api';
 
 export default function Home() {
-  const params = useParams();
-  const t = useTranslations('home');
-  const tCommon = useTranslations('common');
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [itemCounts, setItemCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -44,19 +39,19 @@ export default function Home() {
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Wishlist App</h1>
           <div className="flex items-center gap-4">
             <Link
-              href={`/${params.locale}/my-claims`}
+              href="/my-claims"
               className="text-sm text-gray-600 hover:text-gray-900"
             >
-              {t('myClaims')}
+              My Claims
             </Link>
             <Link
-              href={`/${params.locale}/admin/login`}
+              href="/admin/login"
               className="text-sm text-gray-600 hover:text-gray-900"
             >
-              {t('adminLogin')}
+              Admin Login
             </Link>
           </div>
         </div>
@@ -69,7 +64,7 @@ export default function Home() {
 
           {isLoading ? (
             <div className="text-center py-12">
-              <p className="text-gray-600">{tCommon('loading')}</p>
+              <p className="text-gray-600">Loading...</p>
             </div>
           ) : wishlists.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-lg shadow">
@@ -80,7 +75,7 @@ export default function Home() {
               {wishlists.map((wishlist) => (
                 <Link
                   key={wishlist.id}
-                  href={`/${params.locale}/${wishlist.slug}`}
+                  href={`/${wishlist.slug}`}
                   className="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-6"
                 >
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -104,12 +99,10 @@ export default function Home() {
       {/* Footer */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-center gap-3 text-sm text-gray-500">
-          <p>
-            {tCommon('poweredBy')}
-          </p>
+          <p>Powered by Wishlist App</p>
           <span>•</span>
           <a
-            href={`/${params.locale}/admin/login`}
+            href="/admin/login"
             className="text-gray-400 hover:text-gray-600 text-xs"
           >
             Admin

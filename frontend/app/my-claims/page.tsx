@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 import { claimingApi } from '@/lib/api';
 
 interface MyClaim {
@@ -12,9 +11,6 @@ interface MyClaim {
 }
 
 export default function MyClaimsPage() {
-  const t = useTranslations('claims');
-  const tItem = useTranslations('item');
-  const tCommon = useTranslations('common');
 
   const [claims, setClaims] = useState<Record<string, MyClaim>>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +24,7 @@ export default function MyClaimsPage() {
   }, []);
 
   const handleUnclaim = async (itemId: string, token: string) => {
-    if (!confirm(tItem('unclaimConfirm'))) return;
+    if (!confirm('Are you sure you want to unclaim this item?')) return;
 
     try {
       await claimingApi.unclaim(token);
@@ -37,23 +33,23 @@ export default function MyClaimsPage() {
       setClaims(updatedClaims);
       localStorage.setItem('myClaims', JSON.stringify(updatedClaims));
     } catch (error: any) {
-      alert(error.message || tItem('unclaimFailed'));
+      alert(error.message || 'Failed to unclaim item');
     }
   };
 
   const handleMarkPurchased = async (itemId: string, token: string) => {
     try {
       await claimingApi.updateClaim(token, undefined, undefined, true);
-      alert(tItem('markPurchasedSuccess'));
+      alert('Item marked as purchased successfully!');
     } catch (error: any) {
-      alert(error.message || tItem('updateClaimFailed'));
+      alert(error.message || 'Failed to update claim');
     }
   };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-600">{tCommon('loading')}</p>
+        <p className="text-gray-600">Loading...</p>
       </div>
     );
   }
@@ -64,17 +60,17 @@ export default function MyClaimsPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Claims</h1>
           <p className="text-gray-600">
-            {t('subtitle')}
+            Track items you've claimed to buy for others
           </p>
         </div>
 
         {claimsList.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
-            <p className="text-gray-500 mb-4">{t('noClaimsYet')}</p>
+            <p className="text-gray-500 mb-4">No claims yet</p>
             <p className="text-sm text-gray-400">
-              {t('whenYouClaim')}
+              When you claim items from wishlists, they will appear here
             </p>
           </div>
         ) : (
@@ -90,7 +86,7 @@ export default function MyClaimsPage() {
                       href={`/${claim.wishlistSlug}`}
                       className="text-sm text-blue-600 hover:text-blue-700"
                     >
-                      {t('viewWishlist')}
+                      View Wishlist
                     </Link>
                   </div>
                   <div className="flex flex-col space-y-2">
@@ -98,22 +94,22 @@ export default function MyClaimsPage() {
                       onClick={() => handleMarkPurchased(itemId, claim.token)}
                       className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
                     >
-                      {tItem('markPurchased')}
+                      Mark Purchased
                     </button>
                     <button
                       onClick={() => handleUnclaim(itemId, claim.token)}
                       className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
                     >
-                      {tItem('unclaim')}
+                      Unclaim
                     </button>
                   </div>
                 </div>
                 <div className="mt-3 p-3 bg-blue-50 rounded text-sm text-gray-700">
                   <p>
-                    <strong>{t('claimToken')}</strong> {claim.token.substring(0, 16)}...
+                    <strong>Claim Token:</strong> {claim.token.substring(0, 16)}...
                   </p>
                   <p className="text-xs text-gray-600 mt-1">
-                    {t('saveToken')}
+                    Save this token to access your claim on other devices
                   </p>
                 </div>
               </div>
@@ -123,17 +119,17 @@ export default function MyClaimsPage() {
 
         <div className="mt-8 bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            {t('aboutClaims')}
+            About Claims
           </h2>
           <div className="space-y-2 text-sm text-gray-600">
             <p>
-              • {t('storedLocally')}
+              • Claims are stored locally in your browser
             </p>
             <p>
-              • {t('useToken')}
+              • Use your token to access claims on other devices
             </p>
             <p>
-              • {t('honorSystem')}
+              • This is an honor system - please respect other people's claims
             </p>
           </div>
         </div>

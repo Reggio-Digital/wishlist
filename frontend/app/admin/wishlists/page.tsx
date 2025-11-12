@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
 import ProtectedRoute from '@/components/protected-route';
 import AdminNav from '@/components/admin-nav';
 import { useAuth } from '@/lib/auth-context';
@@ -9,9 +8,6 @@ import { wishlistsApi, itemsApi, type Wishlist } from '@/lib/api';
 import Link from 'next/link';
 
 export default function WishlistsPage() {
-  const t = useTranslations('admin');
-  const tWishlist = useTranslations('wishlist');
-  const tCommon = useTranslations('common');
   const { accessToken } = useAuth();
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [itemCounts, setItemCounts] = useState<Record<string, number>>({});
@@ -72,14 +68,14 @@ export default function WishlistsPage() {
   };
 
   const handleDeleteWishlist = async (id: string) => {
-    if (!confirm(t('deleteConfirm'))) return;
+    if (!confirm('Are you sure you want to delete this wishlist?')) return;
     if (!accessToken) return;
 
     try {
       await wishlistsApi.delete(accessToken, id);
       fetchWishlists();
     } catch (error) {
-      alert(t('deleteFailed'));
+      alert('Failed to delete wishlist');
     }
   };
 
@@ -102,27 +98,27 @@ export default function WishlistsPage() {
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             <div className="flex items-center justify-between mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">{t('wishlists')}</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Wishlists</h1>
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
-                + {t('createWishlist')}
+                + Create Wishlist
               </button>
             </div>
 
             {isLoading ? (
               <div className="text-center py-12">
-                <p className="text-gray-600">{tCommon('loading')}</p>
+                <p className="text-gray-600">Loading...</p>
               </div>
             ) : wishlists.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-lg shadow">
-                <p className="text-gray-500 mb-4">{t('noWishlistsYet')}</p>
+                <p className="text-gray-500 mb-4">No wishlists yet</p>
                 <button
                   onClick={() => setShowCreateModal(true)}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                 >
-                  {t('createFirstWishlist')}
+                  Create Your First Wishlist
                 </button>
               </div>
             ) : (
@@ -147,7 +143,7 @@ export default function WishlistsPage() {
                               : 'bg-gray-100 text-gray-800'
                           }`}
                         >
-                          {wishlist.isPublic ? t('public') : t('private')}
+                          {wishlist.isPublic ? 'Public' : 'Private'}
                         </span>
                       </div>
                       <p className="text-sm text-gray-600 mb-3">
@@ -159,7 +155,7 @@ export default function WishlistsPage() {
                         </p>
                       )}
                       <p className="text-sm text-gray-600">
-                        {itemCounts[wishlist.id] || 0} {t('items')}
+                        {itemCounts[wishlist.id] || 0} items
                       </p>
                     </Link>
                     <div className="border-t px-6 py-3 flex justify-end space-x-2">
@@ -167,13 +163,13 @@ export default function WishlistsPage() {
                         href={`/admin/wishlists/${wishlist.id}`}
                         className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                       >
-                        {t('edit')}
+                        Edit
                       </Link>
                       <button
                         onClick={() => handleDeleteWishlist(wishlist.id)}
                         className="text-sm text-red-600 hover:text-red-700 font-medium"
                       >
-                        {t('delete')}
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -187,7 +183,7 @@ export default function WishlistsPage() {
         {showCreateModal && (
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <h2 className="text-xl font-bold mb-4">{t('createNewWishlist')}</h2>
+              <h2 className="text-xl font-bold mb-4">Create New Wishlist</h2>
               <form onSubmit={handleCreateWishlist}>
                 {createError && (
                   <div className="mb-4 p-3 bg-red-50 text-red-800 rounded text-sm">
@@ -197,7 +193,7 @@ export default function WishlistsPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {tWishlist('name')} *
+                      Name *
                     </label>
                     <input
                       type="text"
@@ -209,7 +205,7 @@ export default function WishlistsPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {t('slugUrlFriendly')}
+                      Slug (URL-friendly)
                     </label>
                     <input
                       type="text"
@@ -223,7 +219,7 @@ export default function WishlistsPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {tWishlist('description')}
+                      Description
                     </label>
                     <textarea
                       rows={3}
@@ -254,7 +250,7 @@ export default function WishlistsPage() {
                       htmlFor="isPublic"
                       className="ml-2 block text-sm text-gray-700"
                     >
-                      {t('makePublic')}
+                      Make Public
                     </label>
                   </div>
                 </div>
@@ -267,14 +263,14 @@ export default function WishlistsPage() {
                     }}
                     className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
                   >
-                    {tWishlist('cancel')}
+                    Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isCreating}
                     className="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
                   >
-                    {isCreating ? t('creating') : t('create')}
+                    {isCreating ? 'Creating...' : 'Create'}
                   </button>
                 </div>
               </form>
