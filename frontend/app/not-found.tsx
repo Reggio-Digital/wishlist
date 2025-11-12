@@ -1,4 +1,4 @@
-// Root-level not-found page for requests outside locale scope
+// Root-level not-found page
 export default function RootNotFound() {
   return (
     <html lang="en">
@@ -28,7 +28,7 @@ export default function RootNotFound() {
               The page you are looking for doesn't exist.
             </p>
             <a
-              href="/en"
+              href="/"
               style={{
                 display: 'inline-block',
                 marginTop: '1.5rem',
