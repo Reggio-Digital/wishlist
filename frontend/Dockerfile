@@ -1,4 +1,4 @@
-# Frontend Dockerfile - Multi-stage build for Next.js
+# Multi-stage build for Next.js wishlist app
 
 # Stage 1: Dependencies
 FROM node:20-alpine AS deps
@@ -23,9 +23,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Set build-time environment variables
-ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_DEFAULT_LOCALE=en
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV NEXT_PUBLIC_DEFAULT_LOCALE=${NEXT_PUBLIC_DEFAULT_LOCALE}
 
 # Disable Next.js telemetry
@@ -55,18 +53,22 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Set ownership
-RUN chown -R nextjs:nodejs /app
+# Copy drizzle migrations
+COPY --from=builder /app/drizzle ./drizzle
+
+# Create data directory with proper permissions
+RUN mkdir -p /app/data && \
+    chown -R nextjs:nodejs /app
 
 # Switch to non-root user
 USER nextjs
 
 # Expose port
-EXPOSE 3001
+EXPOSE 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \
-  CMD node -e "require('http').get('http://localhost:3001/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
