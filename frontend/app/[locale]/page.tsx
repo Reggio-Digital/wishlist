@@ -21,12 +21,12 @@ export default function Home() {
   const fetchWishlists = async () => {
     try {
       const data = await wishlistsApi.getAllPublic();
-      setWishlists(data.wishlists);
+      setWishlists(data);
 
       // Fetch item counts for each wishlist
       const counts: Record<string, number> = {};
       await Promise.all(
-        data.wishlists.map(async (w) => {
+        data.map(async (w) => {
           const items = await itemsApi.getAll(w.id);
           counts[w.id] = items.length;
         })

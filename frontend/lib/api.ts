@@ -110,14 +110,16 @@ export const wishlistsApi = {
       headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
-    return handleResponse<Wishlist[]>(response);
+    const data = await handleResponse<{ success: boolean; wishlists: Wishlist[] }>(response);
+    return data.wishlists;
   },
 
   async getAllPublic() {
     const response = await fetch(`${API_BASE_URL}/public/wishlists`, {
       credentials: 'include',
     });
-    return handleResponse<{ success: boolean; wishlists: Wishlist[] }>(response);
+    const data = await handleResponse<{ success: boolean; wishlists: Wishlist[] }>(response);
+    return data.wishlists;
   },
 
   async getOne(token: string, id: string) {
@@ -125,14 +127,16 @@ export const wishlistsApi = {
       headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
-    return handleResponse<Wishlist>(response);
+    const result = await handleResponse<{ success: boolean; wishlist: Wishlist }>(response);
+    return result.wishlist;
   },
 
   async getBySlug(slug: string) {
     const response = await fetch(`${API_BASE_URL}/${slug}`, {
       credentials: 'include',
     });
-    return handleResponse<Wishlist>(response);
+    const result = await handleResponse<{ success: boolean; wishlist: Wishlist }>(response);
+    return result.wishlist;
   },
 
   async create(token: string, data: Partial<Wishlist>) {
@@ -145,7 +149,8 @@ export const wishlistsApi = {
       credentials: 'include',
       body: JSON.stringify(data),
     });
-    return handleResponse<Wishlist>(response);
+    const result = await handleResponse<{ success: boolean; wishlist: Wishlist }>(response);
+    return result.wishlist;
   },
 
   async update(token: string, id: string, data: Partial<Wishlist>) {
@@ -158,7 +163,8 @@ export const wishlistsApi = {
       credentials: 'include',
       body: JSON.stringify(data),
     });
-    return handleResponse<Wishlist>(response);
+    const result = await handleResponse<{ success: boolean; wishlist: Wishlist }>(response);
+    return result.wishlist;
   },
 
   async delete(token: string, id: string) {
