@@ -113,6 +113,13 @@ export const wishlistsApi = {
     return handleResponse<Wishlist[]>(response);
   },
 
+  async getAllPublic() {
+    const response = await fetch(`${API_BASE_URL}/public/wishlists`, {
+      credentials: 'include',
+    });
+    return handleResponse<{ success: boolean; wishlists: Wishlist[] }>(response);
+  },
+
   async getOne(token: string, id: string) {
     const response = await fetch(`${API_BASE_URL}/wishlists/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
