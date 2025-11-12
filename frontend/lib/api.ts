@@ -188,7 +188,8 @@ export const itemsApi = {
       headers,
       credentials: 'include',
     });
-    return handleResponse<Item[]>(response);
+    const result = await handleResponse<{ success: boolean; items: Item[] }>(response);
+    return result.items;
   },
 
   async getOne(id: string, token?: string) {

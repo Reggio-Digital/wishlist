@@ -45,9 +45,9 @@ export async function seedDatabase() {
         priority: 'high',
         quantity: 1,
         sortOrder: 0,
-        purchaseUrls: JSON.stringify([
+        purchaseUrls: [
           { label: 'Amazon', url: 'https://amazon.com', isPrimary: true },
-        ]),
+        ] as any,
       },
       {
         wishlistId: dadWishlist.id,
