@@ -37,11 +37,23 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-4">
+              Wishlists
+            </h1>
+            <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto">
+              Browse and explore available wishlists
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Wishlists</h1>
-
           {isLoading ? (
             <div className="text-center py-12">
               <p className="text-gray-600">Loading...</p>
@@ -51,22 +63,22 @@ export default function Home() {
               <p className="text-gray-500">No public wishlists available yet</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {wishlists.map((wishlist) => (
                 <Link
                   key={wishlist.id}
                   href={`/${wishlist.slug}`}
-                  className="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-6"
+                  className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-8 hover:scale-105 border border-gray-100"
                 >
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
                     {wishlist.name}
                   </h3>
                   {wishlist.description && (
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    <p className="text-base text-gray-600 mb-4 line-clamp-3">
                       {wishlist.description}
                     </p>
                   )}
-                  <p className="text-sm text-gray-500">
+                  <p className="text-base text-gray-500 font-medium">
                     {itemCounts[wishlist.id] || 0} items
                   </p>
                 </Link>

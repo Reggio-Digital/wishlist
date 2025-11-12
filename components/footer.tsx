@@ -7,7 +7,17 @@ export default function Footer() {
         <div className="flex items-center gap-3 text-gray-500">
           <p>Built for families</p>
           <span>•</span>
-          <p>Open source wishlist manager</p>
+          <p>
+            Made with ❤️ by{' '}
+            <a
+              href="https://reggiodigital.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              Reggio Digital
+            </a>
+          </p>
         </div>
         <Link
           href="/admin/login"

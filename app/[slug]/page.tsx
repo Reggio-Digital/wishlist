@@ -123,34 +123,44 @@ export default function PublicWishlistPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-4">
+              {wishlist.name}
+            </h1>
+            {wishlist.description && (
+              <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto">
+                {wishlist.description}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
-          <div className="mb-8">
-            <a
-              href="/"
-              className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-4 transition-colors"
+          <a
+            href="/"
+            className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-6 transition-colors cursor-pointer"
+          >
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              Back to Home
-            </a>
-            <h1 className="text-3xl font-bold text-gray-900">{wishlist.name}</h1>
-            {wishlist.description && (
-              <p className="mt-2 text-gray-600">{wishlist.description}</p>
-            )}
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            Back to Home
+          </a>
           {/* Controls */}
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -195,68 +205,43 @@ export default function PublicWishlistPage() {
 
                     {/* Middle: Item Details */}
                     <div className="flex-1 p-6">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">
                         {item.name}
                       </h3>
                       {item.description && (
-                        <p className="text-sm text-gray-600 mb-3">
+                        <p className="text-base text-gray-600 mb-4">
                           {item.description}
                         </p>
-                      )}
-
-                      {/* Purchase Links */}
-                      {item.purchaseUrls && item.purchaseUrls.length > 0 && (
-                        <div className="mb-3">
-                          <p className="text-sm font-semibold text-gray-700 mb-2">Stores:</p>
-                          <div className="space-y-1">
-                            {item.purchaseUrls.map((url, idx) => (
-                              <div key={idx} className="flex items-center justify-between text-sm">
-                                <a
-                                  href={url.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-indigo-600 hover:text-indigo-800 hover:underline"
-                                >
-                                  {url.label}
-                                </a>
-                                <span className="text-gray-900 font-semibold">
-                                  {item.price && formatPrice(item.price, item.currency)}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
                       )}
                     </div>
 
                     {/* Right: Action Area */}
-                    <div className="md:w-80 md:flex-shrink-0 p-6 bg-gray-50 border-t md:border-t-0 md:border-l border-gray-200">
+                    <div className="md:w-80 md:flex-shrink-0 p-6 bg-gray-50 border-t md:border-t-0 md:border-l border-gray-200 flex flex-col">
                       <div className="mb-4">
-                        {item.purchaseUrls && item.purchaseUrls.length > 0 ? (
-                          <div className="space-y-1">
+                        {item.purchaseUrls && item.purchaseUrls.length > 0 && (
+                          <div className="space-y-2">
                             {item.purchaseUrls.map((url, idx) => (
                               <a
                                 key={idx}
                                 href={url.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center justify-between text-sm px-2 py-1 rounded hover:bg-indigo-50 transition-colors cursor-pointer"
+                                className="flex items-center justify-between text-base px-4 py-3 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer border border-gray-200"
                               >
-                                <span className="text-indigo-600 hover:text-indigo-800">
+                                <span className="text-indigo-600 hover:text-indigo-800 font-medium">
                                   {url.label}
                                 </span>
-                                <span className="text-gray-900 font-semibold">
+                                <span className="text-gray-900 font-bold text-lg">
                                   {item.price && formatPrice(item.price, item.currency)}
                                 </span>
                               </a>
                             ))}
                           </div>
-                        ) : (
-                          <p className="text-sm text-gray-500">No purchase links</p>
                         )}
                       </div>
 
                       {/* Claimed Badge, Success Message, or Claim Button/Form */}
+                      <div className="mt-auto">
                       {justClaimedItemId === item.id ? (
                         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                           <div className="flex items-center justify-center mb-2">
@@ -311,7 +296,7 @@ export default function PublicWishlistPage() {
                                 id={`claim-note-${item.id}`}
                                 rows={3}
                                 placeholder="e.g., 'Will buy this weekend on sale' or 'Please confirm compatibility first.'"
-                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                                className="w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
                                 value={claimNote}
                                 onChange={(e) => setClaimNote(e.target.value)}
                               />
@@ -320,7 +305,7 @@ export default function PublicWishlistPage() {
                             <button
                               type="submit"
                               disabled={isClaiming}
-                              className="w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 font-medium disabled:opacity-50 transition-colors"
+                              className="w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 font-medium disabled:opacity-50 transition-colors cursor-pointer"
                             >
                               {isClaiming ? 'Claiming...' : 'Confirm Claim'}
                             </button>
@@ -329,11 +314,12 @@ export default function PublicWishlistPage() {
                       ) : (
                         <button
                           onClick={() => handleClaimItem(item.id)}
-                          className="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-medium transition-colors"
+                          className="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-medium transition-colors cursor-pointer"
                         >
                           Claim This Item
                         </button>
                       )}
+                      </div>
                     </div>
                   </div>
                 </div>
