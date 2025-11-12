@@ -22,10 +22,6 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy application files
 COPY . .
 
-# Set build-time environment variables
-ARG NEXT_PUBLIC_DEFAULT_LOCALE=en
-ENV NEXT_PUBLIC_DEFAULT_LOCALE=${NEXT_PUBLIC_DEFAULT_LOCALE}
-
 # Disable Next.js telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
 

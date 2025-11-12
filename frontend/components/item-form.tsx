@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { useAuth } from '@/lib/auth-context';
 import { scrapingApi, type Item } from '@/lib/api';
 
@@ -13,7 +12,6 @@ interface ItemFormProps {
 }
 
 export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = false }: ItemFormProps) {
-  const t = useTranslations('item');
   const { accessToken } = useAuth();
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
@@ -54,7 +52,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         purchaseLabel: new URL(scrapeUrl).hostname.replace('www.', ''),
       }));
     } catch (error: any) {
-      setScrapeError(error.message || t('failedToScrape'));
+      setScrapeError(error.message || 'Failed to scrape URL');
     } finally {
       setIsScraping(false);
     }
@@ -88,7 +86,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         notes: formData.notes || null,
       });
     } catch (error: any) {
-      setSubmitError(error.message || t('failedToSave'));
+      setSubmitError(error.message || 'Failed to save item');
       setIsSubmitting(false);
     }
   };
@@ -105,12 +103,12 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
       {!isEditing && (
         <div className="bg-blue-50 p-4 rounded-lg">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            {t('autoFillUrl')}
+            Auto-fill from URL (optional)
           </label>
           <div className="flex space-x-2">
             <input
               type="url"
-              placeholder={t('urlPlaceholder')}
+              placeholder="https://example.com"
               className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
               value={scrapeUrl}
               onChange={(e) => setScrapeUrl(e.target.value)}
@@ -121,14 +119,14 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
               disabled={isScraping || !scrapeUrl}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
             >
-              {isScraping ? t('scraping') : t('scrape')}
+              {isScraping ? 'Scraping...' : 'Scrape'}
             </button>
           </div>
           {scrapeError && (
             <p className="mt-2 text-sm text-red-600">{scrapeError}</p>
           )}
           <p className="mt-2 text-xs text-gray-600">
-            {t('scrapeSupport')}
+            Supports common retailers like Amazon, eBay, etc.
           </p>
         </div>
       )}
@@ -136,7 +134,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
       {/* Basic Info */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          {t('nameRequired')}
+          Item Name *
         </label>
         <input
           type="text"
@@ -149,7 +147,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          {t('description')}
+          Description
         </label>
         <textarea
           rows={4}
@@ -165,7 +163,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t('price')}
+            Price
           </label>
           <input
             type="number"
@@ -177,7 +175,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t('currency')}
+            Currency
           </label>
           <select
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -197,7 +195,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t('quantity')}
+            Quantity
           </label>
           <input
             type="number"
@@ -211,7 +209,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t('priority')}
+            Priority
           </label>
           <select
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -220,9 +218,9 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
               setFormData((prev) => ({ ...prev, priority: e.target.value as 'low' | 'medium' | 'high' }))
             }
           >
-            <option value="low">{t('priorityLow')}</option>
-            <option value="medium">{t('priorityMedium')}</option>
-            <option value="high">{t('priorityHigh')}</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
           </select>
         </div>
       </div>
@@ -230,11 +228,11 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
       {/* Image URL */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          {t('imageUrl')}
+          Image URL
         </label>
         <input
           type="url"
-          placeholder={t('imageUrlPlaceholder')}
+          placeholder="https://example.com/image.jpg"
           className="w-full px-3 py-2 border border-gray-300 rounded-md"
           value={formData.imageUrl}
           onChange={(e) =>
@@ -244,7 +242,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         {formData.imageUrl && (
           <img
             src={formData.imageUrl}
-            alt={t('preview')}
+            alt="Image preview"
             className="mt-2 max-w-xs h-32 object-cover rounded"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
@@ -256,11 +254,11 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
       {/* Purchase Link */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          {t('purchaseLink')}
+          Purchase Link
         </label>
         <input
           type="url"
-          placeholder={t('purchaseLinkPlaceholder')}
+          placeholder="https://example.com/product"
           className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
           value={formData.purchaseUrl}
           onChange={(e) =>
@@ -269,7 +267,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         />
         <input
           type="text"
-          placeholder={t('linkLabel')}
+          placeholder="Link Label"
           className="w-full px-3 py-2 border border-gray-300 rounded-md"
           value={formData.purchaseLabel}
           onChange={(e) =>
@@ -281,7 +279,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
       {/* Private Notes */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          {t('privateNotes')}
+          Private Notes (admin only)
         </label>
         <textarea
           rows={2}
@@ -298,14 +296,14 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
           onClick={onCancel}
           className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
-          {t('cancel')}
+          Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
           className="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
         >
-          {isSubmitting ? t('saving') : isEditing ? t('updateItem') : t('createItem')}
+          {isSubmitting ? 'Saving...' : isEditing ? 'Update Item' : 'Create Item'}
         </button>
       </div>
     </form>

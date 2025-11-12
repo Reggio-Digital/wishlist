@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import ProtectedRoute from '@/components/protected-route';
 import AdminNav from '@/components/admin-nav';
 import ItemForm from '@/components/item-form';
@@ -14,8 +13,6 @@ export default function EditItemPage() {
   const params = useParams();
   const router = useRouter();
   const { accessToken } = useAuth();
-  const tAdmin = useTranslations('admin');
-  const tCommon = useTranslations('common');
   const [item, setItem] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,7 +24,7 @@ export default function EditItemPage() {
         const data = await itemsApi.getOne(params.itemId as string, accessToken);
         setItem(data);
       } catch (error) {
-        alert(tAdmin('failedToLoadItem'));
+        alert('Failed to load item');
         router.push(`/admin/wishlists/${params.id}`);
       } finally {
         setIsLoading(false);
@@ -55,7 +52,7 @@ export default function EditItemPage() {
           <AdminNav />
           <div className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
             <div className="text-center py-12">
-              <p className="text-gray-600">{tCommon('loading')}</p>
+              <p className="text-gray-600">Loading...</p>
             </div>
           </div>
         </div>
@@ -78,12 +75,12 @@ export default function EditItemPage() {
                 href={`/admin/wishlists/${params.id}`}
                 className="text-blue-600 hover:text-blue-700 text-sm"
               >
-                {tAdmin('backToWishlist')}
+                Back to Wishlist
               </Link>
             </div>
 
             <div className="bg-white shadow rounded-lg p-6">
-              <h1 className="text-2xl font-bold text-gray-900 mb-6">{tAdmin('edit')} {item.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit {item.name}</h1>
               <ItemForm
                 initialData={item}
                 onSubmit={handleSubmit}
