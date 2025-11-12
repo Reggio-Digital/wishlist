@@ -321,9 +321,18 @@ export default function PublicWishlistPage() {
 
       {/* Footer */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <p className="text-center text-sm text-gray-500">
-          {tCommon('poweredBy')}
-        </p>
+        <div className="flex items-center justify-center gap-3 text-sm text-gray-500">
+          <p>
+            {tCommon('poweredBy')}
+          </p>
+          <span>•</span>
+          <a
+            href={`/${params.locale}/admin/login`}
+            className="text-gray-400 hover:text-gray-600 text-xs"
+          >
+            Admin
+          </a>
+        </div>
       </div>
     </div>
   );
