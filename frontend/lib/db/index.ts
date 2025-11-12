@@ -21,8 +21,8 @@ sqlite.pragma('journal_mode = WAL'); // Better concurrency
 // Create Drizzle instance
 export const db = drizzle(sqlite, { schema });
 
-// Initialize database (run migrations)
-export function initializeDatabase() {
+// Initialize database (run migrations and seed if needed)
+export async function initializeDatabase() {
   try {
     const migrationsFolder = path.join(process.cwd(), 'drizzle');
 
@@ -33,6 +33,10 @@ export function initializeDatabase() {
     } else {
       console.log('⚠️  No migrations folder found - skipping migrations');
     }
+
+    // Auto-seed database if empty
+    const { seedDatabase } = await import('./seed');
+    await seedDatabase();
 
     return true;
   } catch (error) {

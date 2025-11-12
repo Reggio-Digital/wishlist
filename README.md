@@ -87,6 +87,10 @@ cd frontend && npm run dev
 
 Visit http://localhost:3001 to use the app.
 
+**Sample Data Included!**
+
+When you first start the app, it automatically creates two sample wishlists (Dad's and Mom's) with 5 items each. This helps you see the app in action right away. You can delete or modify these through the admin dashboard once you're familiar with how everything works.
+
 ### Configuration
 
 Your `.env` file needs at minimum:
