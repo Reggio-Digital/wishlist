@@ -1,18 +1,31 @@
 import createMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './i18n';
+import { NextRequest } from 'next/server';
 
-export default createMiddleware({
+const intlMiddleware = createMiddleware({
   // A list of all locales that are supported
   locales,
 
   // Used when no locale matches
   defaultLocale,
 
-  // Don't use locale prefixes for the default locale
-  localePrefix: 'as-needed'
+  // Always use locale prefixes (more reliable in production)
+  localePrefix: 'always'
 });
+
+export default function middleware(request: NextRequest) {
+  return intlMiddleware(request);
+}
 
 export const config = {
   // Match only internationalized pathnames
-  matcher: ['/', '/(de|es|fr|en)/:path*', '/((?!api|_next|_vercel|.*\\..*).*)']
+  matcher: [
+    // Match root path
+    '/',
+    // Match all pathnames except for:
+    // - API routes
+    // - Next.js internals (_next)
+    // - Static files (files with extensions)
+    '/((?!api|_next|_vercel|.*\\..*).*)'
+  ]
 };
