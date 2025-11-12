@@ -51,34 +51,7 @@ This guide covers deploying the Wishlist App in production.
    curl http://localhost:3000/api/health
    ```
 
-### Production with Nginx
-
-1. **Enable Nginx in docker-compose.yml**
-   - Uncomment the `nginx` service section
-
-2. **Configure SSL Certificates**
-   ```bash
-   # Option 1: Let's Encrypt
-   sudo certbot certonly --standalone -d your-domain.com
-   sudo cp /etc/letsencrypt/live/your-domain.com/fullchain.pem nginx/ssl/cert.pem
-   sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem nginx/ssl/key.pem
-
-   # Option 2: Self-signed (development only)
-   mkdir -p nginx/ssl
-   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-     -keyout nginx/ssl/key.pem -out nginx/ssl/cert.pem
-   ```
-
-3. **Update nginx.conf**
-   - Set your domain in `server_name`
-   - Uncomment HTTPS server block
-   - Configure SSL paths
-
-4. **Deploy**
-   ```bash
-   docker-compose down
-   docker-compose up -d
-   ```
+The app runs on port 3000. For production, use a reverse proxy (Nginx or Caddy) with SSL - see [Reverse Proxy Setup](#reverse-proxy-setup) below.
 
 ## Manual Deployment
 
@@ -116,8 +89,6 @@ This guide covers deploying the Wishlist App in production.
 ## Reverse Proxy Setup
 
 ### Nginx
-
-See `nginx/nginx.conf` for a complete configuration example.
 
 **Basic setup:**
 ```nginx
