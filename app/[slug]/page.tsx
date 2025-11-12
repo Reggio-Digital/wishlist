@@ -15,10 +15,11 @@ export default function PublicWishlistPage() {
 
   // Claim form state
   const [claimingItemId, setClaimingItemId] = useState<string | null>(null);
-  const [claimName, setClaimName] = useState('');
   const [claimNote, setClaimNote] = useState('');
   const [isClaiming, setIsClaiming] = useState(false);
   const [claimError, setClaimError] = useState('');
+  const [justClaimedItemId, setJustClaimedItemId] = useState<string | null>(null);
+  const [justClaimedNote, setJustClaimedNote] = useState('');
 
   useEffect(() => {
     fetchWishlist();
@@ -43,8 +44,8 @@ export default function PublicWishlistPage() {
   const handleClaimItem = (itemId: string) => {
     setClaimingItemId(itemId);
     setClaimError('');
-    setClaimName('');
     setClaimNote('');
+    setJustClaimedItemId(null);
   };
 
   const handleSubmitClaim = async (e: React.FormEvent, itemId: string, itemName: string) => {
@@ -54,7 +55,7 @@ export default function PublicWishlistPage() {
     setClaimError('');
 
     try {
-      const result = await claimingApi.claim(itemId, claimName, claimNote);
+      const result = await claimingApi.claim(itemId, undefined, claimNote);
       // Store claim token in localStorage for later management
       const claims = JSON.parse(localStorage.getItem('myClaims') || '{}');
       claims[itemId] = {
@@ -64,8 +65,9 @@ export default function PublicWishlistPage() {
       };
       localStorage.setItem('myClaims', JSON.stringify(claims));
 
+      setJustClaimedItemId(itemId);
+      setJustClaimedNote(claimNote);
       setClaimingItemId(null);
-      setClaimName('');
       setClaimNote('');
       fetchWishlist();
     } catch (err: any) {
@@ -218,8 +220,29 @@ export default function PublicWishlistPage() {
                       </div>
                     )}
 
-                    {/* Claimed Badge or Claim Button/Form */}
-                    {item.claimedByName ? (
+                    {/* Claimed Badge, Success Message, or Claim Button/Form */}
+                    {justClaimedItemId === item.id ? (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div className="flex items-center justify-center mb-2">
+                          <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </div>
+                        <p className="text-center text-lg font-semibold text-gray-900 mb-1">
+                          Item Claimed!
+                        </p>
+                        <p className="text-center text-sm text-gray-600 mb-2">
+                          The status is now locked.
+                        </p>
+                        {justClaimedNote && (
+                          <p className="text-center text-xs text-gray-600 italic">
+                            Your Note: &quot;{justClaimedNote}&quot;
+                          </p>
+                        )}
+                      </div>
+                    ) : item.claimedByName ? (
                       <div className="bg-green-50 border border-green-200 rounded p-3">
                         <p className="text-sm font-medium text-green-800">
                           Claimed by {item.claimedByName}
@@ -235,66 +258,45 @@ export default function PublicWishlistPage() {
                           </p>
                         )}
                       </div>
+                    ) : claimingItemId === item.id ? (
+                      <div className="space-y-3">
+                        <form onSubmit={(e) => handleSubmitClaim(e, item.id, item.name)} className="space-y-3">
+                          {claimError && (
+                            <div className="p-2 bg-red-50 text-red-800 rounded text-xs">
+                              {claimError}
+                            </div>
+                          )}
+
+                          <div>
+                            <label htmlFor={`claim-note-${item.id}`} className="block text-sm font-medium text-gray-700 mb-1">
+                              Optional Claim Note:
+                            </label>
+                            <textarea
+                              id={`claim-note-${item.id}`}
+                              rows={3}
+                              placeholder="e.g., 'Will buy this weekend on sale' or 'Please confirm compatibility first.'"
+                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                              value={claimNote}
+                              onChange={(e) => setClaimNote(e.target.value)}
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            disabled={isClaiming}
+                            className="w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 font-medium disabled:opacity-50 transition-colors"
+                          >
+                            {isClaiming ? 'Claiming...' : 'Confirm Claim'}
+                          </button>
+                        </form>
+                      </div>
                     ) : (
-                      <>
-                        <button
-                          onClick={() => handleClaimItem(item.id)}
-                          className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
-                        >
-                          Claim This Item
-                        </button>
-
-                        {/* Inline Claim Form */}
-                        {claimingItemId === item.id && (
-                          <form onSubmit={(e) => handleSubmitClaim(e, item.id, item.name)} className="mt-3 space-y-3 p-3 bg-gray-50 rounded-md border border-gray-200">
-                            {claimError && (
-                              <div className="p-2 bg-red-50 text-red-800 rounded text-xs">
-                                {claimError}
-                              </div>
-                            )}
-
-                            <div>
-                              <input
-                                type="text"
-                                placeholder="Your name (optional)"
-                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={claimName}
-                                onChange={(e) => setClaimName(e.target.value)}
-                              />
-                            </div>
-
-                            <div>
-                              <input
-                                type="text"
-                                placeholder="Coordination note (optional)"
-                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={claimNote}
-                                onChange={(e) => setClaimNote(e.target.value)}
-                              />
-                            </div>
-
-                            <div className="flex justify-end space-x-2">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setClaimingItemId(null);
-                                  setClaimError('');
-                                }}
-                                className="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                              >
-                                Cancel
-                              </button>
-                              <button
-                                type="submit"
-                                disabled={isClaiming}
-                                className="px-3 py-1.5 text-sm border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
-                              >
-                                {isClaiming ? 'Claiming...' : 'Confirm Claim'}
-                              </button>
-                            </div>
-                          </form>
-                        )}
-                      </>
+                      <button
+                        onClick={() => handleClaimItem(item.id)}
+                        className="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-medium transition-colors"
+                      >
+                        Claim This Item
+                      </button>
                     )}
                   </div>
                 </div>

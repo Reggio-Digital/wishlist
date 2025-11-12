@@ -33,6 +33,7 @@ export const wishlistItems = sqliteTable('wishlist_items', {
   currency: text('currency').notNull().default('USD'),
   quantity: integer('quantity').notNull().default(1),
   priority: text('priority', { enum: ['low', 'medium', 'high'] }).notNull().default('medium'),
+  imageUrl: text('images'), // Stored as 'images' in DB but exposed as imageUrl
   purchaseUrls: text('purchase_urls', { mode: 'json' }).$type<Array<{
     label: string;
     url: string;

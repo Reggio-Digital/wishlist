@@ -40,6 +40,7 @@ export async function seedDatabase() {
         priority: 'high',
         quantity: 1,
         sortOrder: 0,
+        imageUrl: '/images/test.jpg',
         purchaseUrls: [
           { label: 'Amazon', url: 'https://amazon.com', isPrimary: true },
         ],
@@ -53,6 +54,7 @@ export async function seedDatabase() {
         priority: 'medium',
         quantity: 1,
         sortOrder: 1,
+        imageUrl: '/images/test.jpg',
       },
       {
         wishlistId: dadWishlist.id,
@@ -97,6 +99,7 @@ export async function seedDatabase() {
         priority: 'high',
         quantity: 1,
         sortOrder: 0,
+        imageUrl: '/images/test.jpg',
       },
       {
         wishlistId: momWishlist.id,
