@@ -3,6 +3,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_DEFAULT_LOCALE=${DEFAULT_LANGUAGE:-en}
     container_name: wishlist-app
     restart: unless-stopped
     ports:
@@ -13,6 +15,7 @@ services:
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
       - DEFAULT_CURRENCY=${DEFAULT_CURRENCY:-USD}
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE:-en}
       - TZ=${TZ:-America/New_York}
     volumes:
       - wishlist-data:/app/data
