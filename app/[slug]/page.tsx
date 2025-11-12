@@ -191,61 +191,59 @@ export default function PublicWishlistPage() {
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow border border-gray-100 overflow-hidden"
+                  className="bg-white rounded-lg shadow hover:shadow-lg transition-all duration-300 hover:scale-105 overflow-hidden"
                 >
-                  {/* Item Image */}
-                  {item.imageUrl && (
-                    <div className="w-full h-64 bg-gray-100 overflow-hidden">
-                      <img
-                        src={item.imageUrl}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
+                  <div className="flex flex-col md:flex-row">
+                    {/* Left: Image */}
+                    {item.imageUrl && (
+                      <div className="md:w-48 md:flex-shrink-0">
+                        <img
+                          src={item.imageUrl}
+                          alt={item.name}
+                          className="w-full h-48 md:h-full object-cover"
+                        />
+                      </div>
+                    )}
 
-                  <div className="p-8">
-                    {/* Item Header */}
-                    <div className="mb-6">
-                      <h3 className="text-3xl font-bold text-gray-900 mb-3">
+                    {/* Middle: Item Details */}
+                    <div className="flex-1 p-6">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">
                         {item.name}
                       </h3>
                       {item.description && (
-                        <p className="text-lg text-gray-600 leading-relaxed">
+                        <p className="text-base text-gray-600 mb-4">
                           {item.description}
                         </p>
                       )}
                     </div>
 
-                    {/* Purchase Links Section */}
-                    {item.purchaseUrls && item.purchaseUrls.length > 0 && (
-                      <div className="mb-6">
-                        <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                          Where to Buy
-                        </h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {item.purchaseUrls.map((url, idx) => (
-                            <a
-                              key={idx}
-                              href={url.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center justify-between px-5 py-4 rounded-lg bg-gray-50 hover:bg-indigo-50 transition-colors cursor-pointer border border-gray-200 hover:border-indigo-300"
-                            >
-                              <span className="text-indigo-600 hover:text-indigo-800 font-semibold text-base">
-                                {url.label}
-                              </span>
-                              <span className="text-gray-900 font-bold text-xl">
-                                {item.price && formatPrice(item.price, item.currency)}
-                              </span>
-                            </a>
-                          ))}
-                        </div>
+                    {/* Right: Action Area */}
+                    <div className="md:w-80 md:flex-shrink-0 p-6 bg-gray-50 border-t md:border-t-0 md:border-l border-gray-200 flex flex-col">
+                      <div className="mb-4">
+                        {item.purchaseUrls && item.purchaseUrls.length > 0 && (
+                          <div className="space-y-2">
+                            {item.purchaseUrls.map((url, idx) => (
+                              <a
+                                key={idx}
+                                href={url.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-between text-base px-4 py-3 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer border border-gray-200"
+                              >
+                                <span className="text-indigo-600 hover:text-indigo-800 font-medium">
+                                  {url.label}
+                                </span>
+                                <span className="text-gray-900 font-bold text-lg">
+                                  {item.price && formatPrice(item.price, item.currency)}
+                                </span>
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
 
-                    {/* Action Section */}
-                    <div className="pt-4 border-t border-gray-200">
+                      {/* Claimed Badge, Success Message, or Claim Button/Form */}
+                      <div className="mt-auto">
                       {justClaimedItemId === item.id ? (
                         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                           <div className="flex items-center justify-center mb-2">
@@ -316,15 +314,14 @@ export default function PublicWishlistPage() {
                           </form>
                         </div>
                       ) : (
-                        <div className="flex justify-center">
-                          <button
-                            onClick={() => handleClaimItem(item.id)}
-                            className="px-8 py-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-bold text-lg transition-colors cursor-pointer shadow-md hover:shadow-lg min-w-[240px]"
-                          >
-                            Claim This Item
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => handleClaimItem(item.id)}
+                          className="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-medium transition-colors cursor-pointer"
+                        >
+                          Claim This Item
+                        </button>
                       )}
+                      </div>
                     </div>
                   </div>
                 </div>
