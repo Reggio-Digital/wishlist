@@ -17,7 +17,6 @@ export const wishlists = sqliteTable('wishlists', {
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
   description: text('description'),
-  notes: text('notes'), // Private admin-only notes
   isPublic: integer('is_public', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
@@ -32,7 +31,6 @@ export const wishlistItems = sqliteTable('wishlist_items', {
   price: real('price'),
   currency: text('currency').notNull().default('USD'),
   quantity: integer('quantity').notNull().default(1),
-  priority: text('priority', { enum: ['low', 'medium', 'high'] }).notNull().default('medium'),
   imageUrl: text('images'), // Stored as 'images' in DB but exposed as imageUrl
   purchaseUrls: text('purchase_urls', { mode: 'json' }).$type<Array<{
     label: string;
@@ -40,7 +38,6 @@ export const wishlistItems = sqliteTable('wishlist_items', {
     isPrimary: boolean;
   }>>(),
 
-  notes: text('notes'), // Private admin-only notes
   isArchived: integer('is_archived', { mode: 'boolean' }).notNull().default(false),
 
   // Claim information

@@ -101,7 +101,6 @@ export async function PATCH(
       price,
       currency,
       quantity,
-      priority,
       images,
       purchaseUrls,
       notes,
@@ -132,7 +131,6 @@ export async function PATCH(
     if (price !== undefined) updateData.price = price;
     if (currency !== undefined) updateData.currency = currency;
     if (quantity !== undefined) updateData.quantity = quantity;
-    if (priority !== undefined) updateData.priority = priority;
     if (images !== undefined) updateData.images = images;
     if (purchaseUrls !== undefined) updateData.purchaseUrls = purchaseUrls;
     if (notes !== undefined) updateData.notes = notes;

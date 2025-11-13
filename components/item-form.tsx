@@ -19,11 +19,9 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
     price: initialData?.price?.toString() || '',
     currency: initialData?.currency || 'USD',
     quantity: initialData?.quantity?.toString() || '1',
-    priority: initialData?.priority || 'medium',
     imageUrl: initialData?.imageUrl || '',
     purchaseUrl: initialData?.purchaseUrls?.[0]?.url || '',
     purchaseLabel: initialData?.purchaseUrls?.[0]?.label || '',
-    notes: initialData?.notes || '',
   });
 
   const [scrapeUrl, setScrapeUrl] = useState('');
@@ -80,7 +78,6 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         price: formData.price ? parseFloat(formData.price) : null,
         currency: formData.currency,
         quantity: parseInt(formData.quantity) || 1,
-        priority: formData.priority as 'low' | 'medium' | 'high',
         imageUrl: formData.imageUrl || null,
         purchaseUrls,
         notes: formData.notes || null,
@@ -109,7 +106,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
             <input
               type="url"
               placeholder="https://example.com"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+              className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               value={scrapeUrl}
               onChange={(e) => setScrapeUrl(e.target.value)}
             />
@@ -117,7 +114,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
               type="button"
               onClick={handleScrape}
               disabled={isScraping || !scrapeUrl}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 font-semibold transition-colors"
             >
               {isScraping ? 'Scraping...' : 'Scrape'}
             </button>
@@ -139,7 +136,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         <input
           type="text"
           required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           value={formData.name}
           onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
         />
@@ -151,7 +148,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         </label>
         <textarea
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           value={formData.description}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, description: e.target.value }))
@@ -168,7 +165,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
           <input
             type="number"
             step="0.01"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             value={formData.price}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value }))}
           />
@@ -178,7 +175,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
             Currency
           </label>
           <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             value={formData.currency}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, currency: e.target.value }))
@@ -192,37 +189,19 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Quantity
-          </label>
-          <input
-            type="number"
-            min="1"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            value={formData.quantity}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, quantity: e.target.value }))
-            }
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Priority
-          </label>
-          <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            value={formData.priority}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, priority: e.target.value as 'low' | 'medium' | 'high' }))
-            }
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-        </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Quantity
+        </label>
+        <input
+          type="number"
+          min="1"
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          value={formData.quantity}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, quantity: e.target.value }))
+          }
+        />
       </div>
 
       {/* Image URL */}
@@ -233,7 +212,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         <input
           type="url"
           placeholder="https://example.com/image.jpg"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           value={formData.imageUrl}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, imageUrl: e.target.value }))
@@ -259,7 +238,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         <input
           type="url"
           placeholder="https://example.com/product"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-2"
           value={formData.purchaseUrl}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, purchaseUrl: e.target.value }))
@@ -268,7 +247,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         <input
           type="text"
           placeholder="Link Label"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           value={formData.purchaseLabel}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, purchaseLabel: e.target.value }))
@@ -283,7 +262,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         </label>
         <textarea
           rows={2}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           value={formData.notes}
           onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
         />
@@ -294,14 +273,14 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="px-6 py-3 border-2 border-gray-300 rounded-lg text-base font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+          className="px-6 py-3 border border-transparent rounded-lg text-base font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all disabled:opacity-50"
         >
           {isSubmitting ? 'Saving...' : isEditing ? 'Update Item' : 'Create Item'}
         </button>

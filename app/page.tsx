@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { wishlistsApi, itemsApi, type Wishlist } from '@/lib/api';
+import { useAuth } from '@/lib/auth-context';
 import Footer from '@/components/footer';
 
 export default function Home() {

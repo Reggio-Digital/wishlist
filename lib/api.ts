@@ -76,7 +76,6 @@ export interface Item {
   price: number | null;
   currency: string;
   quantity: number;
-  priority: 'low' | 'medium' | 'high';
   imageUrl: string | null;
   purchaseUrls: Array<{ label: string; url: string; isPrimary: boolean }> | null;
   notes: string | null;

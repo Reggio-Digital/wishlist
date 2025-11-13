@@ -81,19 +81,6 @@ export default function PublicWishlistPage() {
     ? items
     : items.filter((item) => !item.claimedByName);
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'border-l-4 border-red-500';
-      case 'medium':
-        return 'border-l-4 border-yellow-500';
-      case 'low':
-        return 'border-l-4 border-green-500';
-      default:
-        return '';
-    }
-  };
-
   const formatPrice = (price: number | null, currency: string) => {
     if (!price) return null;
     return new Intl.NumberFormat('en-US', {
@@ -292,12 +279,12 @@ export default function PublicWishlistPage() {
 
                             <div>
                               <label htmlFor={`claim-note-${item.id}`} className="block text-sm font-medium text-gray-700 mb-1">
-                                Optional Claim Note:
+                                Add a Note (Optional):
                               </label>
                               <textarea
                                 id={`claim-note-${item.id}`}
                                 rows={3}
-                                placeholder="e.g., 'Will buy this weekend on sale' or 'Please confirm compatibility first.'"
+                                placeholder="Let them know your plans! e.g., 'Buying this next week' or 'Found a great deal online' or 'Need to check the size first'"
                                 className="w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
                                 value={claimNote}
                                 onChange={(e) => setClaimNote(e.target.value)}

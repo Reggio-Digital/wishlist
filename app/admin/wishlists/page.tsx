@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/components/protected-route';
-import AdminNav from '@/components/admin-nav';
 import { useAuth } from '@/lib/auth-context';
 import { wishlistsApi, itemsApi, type Wishlist } from '@/lib/api';
 import Link from 'next/link';
@@ -94,86 +93,102 @@ export default function WishlistsPage() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50">
-        <AdminNav />
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">
-            <div className="flex items-center justify-between mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">Wishlists</h1>
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                + Create Wishlist
-              </button>
+        {/* Hero Section */}
+        <div className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-4">
+                Wishlists
+              </h1>
+              <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto mb-6">
+                Manage all your wishlists
+              </p>
+              <div className="flex flex-col items-center gap-3 mt-8">
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all"
+                >
+                  + Create Wishlist
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-0">
 
             {isLoading ? (
               <div className="text-center py-12">
                 <p className="text-gray-600">Loading...</p>
               </div>
             ) : wishlists.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-lg shadow">
-                <p className="text-gray-500 mb-4">No wishlists yet</p>
-                <button
-                  onClick={() => setShowCreateModal(true)}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                >
-                  Create Your First Wishlist
-                </button>
+              <div className="bg-white shadow-md rounded-xl border border-gray-100 p-8">
+                <div className="text-center py-12">
+                  <p className="text-gray-500 mb-6 text-lg">No wishlists yet</p>
+                  <button
+                    onClick={() => setShowCreateModal(true)}
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all"
+                  >
+                    Create Your First Wishlist
+                  </button>
+                </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {wishlists.map((wishlist) => (
-                  <div
-                    key={wishlist.id}
-                    className="bg-white rounded-lg shadow hover:shadow-md transition-shadow"
-                  >
-                    <Link
-                      href={`/admin/wishlists/${wishlist.id}`}
-                      className="block p-6"
+              <div className="bg-white shadow-md rounded-xl border border-gray-100 p-8">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {wishlists.map((wishlist) => (
+                    <div
+                      key={wishlist.id}
+                      className="bg-white rounded-xl shadow-md border border-gray-100 hover:shadow-xl transition-all duration-300 hover:scale-105"
                     >
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {wishlist.name}
-                        </h3>
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            wishlist.isPublic
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {wishlist.isPublic ? 'Public' : 'Private'}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-3">
-                        /{wishlist.slug}
-                      </p>
-                      {wishlist.description && (
-                        <p className="text-sm text-gray-500 mb-3 line-clamp-2">
-                          {wishlist.description}
-                        </p>
-                      )}
-                      <p className="text-sm text-gray-600">
-                        {itemCounts[wishlist.id] || 0} items
-                      </p>
-                    </Link>
-                    <div className="border-t px-6 py-3 flex justify-end space-x-2">
                       <Link
                         href={`/admin/wishlists/${wishlist.id}`}
-                        className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                        className="block p-6"
                       >
-                        Edit
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="text-lg font-bold text-gray-900">
+                            {wishlist.name}
+                          </h3>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              wishlist.isPublic
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}
+                          >
+                            {wishlist.isPublic ? 'Public' : 'Private'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-3">
+                          /{wishlist.slug}
+                        </p>
+                        {wishlist.description && (
+                          <p className="text-sm text-gray-500 mb-3 line-clamp-2">
+                            {wishlist.description}
+                          </p>
+                        )}
+                        <p className="text-sm text-gray-600">
+                          {itemCounts[wishlist.id] || 0} items
+                        </p>
                       </Link>
-                      <button
-                        onClick={() => handleDeleteWishlist(wishlist.id)}
-                        className="text-sm text-red-600 hover:text-red-700 font-medium"
-                      >
-                        Delete
-                      </button>
+                      <div className="border-t px-6 py-3 flex justify-end space-x-2">
+                        <Link
+                          href={`/admin/wishlists/${wishlist.id}`}
+                          className="text-sm text-indigo-600 hover:text-indigo-800 font-semibold transition-colors"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteWishlist(wishlist.id)}
+                          className="text-sm text-red-600 hover:text-red-700 font-semibold transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -182,11 +197,11 @@ export default function WishlistsPage() {
         {/* Create Modal */}
         {showCreateModal && (
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <h2 className="text-xl font-bold mb-4">Create New Wishlist</h2>
+            <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl">
+              <h2 className="text-2xl font-bold mb-6">Create New Wishlist</h2>
               <form onSubmit={handleCreateWishlist}>
                 {createError && (
-                  <div className="mb-4 p-3 bg-red-50 text-red-800 rounded text-sm">
+                  <div className="mb-4 p-4 bg-red-50 text-red-800 rounded-lg text-sm border border-red-100">
                     {createError}
                   </div>
                 )}
@@ -198,7 +213,7 @@ export default function WishlistsPage() {
                     <input
                       type="text"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       value={newWishlist.name}
                       onChange={(e) => handleNameChange(e.target.value)}
                     />
@@ -210,7 +225,7 @@ export default function WishlistsPage() {
                     <input
                       type="text"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       value={newWishlist.slug}
                       onChange={(e) =>
                         setNewWishlist((prev) => ({ ...prev, slug: e.target.value }))
@@ -223,7 +238,7 @@ export default function WishlistsPage() {
                     </label>
                     <textarea
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       value={newWishlist.description}
                       onChange={(e) =>
                         setNewWishlist((prev) => ({
@@ -237,7 +252,7 @@ export default function WishlistsPage() {
                     <input
                       type="checkbox"
                       id="isPublic"
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-5 w-5 text-indigo-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500"
                       checked={newWishlist.isPublic}
                       onChange={(e) =>
                         setNewWishlist((prev) => ({
@@ -248,7 +263,7 @@ export default function WishlistsPage() {
                     />
                     <label
                       htmlFor="isPublic"
-                      className="ml-2 block text-sm text-gray-700"
+                      className="ml-2 block text-sm font-medium text-gray-700"
                     >
                       Make Public
                     </label>
@@ -261,14 +276,14 @@ export default function WishlistsPage() {
                       setShowCreateModal(false);
                       setCreateError('');
                     }}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="px-6 py-3 border-2 border-gray-300 rounded-lg text-base font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isCreating}
-                    className="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+                    className="px-6 py-3 border border-transparent rounded-lg text-base font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all disabled:opacity-50"
                   >
                     {isCreating ? 'Creating...' : 'Create'}
                   </button>
@@ -277,6 +292,27 @@ export default function WishlistsPage() {
             </div>
           </div>
         )}
+
+        {/* Footer */}
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center gap-2 text-sm">
+            <div className="flex items-center gap-3 text-gray-500">
+              <p>Built for families</p>
+              <span>•</span>
+              <p>
+                Made with ❤️ by{' '}
+                <a
+                  href="https://reggiodigital.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  Reggio Digital
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </ProtectedRoute>
   );
