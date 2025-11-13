@@ -37,3 +37,9 @@ coverage/
 .cache/
 temp/
 tmp/
+
+# Database (don't include existing DB in image)
+data/
+*.db
+*.db-shm
+*.db-wal

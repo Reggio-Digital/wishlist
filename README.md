@@ -4,6 +4,8 @@ Self-hosted wishlist manager for families and friends. Create wishlists for birt
 
 ## Quick Start
 
+### Using Docker (Recommended)
+
 ```bash
 # Clone and configure
 git clone <repository-url>
@@ -11,11 +13,29 @@ cd wishlist-app
 cp .env.example .env
 
 # Edit .env with your admin credentials
+nano .env
+
 # Start with Docker
 docker-compose up -d
 ```
 
 Visit http://localhost:3000
+
+### Using Pre-built Docker Image
+
+```bash
+# Pull from Docker Hub (coming soon)
+docker pull <your-dockerhub-username>/wishlist-app:latest
+
+# Run with environment variables
+docker run -d \
+  -p 3000:3000 \
+  -e ADMIN_USERNAME=admin \
+  -e ADMIN_PASSWORD=your-secure-password \
+  -v wishlist-data:/app/data \
+  --name wishlist-app \
+  <your-dockerhub-username>/wishlist-app:latest
+```
 
 ## Development
 

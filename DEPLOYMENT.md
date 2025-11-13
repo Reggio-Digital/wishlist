@@ -17,6 +17,56 @@ This guide covers deploying the Wishlist App in production.
 - Docker Compose 2.0+
 - Domain name (for production with SSL)
 
+### Publishing to Docker Hub
+
+To share your Docker image publicly:
+
+1. **Build the image**
+   ```bash
+   docker build -t <your-dockerhub-username>/wishlist-app:latest .
+   ```
+
+2. **Test locally**
+   ```bash
+   docker run -d \
+     -p 3000:3000 \
+     -e ADMIN_USERNAME=admin \
+     -e ADMIN_PASSWORD=test123 \
+     -v wishlist-data:/app/data \
+     --name wishlist-test \
+     <your-dockerhub-username>/wishlist-app:latest
+   ```
+
+3. **Login to Docker Hub**
+   ```bash
+   docker login
+   ```
+
+4. **Push to Docker Hub**
+   ```bash
+   docker push <your-dockerhub-username>/wishlist-app:latest
+   ```
+
+5. **Tag versions (recommended)**
+   ```bash
+   # Tag with version number
+   docker tag <your-dockerhub-username>/wishlist-app:latest \
+              <your-dockerhub-username>/wishlist-app:v1.0.0
+
+   docker push <your-dockerhub-username>/wishlist-app:v1.0.0
+   ```
+
+**Multi-platform builds** (for ARM/AMD support):
+```bash
+# Create buildx builder (one-time setup)
+docker buildx create --name multiplatform --use
+
+# Build and push for multiple platforms
+docker buildx build --platform linux/amd64,linux/arm64 \
+  -t <your-dockerhub-username>/wishlist-app:latest \
+  --push .
+```
+
 ### Quick Start
 
 1. **Clone and Configure**
