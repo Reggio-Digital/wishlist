@@ -1,6 +1,18 @@
-# Wishlist App
+# Wishlist
 
-Self-hosted wishlist manager for families and friends. Create wishlists for birthdays, holidays, weddings, and more. Share them via simple URLs with an honor-based claiming system.
+A simple, self-hosted wishlist app for sharing gift ideas with family and friends.
+
+## Why This App?
+
+Most wishlist apps are bloated with features you don't need, require accounts for everyone, or lock you into a platform. This app solves a simple problem: you want to share what you'd like as gifts, and your friends and family want to claim items without spoiling the surprise.
+
+**Key Philosophy:**
+
+- **Simple** - No complex features, just wishlists and items
+- **Easy to Share** - Send a single URL, no signups required
+- **Privacy-Focused** - Self-hosted, your data stays with you
+- **Transparent** - Anyone viewing the list can see what's been claimed to avoid duplicates
+- **Low Maintenance** - Single Docker container with SQLite, no database setup needed
 
 ## Demo
 
