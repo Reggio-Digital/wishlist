@@ -1,6 +1,6 @@
 services:
   app:
-    image: reggiodigital1/wishlist:latest
+    image: reggiodigital/wishlist:latest
     container_name: wishlist
     restart: unless-stopped
     ports:

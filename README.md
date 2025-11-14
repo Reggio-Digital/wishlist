@@ -24,8 +24,8 @@ Visit http://localhost:3000
 ### Using Pre-built Docker Image
 
 ```bash
-# Pull from Docker Hub (coming soon)
-docker pull <your-dockerhub-username>/wishlist:latest
+# Pull from Docker Hub
+docker pull reggiodigital/wishlist:latest
 
 # Run with environment variables
 docker run -d \
@@ -34,7 +34,7 @@ docker run -d \
   -e ADMIN_PASSWORD=your-secure-password \
   -v wishlist-data:/app/data \
   --name wishlist \
-  <your-dockerhub-username>/wishlist:latest
+  reggiodigital/wishlist:latest
 
 # Data is stored in /app/data:
 #   /app/data/db       - SQLite database files
