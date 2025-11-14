@@ -48,9 +48,6 @@ data/
 *.tsbuildinfo
 next-env.d.ts
 
-# Lock files (already installed in deps stage)
-package-lock.json
-
 # Documentation
 README.md
 DEPLOYMENT.md
