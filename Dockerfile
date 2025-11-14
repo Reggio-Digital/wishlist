@@ -33,6 +33,9 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
+# Install su-exec for user switching (standard approach)
+RUN apk add --no-cache su-exec
+
 # Set production environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -42,11 +45,18 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Create base data directory
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Create base data directory (ownership set by entrypoint)
 RUN mkdir -p /app/data/db /app/data/uploads
 
 # Expose port
 EXPOSE 3000
 
-# Start the application (user is set via docker-compose)
+# Use entrypoint to handle PUID/PGID (LinuxServer.io pattern)
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Start the application
 CMD ["node", "server.js"]

@@ -67,7 +67,8 @@ Visit http://localhost:3000
 ```bash
 docker run -d \
   -p 3000:3000 \
-  --user 1000:1000 \
+  -e PUID=1000 \
+  -e PGID=1000 \
   -e ADMIN_USERNAME=admin \
   -e ADMIN_PASSWORD=your-secure-password \
   -v wishlist-data:/app/data \
@@ -75,7 +76,7 @@ docker run -d \
   reggiodigital/wishlist:latest
 ```
 
-**For Unraid users:** Set `--user 99:100`
+**For Unraid users:** Set `-e PUID=99 -e PGID=100`
 
 ## Data Storage
 
@@ -105,10 +106,10 @@ SECRET=
 
 ### User Permissions (PUID/PGID)
 
-The container runs as a specific user to avoid permission issues. Set via the `user:` directive in docker-compose or `--user` flag in docker run:
+The container automatically handles file permissions using PUID/PGID environment variables (LinuxServer.io pattern):
 
 - **Default:** `1000:1000` (standard Linux user)
-- **Unraid:** Set to `99:100` (nobody:users)
+- **Unraid:** Set `PUID=99` and `PGID=100` (nobody:users)
 - **Find your IDs:** Run `id` on your system
 
 Example for Unraid in `.env`:
@@ -117,7 +118,10 @@ PUID=99
 PGID=100
 ```
 
-**Note:** Ensure `/folder-for-wishlist-data` on your host has appropriate permissions for the user you specify.
+The entrypoint script automatically:
+- Creates the user/group if needed
+- Sets correct ownership on data directories
+- Ensures proper file permissions for uploads
 
 ## Development
 
