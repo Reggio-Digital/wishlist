@@ -33,9 +33,8 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001
+# Install su-exec for user switching (standard approach)
+RUN apk add --no-cache su-exec
 
 # Set production environment
 ENV NODE_ENV=production
@@ -46,15 +45,18 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Create data directory structure with proper permissions
-RUN mkdir -p /app/data/db /app/data/uploads && \
-    chown -R nextjs:nodejs /app
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Switch to non-root user
-USER nextjs
+# Create base data directory (ownership set by entrypoint)
+RUN mkdir -p /app/data/db /app/data/uploads
 
 # Expose port
 EXPOSE 3000
+
+# Use entrypoint to handle PUID/PGID (LinuxServer.io pattern)
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Start the application
 CMD ["node", "server.js"]

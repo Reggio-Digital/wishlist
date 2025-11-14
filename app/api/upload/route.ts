@@ -46,7 +46,8 @@ export async function POST(request: NextRequest) {
     // Create upload directory if it doesn't exist
     const typeDir = path.join(UPLOAD_DIR, type === 'wishlist' ? 'wishlists' : 'items');
     if (!existsSync(typeDir)) {
-      await mkdir(typeDir, { recursive: true });
+      // Create directory with 0775 permissions (rwxrwxr-x)
+      await mkdir(typeDir, { recursive: true, mode: 0o775 });
     }
 
     // Generate unique filename (always use .webp for output)
@@ -67,8 +68,11 @@ export async function POST(request: NextRequest) {
       .webp({ quality: QUALITY })
       .toBuffer();
 
-    // Save processed image
-    await writeFile(filepath, processedImage);
+    // Save processed image with explicit permissions (0666 = rw-rw-rw-)
+    // This ensures the file is readable/writable by all users
+    await writeFile(filepath, processedImage, { mode: 0o666 });
+
+    console.log(`Uploaded file: ${filepath}`);
 
     // Return the public URL (must include /api prefix to match the route)
     const publicUrl = `/api/uploads/${type === 'wishlist' ? 'wishlists' : 'items'}/${filename}`;
