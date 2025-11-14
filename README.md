@@ -56,10 +56,9 @@ Create a `.env` file:
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=changeme
 
-# Optional - JWT Secrets (auto-generated if not provided)
+# Optional - JWT Secret (auto-generated if not provided)
 # Generate with: openssl rand -base64 32
 SECRET=
-REFRESH_SECRET=
 ```
 
 ## Development
