@@ -52,6 +52,12 @@ export default function ImageUpload({
         body: formData,
       });
 
+      // Check if response is JSON before parsing
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error(`Server returned non-JSON response (${response.status}): ${response.statusText}`);
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -61,6 +67,7 @@ export default function ImageUpload({
       setImageUrl(data.url);
       onImageChange(data.url);
     } catch (error: any) {
+      console.error('Image upload error:', error);
       setUploadError(error.message || 'Failed to upload image');
     } finally {
       setIsUploading(false);
