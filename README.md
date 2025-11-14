@@ -2,9 +2,16 @@
 
 Self-hosted wishlist manager for families and friends. Create wishlists for birthdays, holidays, weddings, and more. Share them via simple URLs with an honor-based claiming system.
 
+## Features
+
+- **Admin Dashboard**: Manage wishlists and items
+- **Public Wishlist View**: Share wishlists
+- **Claim System**: Honor-based claiming
+- **URL Scraping**: Auto-fill item details from product URLs (Coming Soon)
+
 ## Quick Start
 
-### Using Docker (Recommended)
+### Using Docker Compose
 
 ```bash
 # Clone and configure
@@ -15,13 +22,13 @@ cp .env.example .env
 # Edit .env with your admin credentials
 nano .env
 
-# Start with Docker
+# Start with Docker Compose
 docker-compose up -d
 ```
 
 Visit http://localhost:3000
 
-### Using Pre-built Docker Image
+### Using Docker Image
 
 ```bash
 # Pull from Docker Hub
@@ -41,6 +48,27 @@ docker run -d \
 #   /app/data/uploads  - Uploaded images
 ```
 
+## Data Storage
+
+Data is stored in `/app/data`:
+
+- `/app/data/db` - SQLite database files
+- `/app/data/uploads` - Uploaded images
+
+## Environment Variables
+
+Create a `.env` file:
+
+```env
+# Required - Admin Credentials
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=changeme
+
+# Optional - JWT Secrets (auto-generated if not provided)
+SECRET=
+REFRESH_SECRET=
+```
+
 ## Development
 
 ```bash
@@ -57,45 +85,11 @@ npm run build
 npm start
 ```
 
-## Environment Variables
-
-Create a `.env` file:
-
-```env
-# Required - Admin Credentials
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=changeme
-
-# Optional - JWT Secrets (auto-generated if not provided)
-SECRET=
-REFRESH_SECRET=
-```
-
-## Features
-
-- **Admin Dashboard**: Manage wishlists and items
-- **Public Wishlist View**: Share wishlists with custom slugs
-- **Claim System**: Honor-based claiming with local storage
-- **URL Scraping**: Auto-fill item details from product URLs (Amazon, Target, Walmart, Best Buy)
-- **Responsive Design**: Works on desktop and mobile
-- **Single Container**: Easy Docker deployment
-
 ## Pages
 
 - `/admin/login` - Admin authentication
-- `/admin/dashboard` - Overview and stats
-- `/admin/wishlists` - Manage wishlists
-- `/admin/wishlists/[id]` - Wishlist detail with items
-- `/admin/settings` - Change password
+- `/admin` - Admin dashboard (manage wishlists and items)
 - `/[slug]` - Public wishlist view
-
-## Deployment
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions including:
-- Docker setup
-- SSL/TLS configuration
-- Database backups
-- Monitoring
 
 ## License
 

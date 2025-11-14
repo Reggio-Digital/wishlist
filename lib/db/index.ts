@@ -4,34 +4,51 @@ import * as schema from './schema';
 import path from 'path';
 import fs from 'fs';
 
-// Ensure data directories exist
-const dataDir = path.join(process.cwd(), 'data');
-const dbDir = path.join(dataDir, 'db');
-const uploadsDir = path.join(dataDir, 'uploads');
+// Lazy initialization to avoid database access during build
+let _db: ReturnType<typeof drizzle> | null = null;
+let _sqlite: Database.Database | null = null;
 
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+function getDb() {
+  if (!_db) {
+    // Ensure data directories exist
+    const dataDir = path.join(process.cwd(), 'data');
+    const dbDir = path.join(dataDir, 'db');
+    const uploadsDir = path.join(dataDir, 'uploads');
+
+    if (!fs.existsSync(dbDir)) {
+      fs.mkdirSync(dbDir, { recursive: true });
+    }
+
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    // Database file path
+    const dbPath = path.join(dbDir, 'wishlist.db');
+
+    // Create SQLite database connection
+    _sqlite = new Database(dbPath);
+    _sqlite.pragma('journal_mode = WAL'); // Better concurrency
+
+    // Create Drizzle instance
+    _db = drizzle(_sqlite, { schema });
+  }
+  return _db;
 }
 
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
-// Database file path
-const dbPath = path.join(dbDir, 'wishlist.db');
-
-// Create SQLite database connection
-const sqlite = new Database(dbPath);
-sqlite.pragma('journal_mode = WAL'); // Better concurrency
-
-// Create Drizzle instance
-export const db = drizzle(sqlite, { schema });
+// Export db as a getter
+export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+  get(target, prop) {
+    return getDb()[prop as keyof ReturnType<typeof drizzle>];
+  }
+});
 
 // Initialize database (create tables and seed if needed)
 export async function initializeDatabase() {
   try {
-    // Create tables directly from schema
-    const { wishlists, wishlistItems } = schema;
+    // Ensure database is initialized
+    const sqlite = _sqlite || getDb() && _sqlite;
+    if (!sqlite) throw new Error('Failed to initialize database');
 
     // Create wishlists table
     sqlite.exec(`
