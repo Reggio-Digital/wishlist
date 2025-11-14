@@ -70,8 +70,8 @@ export async function POST(request: NextRequest) {
     // Save processed image
     await writeFile(filepath, processedImage);
 
-    // Return the public URL
-    const publicUrl = `/uploads/${type === 'wishlist' ? 'wishlists' : 'items'}/${filename}`;
+    // Return the public URL (must include /api prefix to match the route)
+    const publicUrl = `/api/uploads/${type === 'wishlist' ? 'wishlists' : 'items'}/${filename}`;
 
     return NextResponse.json({
       success: true,

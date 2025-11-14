@@ -14,14 +14,22 @@ export async function GET(
     // Await params in Next.js 16+
     const { path: pathSegments } = await params;
 
+    console.log('Upload request - pathSegments:', pathSegments);
+    console.log('UPLOAD_DIR:', UPLOAD_DIR);
+
     // Get the file path from the URL
     const filePath = path.join(UPLOAD_DIR, ...pathSegments);
+    console.log('Constructed filePath:', filePath);
 
     // Security: Ensure the resolved path is within UPLOAD_DIR
     const resolvedPath = path.resolve(filePath);
     const resolvedUploadDir = path.resolve(UPLOAD_DIR);
 
+    console.log('Resolved path:', resolvedPath);
+    console.log('Resolved upload dir:', resolvedUploadDir);
+
     if (!resolvedPath.startsWith(resolvedUploadDir)) {
+      console.log('Security check failed - path outside upload dir');
       return NextResponse.json(
         { error: 'Invalid file path' },
         { status: 403 }
@@ -30,11 +38,14 @@ export async function GET(
 
     // Check if file exists
     if (!existsSync(resolvedPath)) {
+      console.log('File not found at:', resolvedPath);
       return NextResponse.json(
         { error: 'File not found' },
         { status: 404 }
       );
     }
+
+    console.log('File exists, serving...');
 
     // Read the file
     const fileBuffer = await readFile(resolvedPath);
