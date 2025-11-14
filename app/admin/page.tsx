@@ -3,17 +3,21 @@
 import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/components/protected-route';
 import { useAuth } from '@/lib/auth-context';
-import { wishlistsApi, itemsApi, type Wishlist, type Item } from '@/lib/api';
+import { wishlistsApi, itemsApi, settingsApi, type Wishlist, type Item, type Settings } from '@/lib/api';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import ImageUpload from '@/components/image-upload';
 
 export default function AdminPage() {
-  const { accessToken, logout, username } = useAuth();
+  const { accessToken, logout } = useAuth();
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [itemCounts, setItemCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [settings, setSettings] = useState<Settings>({ siteTitle: 'Wishlist', homepageSubtext: 'Browse and explore available wishlists' });
+  const [editingSettings, setEditingSettings] = useState(false);
+  const [settingsForm, setSettingsForm] = useState<Settings>({ siteTitle: '', homepageSubtext: '' });
+  const [settingsError, setSettingsError] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newWishlist, setNewWishlist] = useState({
     name: '',
@@ -50,7 +54,17 @@ export default function AdminPage() {
 
   useEffect(() => {
     fetchWishlists();
+    fetchSettings();
   }, [accessToken]);
+
+  const fetchSettings = async () => {
+    try {
+      const data = await settingsApi.getSettings();
+      setSettings(data);
+    } catch (error) {
+      console.error('Failed to fetch settings:', error);
+    }
+  };
 
   const fetchWishlists = async () => {
     if (!accessToken) return;
@@ -240,6 +254,32 @@ export default function AdminPage() {
     }
   };
 
+  const startEditingSettings = () => {
+    setEditingSettings(true);
+    setSettingsForm({ ...settings });
+    setSettingsError('');
+  };
+
+  const cancelEditingSettings = () => {
+    setEditingSettings(false);
+    setSettingsError('');
+  };
+
+  const handleUpdateSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!accessToken) return;
+
+    setSettingsError('');
+
+    try {
+      await settingsApi.updateSettings(accessToken, settingsForm);
+      setSettings(settingsForm);
+      setEditingSettings(false);
+    } catch (error: any) {
+      setSettingsError(error.message || 'Failed to update settings');
+    }
+  };
+
   const stats = {
     totalWishlists: wishlists.length,
     publicWishlists: wishlists.filter((w) => w.isPublic).length,
@@ -341,6 +381,99 @@ export default function AdminPage() {
                           </dl>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Settings Section */}
+                <div className="mb-8">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div className="p-5 border-b border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                          Site Settings
+                        </h2>
+                        {!editingSettings && (
+                          <button
+                            onClick={startEditingSettings}
+                            className="px-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors cursor-pointer"
+                          >
+                            Edit Settings
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      {settingsError && (
+                        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-400 rounded-lg text-base">
+                          {settingsError}
+                        </div>
+                      )}
+                      {editingSettings ? (
+                        <form onSubmit={handleUpdateSettings} className="space-y-4">
+                          <div>
+                            <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Site Title
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                              value={settingsForm.siteTitle}
+                              onChange={(e) =>
+                                setSettingsForm((prev) => ({ ...prev, siteTitle: e.target.value }))
+                              }
+                              placeholder="Wishlist"
+                            />
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                              This is used for the page title and homepage header
+                            </p>
+                          </div>
+                          <div>
+                            <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Homepage Subtext
+                            </label>
+                            <textarea
+                              rows={2}
+                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                              value={settingsForm.homepageSubtext}
+                              onChange={(e) =>
+                                setSettingsForm((prev) => ({ ...prev, homepageSubtext: e.target.value }))
+                              }
+                              placeholder="Browse and explore available wishlists"
+                            />
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                              This appears below the title on the homepage
+                            </p>
+                          </div>
+                          <div className="flex justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={cancelEditingSettings}
+                              className="px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              className="px-4 py-2 text-base bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer"
+                            >
+                              Save Settings
+                            </button>
+                          </div>
+                        </form>
+                      ) : (
+                        <div className="space-y-3">
+                          <div>
+                            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Site Title</p>
+                            <p className="text-base text-gray-900 dark:text-white">{settings.siteTitle}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Homepage Subtext</p>
+                            <p className="text-base text-gray-900 dark:text-white">{settings.homepageSubtext}</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

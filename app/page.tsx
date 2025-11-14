@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { wishlistsApi, itemsApi, type Wishlist } from '@/lib/api';
+import { wishlistsApi, itemsApi, settingsApi, type Wishlist, type Settings } from '@/lib/api';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
@@ -10,10 +10,21 @@ export default function Home() {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [itemCounts, setItemCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [settings, setSettings] = useState<Settings>({ siteTitle: 'Wishlist', homepageSubtext: 'Browse and explore available wishlists' });
 
   useEffect(() => {
     fetchWishlists();
+    fetchSettings();
   }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const data = await settingsApi.getSettings();
+      setSettings(data);
+    } catch (error) {
+      console.error('Failed to fetch settings:', error);
+    }
+  };
 
   const fetchWishlists = async () => {
     try {
@@ -39,8 +50,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header
-        title="Wishlists"
-        subtitle="Browse and explore available wishlists"
+        title={settings.siteTitle}
+        subtitle={settings.homepageSubtext}
       />
 
       {/* Main Content */}

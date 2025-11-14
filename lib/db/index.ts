@@ -91,6 +91,16 @@ export async function initializeDatabase() {
       )
     `);
 
+    // Create settings table
+    sqlite.exec(`
+      CREATE TABLE IF NOT EXISTS settings (
+        id TEXT PRIMARY KEY NOT NULL,
+        key TEXT NOT NULL UNIQUE,
+        value TEXT NOT NULL,
+        updated_at INTEGER DEFAULT (unixepoch()) NOT NULL
+      )
+    `);
+
     // Run migrations for existing databases
     try {
       // Add image_url column if it doesn't exist

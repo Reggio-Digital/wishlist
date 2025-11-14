@@ -273,3 +273,32 @@ export const scrapingApi = {
     return handleResponse<ScrapedData>(response);
   },
 };
+
+// Settings API
+export interface Settings {
+  siteTitle: string;
+  homepageSubtext: string;
+}
+
+export const settingsApi = {
+  async getSettings() {
+    const response = await fetch(`${API_BASE_URL}/settings`, {
+      credentials: 'include',
+    });
+    const result = await handleResponse<{ success: boolean; settings: Settings }>(response);
+    return result.settings;
+  },
+
+  async updateSettings(token: string, settings: Partial<Settings>) {
+    const response = await fetch(`${API_BASE_URL}/settings`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: 'include',
+      body: JSON.stringify(settings),
+    });
+    return handleResponse<{ success: boolean; message: string }>(response);
+  },
+};

@@ -53,6 +53,15 @@ export const wishlistItems = sqliteTable('wishlist_items', {
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 });
 
+// Settings table
+export const settings = sqliteTable('settings', {
+  id: text('id').primaryKey().$defaultFn(() => createId()),
+  key: text('key').notNull().unique(),
+  value: text('value').notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+});
+
 // Type exports
 export type Wishlist = typeof wishlists.$inferSelect;
 export type WishlistItem = typeof wishlistItems.$inferSelect;
+export type Setting = typeof settings.$inferSelect;
