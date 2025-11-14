@@ -6,6 +6,11 @@ services:
     ports:
       - "3000:3000"
     environment:
+      # User and Group IDs - defaults to 1000:1000 (standard Linux)
+      # For Unraid, set PUID=99 and PGID=100
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      # Admin credentials
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
     volumes:

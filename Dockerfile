@@ -33,32 +33,30 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Create user/group compatible with Unraid (nobody:users)
-# UID 99 = nobody, GID 100 = users (standard in Unraid)
-RUN addgroup -g 100 -S users 2>/dev/null || true && \
-    adduser -S -u 99 -G users -h /app nobody 2>/dev/null || true
+# Install su-exec for user switching
+RUN apk add --no-cache su-exec
 
 # Set production environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-# Set umask to ensure files are created with proper permissions
-ENV UMASK=0002
 
 # Copy necessary files from builder
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Create data directory structure with proper permissions
-RUN mkdir -p /app/data/db /app/data/uploads && \
-    chown -R 99:100 /app && \
-    chmod -R 775 /app/data
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Switch to nobody user (Unraid standard)
-USER nobody
+# Create base data directory (entrypoint will set ownership)
+RUN mkdir -p /app/data/db /app/data/uploads
 
 # Expose port
 EXPOSE 3000
+
+# Use entrypoint to handle PUID/PGID
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Start the application
 CMD ["node", "server.js"]

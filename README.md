@@ -67,12 +67,16 @@ Visit http://localhost:3000
 ```bash
 docker run -d \
   -p 3000:3000 \
+  -e PUID=1000 \
+  -e PGID=1000 \
   -e ADMIN_USERNAME=admin \
   -e ADMIN_PASSWORD=your-secure-password \
   -v wishlist-data:/app/data \
   --name wishlist \
   reggiodigital/wishlist:latest
 ```
+
+**For Unraid users:** Set `-e PUID=99 -e PGID=100`
 
 ## Data Storage
 
@@ -90,9 +94,28 @@ Create a `.env` file:
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=changeme
 
+# Optional - User/Group IDs (defaults to 1000:1000)
+# For Unraid, use PUID=99 and PGID=100
+PUID=1000
+PGID=1000
+
 # Optional - JWT Secret (auto-generated if not provided)
 # Generate with: openssl rand -base64 32
 SECRET=
+```
+
+### PUID and PGID
+
+To avoid permission issues with files, you can set the user and group IDs the container runs as:
+
+- **Default:** `1000:1000` (standard Linux user)
+- **Unraid:** Set `PUID=99` and `PGID=100` (nobody:users)
+- **Find your IDs:** Run `id` on your system to see your user/group IDs
+
+Example for Unraid in `.env`:
+```env
+PUID=99
+PGID=100
 ```
 
 ## Development
