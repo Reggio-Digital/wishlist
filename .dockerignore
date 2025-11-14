@@ -43,3 +43,23 @@ data/
 *.db
 *.db-shm
 *.db-wal
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Lock files (already installed in deps stage)
+package-lock.json
+
+# Documentation
+README.md
+DEPLOYMENT.md
+LICENSE
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Setup scripts
+setup.sh

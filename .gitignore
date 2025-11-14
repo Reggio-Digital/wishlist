@@ -41,5 +41,23 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# next.js cache
+/.next/cache/
+/.next/server/
+/.next/static/chunks/
+
+# swc compiler
+.swc/
+
+# turbo
+.turbo/
+
+# drizzle
+drizzle/
+
+# ide
+.vscode/
+.idea/
+
 # data
 /data
