@@ -2,6 +2,28 @@
 
 Self-hosted wishlist manager for families and friends. Create wishlists for birthdays, holidays, weddings, and more. Share them via simple URLs with an honor-based claiming system.
 
+## Demo
+
+![Demo Video](video.mp4)
+
+## Screenshots
+
+### Homepage
+
+![Homepage](screenshot1.png)
+
+### Wishlist View
+
+![Wishlist View](screenshot2.png)
+
+### Admin Dashboard
+
+![Admin Dashboard](screenshot3.png)
+
+### Admin Dashboard - Item Details
+
+![Admin Dashboard - Item Details](screenshot4.png)
+
 ## Features
 
 - **Admin Dashboard**: Manage wishlists and items
