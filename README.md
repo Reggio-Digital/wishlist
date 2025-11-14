@@ -1,6 +1,7 @@
 # Wishlist
 
 [![Docker Hub](https://img.shields.io/docker/pulls/reggiodigital/wishlist)](https://hub.docker.com/r/reggiodigital/wishlist)
+[![License](https://img.shields.io/github/license/Reggio-Digital/wishlist)](LICENSE)
 
 A simple, self-hosted wishlist app for sharing gift ideas with family and friends.
 
