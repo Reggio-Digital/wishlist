@@ -31,10 +31,6 @@ Visit http://localhost:3000
 ### Using Docker Image
 
 ```bash
-# Pull from Docker Hub
-docker pull reggiodigital/wishlist:latest
-
-# Run with environment variables
 docker run -d \
   -p 3000:3000 \
   -e ADMIN_USERNAME=admin \
@@ -42,10 +38,6 @@ docker run -d \
   -v wishlist-data:/app/data \
   --name wishlist \
   reggiodigital/wishlist:latest
-
-# Data is stored in /app/data:
-#   /app/data/db       - SQLite database files
-#   /app/data/uploads  - Uploaded images
 ```
 
 ## Data Storage
@@ -65,6 +57,7 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=changeme
 
 # Optional - JWT Secrets (auto-generated if not provided)
+# Generate with: openssl rand -base64 32
 SECRET=
 REFRESH_SECRET=
 ```
