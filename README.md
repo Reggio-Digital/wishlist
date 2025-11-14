@@ -6,13 +6,17 @@ A simple, self-hosted wishlist app for sharing gift ideas with family and friend
 
 Most wishlist apps are bloated with features you don't need, require accounts for everyone, or lock you into a platform. This app solves a simple problem: you want to share what you'd like as gifts, and your friends and family want to claim items without spoiling the surprise.
 
-**Key Philosophy:**
+**Features:**
 
 - **Simple** - No complex features, just wishlists and items
 - **Easy to Share** - Send a single URL, no signups required
+- **Multiple Purchase Links** - Add multiple store links for each item so people can choose where to buy
+- **Public/Private Wishlists** - Keep lists private while you're working on them, then make them public when ready
+- **No Peeking!** - Admins can't see claimed items from the dashboard - you'd have to visit the specific wishlist's public URL to spoil the surprise
 - **Privacy-Focused** - Self-hosted, your data stays with you
 - **Transparent** - Anyone viewing the list can see what's been claimed to avoid duplicates
 - **Low Maintenance** - Single Docker container with SQLite, no database setup needed
+- **URL Scraping** - Auto-fill item details from product URLs _(Coming Soon)_
 
 ## Demo
 
@@ -35,13 +39,6 @@ Most wishlist apps are bloated with features you don't need, require accounts fo
 ### Admin Dashboard - Item Details
 
 ![Admin Dashboard - Item Details](screenshot4.png)
-
-## Features
-
-- **Admin Dashboard**: Manage wishlists and items
-- **Public Wishlist View**: Share wishlists
-- **Claim System**: Honor-based claiming
-- **URL Scraping**: Auto-fill item details from product URLs (Coming Soon)
 
 ## Quick Start
 
