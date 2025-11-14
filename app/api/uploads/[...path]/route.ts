@@ -8,11 +8,14 @@ const UPLOAD_DIR = path.join(process.cwd(), 'data', 'uploads');
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
+    // Await params in Next.js 16+
+    const { path: pathSegments } = await params;
+
     // Get the file path from the URL
-    const filePath = path.join(UPLOAD_DIR, ...params.path);
+    const filePath = path.join(UPLOAD_DIR, ...pathSegments);
 
     // Security: Ensure the resolved path is within UPLOAD_DIR
     const resolvedPath = path.resolve(filePath);
