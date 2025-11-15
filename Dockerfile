@@ -49,9 +49,6 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Create base data directory (ownership set by entrypoint)
-RUN mkdir -p /app/data/db /app/data/uploads
-
 # Expose port
 EXPOSE 3000
 
