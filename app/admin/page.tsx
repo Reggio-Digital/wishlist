@@ -10,7 +10,7 @@ import Link from 'next/link';
 import ImageUpload from '@/components/image-upload';
 
 export default function AdminPage() {
-  const { accessToken, logout } = useAuth();
+  const { logout } = useAuth();
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [itemCounts, setItemCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +55,7 @@ export default function AdminPage() {
   useEffect(() => {
     fetchWishlists();
     fetchSettings();
-  }, [accessToken]);
+  }, []);
 
   const fetchSettings = async () => {
     try {
@@ -67,17 +67,15 @@ export default function AdminPage() {
   };
 
   const fetchWishlists = async () => {
-    if (!accessToken) return;
-
     try {
-      const data = await wishlistsApi.getAll(accessToken);
+      const data = await wishlistsApi.getAll();
       setWishlists(data);
 
       // Fetch item counts for each wishlist
       const counts: Record<string, number> = {};
       await Promise.all(
         data.map(async (w) => {
-          const items = await itemsApi.getAll(w.id, accessToken);
+          const items = await itemsApi.getAll(w.id);
           counts[w.id] = items.length;
         })
       );
@@ -95,8 +93,8 @@ export default function AdminPage() {
     setIsCreating(true);
 
     try {
-      if (!accessToken) return;
-      await wishlistsApi.create(accessToken, newWishlist);
+      
+      await wishlistsApi.create(newWishlist);
       setShowCreateModal(false);
       setNewWishlist({ name: '', slug: '', description: '', imageUrl: '', isPublic: true });
       fetchWishlists();
@@ -109,10 +107,10 @@ export default function AdminPage() {
 
   const handleDeleteWishlist = async (id: string) => {
     if (!confirm('Are you sure you want to delete this wishlist?')) return;
-    if (!accessToken) return;
+    
 
     try {
-      await wishlistsApi.delete(accessToken, id);
+      await wishlistsApi.delete(id);
       fetchWishlists();
     } catch (error) {
       alert('Failed to delete wishlist');
@@ -161,12 +159,12 @@ export default function AdminPage() {
 
   const handleUpdateWishlist = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingId || !accessToken) return;
+    if (!editingId) return;
 
     setEditError('');
 
     try {
-      await wishlistsApi.update(accessToken, editingId, editForm);
+      await wishlistsApi.update(editingId, editForm);
       setEditingId(null);
       fetchWishlists();
     } catch (error: any) {
@@ -180,8 +178,8 @@ export default function AdminPage() {
     } else {
       setExpandedWishlistId(wishlistId);
       // Fetch items if not already loaded
-      if (!wishlistItems[wishlistId] && accessToken) {
-        const items = await itemsApi.getAll(wishlistId, accessToken);
+      if (!wishlistItems[wishlistId] ) {
+        const items = await itemsApi.getAll(wishlistId);
         setWishlistItems((prev) => ({ ...prev, [wishlistId]: items }));
       }
     }
@@ -199,15 +197,15 @@ export default function AdminPage() {
 
   const handleUpdateItem = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingItemId || !accessToken) return;
+    if (!editingItemId) return;
 
     try {
-      await itemsApi.update(accessToken, editingItemId, editItemForm);
+      await itemsApi.update(editingItemId, editItemForm);
       setEditingItemId(null);
       // Refresh items for the wishlist
       const item = wishlistItems[expandedWishlistId!].find((i) => i.id === editingItemId);
       if (item && expandedWishlistId) {
-        const items = await itemsApi.getAll(expandedWishlistId, accessToken);
+        const items = await itemsApi.getAll(expandedWishlistId);
         setWishlistItems((prev) => ({ ...prev, [expandedWishlistId]: items }));
       }
       fetchWishlists(); // Refresh counts
@@ -218,11 +216,11 @@ export default function AdminPage() {
 
   const handleDeleteItem = async (itemId: string, wishlistId: string) => {
     if (!confirm('Are you sure you want to delete this item?')) return;
-    if (!accessToken) return;
+    
 
     try {
-      await itemsApi.delete(accessToken, itemId);
-      const items = await itemsApi.getAll(wishlistId, accessToken);
+      await itemsApi.delete(itemId);
+      const items = await itemsApi.getAll(wishlistId);
       setWishlistItems((prev) => ({ ...prev, [wishlistId]: items }));
       fetchWishlists(); // Refresh counts
     } catch (error) {
@@ -232,10 +230,10 @@ export default function AdminPage() {
 
   const handleCreateItem = async (e: React.FormEvent, wishlistId: string) => {
     e.preventDefault();
-    if (!accessToken) return;
+    
 
     try {
-      await itemsApi.create(accessToken, wishlistId, newItemForm);
+      await itemsApi.create(wishlistId, newItemForm);
       setShowAddItemForm(null);
       setNewItemForm({
         name: '',
@@ -246,7 +244,7 @@ export default function AdminPage() {
         imageUrl: '',
         purchaseUrls: [],
       });
-      const items = await itemsApi.getAll(wishlistId, accessToken);
+      const items = await itemsApi.getAll(wishlistId);
       setWishlistItems((prev) => ({ ...prev, [wishlistId]: items }));
       fetchWishlists(); // Refresh counts
     } catch (error: any) {
@@ -267,12 +265,12 @@ export default function AdminPage() {
 
   const handleUpdateSettings = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!accessToken) return;
+    
 
     setSettingsError('');
 
     try {
-      await settingsApi.updateSettings(accessToken, settingsForm);
+      await settingsApi.updateSettings(settingsForm);
       setSettings(settingsForm);
       setEditingSettings(false);
     } catch (error: any) {
@@ -669,7 +667,7 @@ export default function AdminPage() {
                                               preventDefault: () => {},
                                             } as any);
                                             // Update the wishlist's public status
-                                            wishlistsApi.update(accessToken!, wishlist.id, {
+                                            wishlistsApi.update(wishlist.id, {
                                               name: wishlist.name,
                                               slug: wishlist.slug,
                                               description: wishlist.description || '',

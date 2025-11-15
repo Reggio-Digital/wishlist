@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/lib/auth-context';
 import { scrapingApi, type Item } from '@/lib/api';
 import ImageUpload from './image-upload';
 
@@ -13,7 +12,6 @@ interface ItemFormProps {
 }
 
 export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = false }: ItemFormProps) {
-  const { accessToken } = useAuth();
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
     description: initialData?.description || '',
@@ -32,13 +30,13 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
   const [submitError, setSubmitError] = useState('');
 
   const handleScrape = async () => {
-    if (!scrapeUrl || !accessToken) return;
+    if (!scrapeUrl) return;
 
     setIsScraping(true);
     setScrapeError('');
 
     try {
-      const data = await scrapingApi.scrapeUrl(accessToken, scrapeUrl);
+      const data = await scrapingApi.scrapeUrl(scrapeUrl);
 
       setFormData((prev) => ({
         ...prev,

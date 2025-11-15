@@ -46,9 +46,8 @@ export const authApi = {
     return handleResponse<{ accessToken: string }>(response);
   },
 
-  async me(token: string) {
+  async me() {
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
     return handleResponse<{ username: string }>(response);
@@ -89,9 +88,8 @@ export interface Item {
 
 // Wishlists API
 export const wishlistsApi = {
-  async getAll(token: string) {
+  async getAll() {
     const response = await fetch(`${API_BASE_URL}/wishlists`, {
-      headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
     const data = await handleResponse<{ success: boolean; wishlists: Wishlist[] }>(response);
@@ -106,9 +104,8 @@ export const wishlistsApi = {
     return data.wishlists;
   },
 
-  async getOne(token: string, id: string) {
+  async getOne(id: string) {
     const response = await fetch(`${API_BASE_URL}/wishlists/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
     const result = await handleResponse<{ success: boolean; wishlist: Wishlist }>(response);
@@ -123,12 +120,11 @@ export const wishlistsApi = {
     return result.wishlist;
   },
 
-  async create(token: string, data: Partial<Wishlist>) {
+  async create(data: Partial<Wishlist>) {
     const response = await fetch(`${API_BASE_URL}/wishlists`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       body: JSON.stringify(data),
@@ -137,12 +133,11 @@ export const wishlistsApi = {
     return result.wishlist;
   },
 
-  async update(token: string, id: string, data: Partial<Wishlist>) {
+  async update(id: string, data: Partial<Wishlist>) {
     const response = await fetch(`${API_BASE_URL}/wishlists/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       body: JSON.stringify(data),
@@ -151,10 +146,9 @@ export const wishlistsApi = {
     return result.wishlist;
   },
 
-  async delete(token: string, id: string) {
+  async delete(id: string) {
     const response = await fetch(`${API_BASE_URL}/wishlists/${id}`, {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
     return handleResponse<void>(response);
@@ -163,37 +157,26 @@ export const wishlistsApi = {
 
 // Items API
 export const itemsApi = {
-  async getAll(wishlistId: string, token?: string) {
-    const headers: HeadersInit = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
+  async getAll(wishlistId: string) {
     const response = await fetch(`${API_BASE_URL}/wishlists/${wishlistId}/items`, {
-      headers,
       credentials: 'include',
     });
     const result = await handleResponse<{ success: boolean; items: Item[] }>(response);
     return result.items;
   },
 
-  async getOne(id: string, token?: string) {
-    const headers: HeadersInit = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
+  async getOne(id: string) {
     const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-      headers,
       credentials: 'include',
     });
     return handleResponse<Item>(response);
   },
 
-  async create(token: string, wishlistId: string, data: Partial<Item>) {
+  async create(wishlistId: string, data: Partial<Item>) {
     const response = await fetch(`${API_BASE_URL}/wishlists/${wishlistId}/items`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       body: JSON.stringify(data),
@@ -201,12 +184,11 @@ export const itemsApi = {
     return handleResponse<Item>(response);
   },
 
-  async update(token: string, id: string, data: Partial<Item>) {
+  async update(id: string, data: Partial<Item>) {
     const response = await fetch(`${API_BASE_URL}/items/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       body: JSON.stringify(data),
@@ -214,21 +196,19 @@ export const itemsApi = {
     return handleResponse<Item>(response);
   },
 
-  async delete(token: string, id: string) {
+  async delete(id: string) {
     const response = await fetch(`${API_BASE_URL}/items/${id}`, {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
     return handleResponse<void>(response);
   },
 
-  async reorder(token: string, id: string, newOrder: number) {
+  async reorder(id: string, newOrder: number) {
     const response = await fetch(`${API_BASE_URL}/items/${id}/reorder`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       body: JSON.stringify({ newOrder }),
@@ -260,12 +240,11 @@ export interface ScrapedData {
 }
 
 export const scrapingApi = {
-  async scrapeUrl(token: string, url: string) {
+  async scrapeUrl(url: string) {
     const response = await fetch(`${API_BASE_URL}/scrape`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       body: JSON.stringify({ url }),
@@ -289,12 +268,11 @@ export const settingsApi = {
     return result.settings;
   },
 
-  async updateSettings(token: string, settings: Partial<Settings>) {
+  async updateSettings(settings: Partial<Settings>) {
     const response = await fetch(`${API_BASE_URL}/settings`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       body: JSON.stringify(settings),
