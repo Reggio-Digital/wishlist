@@ -15,11 +15,14 @@ User GID:    $PGID
 # Create group if it doesn't exist
 if ! getent group ${PGID} > /dev/null 2>&1; then
     addgroup -g ${PGID} appgroup
+    GROUP_NAME="appgroup"
+else
+    GROUP_NAME=$(getent group ${PGID} | cut -d: -f1)
 fi
 
 # Create user if it doesn't exist
 if ! getent passwd ${PUID} > /dev/null 2>&1; then
-    adduser -S -u ${PUID} -G $(getent group ${PGID} | cut -d: -f1) -h /app appuser
+    adduser -S -u ${PUID} -G ${GROUP_NAME} -h /app appuser
 fi
 
 # Ensure data directories exist
