@@ -74,8 +74,8 @@ export async function POST(request: NextRequest) {
 
     console.log(`Uploaded file: ${filepath}`);
 
-    // Return the public URL (must include /api prefix to match the route)
-    const publicUrl = `/api/uploads/${type === 'wishlist' ? 'wishlists' : 'items'}/${filename}`;
+    // Return the public URL (served from /uploads route)
+    const publicUrl = `/uploads/${type === 'wishlist' ? 'wishlists' : 'items'}/${filename}`;
 
     return NextResponse.json({
       success: true,
