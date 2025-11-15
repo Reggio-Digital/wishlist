@@ -22,10 +22,19 @@ if ! getent passwd ${PUID} > /dev/null 2>&1; then
     adduser -S -u ${PUID} -G $(getent group ${PGID} | cut -d: -f1) -h /app appuser
 fi
 
-# Ensure data directories exist and have correct ownership
+# Ensure data directories exist
+echo "Creating data directories if they don't exist..."
 mkdir -p /app/data/db /app/data/uploads
+
+# Fix ownership of all data directories
+echo "Setting ownership to ${PUID}:${PGID}..."
 chown -R ${PUID}:${PGID} /app/data
+
+# Set proper permissions
+echo "Setting permissions..."
 chmod -R 775 /app/data
+
+echo "Data directory permissions configured successfully"
 
 # Set umask for proper file creation permissions
 umask 0002
