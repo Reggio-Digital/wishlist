@@ -29,7 +29,6 @@ jobs:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/wishlist
           tags: |
             type=raw,value=latest
-            type=sha,prefix={{branch}}-
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
