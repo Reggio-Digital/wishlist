@@ -55,6 +55,9 @@ RUN chmod +x /entrypoint.sh
 # Expose port
 EXPOSE 3000
 
+# Ensure we run as root so entrypoint can manage users
+USER root
+
 # Use entrypoint to handle PUID/PGID (LinuxServer.io pattern)
 ENTRYPOINT ["/entrypoint.sh"]
 
