@@ -30,6 +30,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: settings.siteTitle,
     description: "Self-hosted wishlist application for families",
+    icons: {
+      icon: '/icon.svg',
+    },
   };
 }
 
