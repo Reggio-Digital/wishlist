@@ -68,9 +68,9 @@ export async function POST(request: NextRequest) {
       .webp({ quality: QUALITY })
       .toBuffer();
 
-    // Save processed image with explicit permissions (0666 = rw-rw-rw-)
-    // This ensures the file is readable/writable by all users
-    await writeFile(filepath, processedImage, { mode: 0o666 });
+    // Save processed image with proper permissions (0664 = rw-rw-r--)
+    // This respects the umask setting and ensures proper group access
+    await writeFile(filepath, processedImage, { mode: 0o664 });
 
     console.log(`Uploaded file: ${filepath}`);
 
