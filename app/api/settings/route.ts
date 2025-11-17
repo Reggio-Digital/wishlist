@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { db, settings } from '@/lib/db';
 import { verifyAccessToken } from '@/lib/auth/utils';
+import crypto from 'crypto';
 
 // GET /api/settings - Get all settings (public endpoint for reading only)
 export async function GET(request: NextRequest) {
@@ -21,6 +22,9 @@ export async function GET(request: NextRequest) {
     if (!settingsObj.homepageSubtext) {
       settingsObj.homepageSubtext = 'Browse and explore available wishlists';
     }
+
+    // Convert passwordLockEnabled to boolean
+    settingsObj.passwordLockEnabled = settingsObj.passwordLockEnabled === 'true';
 
     return NextResponse.json({
       success: true,
@@ -56,7 +60,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { siteTitle, homepageSubtext } = body;
+    const { siteTitle, homepageSubtext, passwordLockEnabled, passwordLock } = body;
 
     // Update or insert siteTitle
     if (siteTitle !== undefined) {
@@ -96,6 +100,52 @@ export async function PUT(request: NextRequest) {
         await db.insert(settings).values({
           key: 'homepageSubtext',
           value: homepageSubtext,
+        });
+      }
+    }
+
+    // Update or insert passwordLockEnabled
+    if (passwordLockEnabled !== undefined) {
+      const value = passwordLockEnabled ? 'true' : 'false';
+      const existing = await db
+        .select()
+        .from(settings)
+        .where(eq(settings.key, 'passwordLockEnabled'))
+        .limit(1);
+
+      if (existing.length > 0) {
+        await db
+          .update(settings)
+          .set({ value, updatedAt: new Date() })
+          .where(eq(settings.key, 'passwordLockEnabled'));
+      } else {
+        await db.insert(settings).values({
+          key: 'passwordLockEnabled',
+          value,
+        });
+      }
+    }
+
+    // Update password hash if provided
+    if (passwordLock && passwordLock.trim() !== '') {
+      // Hash the password using SHA-256
+      const hash = crypto.createHash('sha256').update(passwordLock).digest('hex');
+
+      const existing = await db
+        .select()
+        .from(settings)
+        .where(eq(settings.key, 'passwordLockHash'))
+        .limit(1);
+
+      if (existing.length > 0) {
+        await db
+          .update(settings)
+          .set({ value: hash, updatedAt: new Date() })
+          .where(eq(settings.key, 'passwordLockHash'));
+      } else {
+        await db.insert(settings).values({
+          key: 'passwordLockHash',
+          value: hash,
         });
       }
     }
