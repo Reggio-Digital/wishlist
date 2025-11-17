@@ -170,8 +170,28 @@ export default function ImageUpload({
   return (
     <div ref={pasteAreaRef} className="space-y-3" tabIndex={-1}>
       {label && (
-        <label className="block text-base font-medium text-gray-700 dark:text-gray-300">
+        <label className="flex items-center gap-2 text-base font-medium text-gray-700 dark:text-gray-300">
           {label}
+          <div className="group relative inline-block">
+            <svg
+              className="w-4 h-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-help transition-colors"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-label="Upload information"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <div className="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-10 pointer-events-none">
+              Max 5MB. Allowed: JPEG, PNG, WebP, GIF. Images will be resized to max 800x800px and optimized.
+              <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900 dark:border-t-gray-700"></div>
+            </div>
+          </div>
         </label>
       )}
 
@@ -247,9 +267,6 @@ export default function ImageUpload({
                 className="w-full px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                 disabled={isUploading}
               />
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Max 5MB. Allowed: JPEG, PNG, WebP, GIF. Images will be resized to max 800x800px and optimized.
-              </p>
               <p className="mt-1 text-sm text-indigo-600 dark:text-indigo-400 font-medium">
                 💡 Tip: You can also paste an image directly (Ctrl+V / Cmd+V)
               </p>
