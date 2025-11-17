@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { eq, desc } from 'drizzle-orm';
+import { eq, asc } from 'drizzle-orm';
 import { db, wishlists } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
       .select()
       .from(wishlists)
       .where(eq(wishlists.isPublic, true))
-      .orderBy(desc(wishlists.updatedAt));
+      .orderBy(asc(wishlists.sortOrder));
 
     return NextResponse.json({
       success: true,

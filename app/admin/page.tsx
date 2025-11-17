@@ -265,7 +265,7 @@ export default function AdminPage() {
 
   const handleUpdateSettings = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
 
     setSettingsError('');
 
@@ -275,6 +275,58 @@ export default function AdminPage() {
       setEditingSettings(false);
     } catch (error: any) {
       setSettingsError(error.message || 'Failed to update settings');
+    }
+  };
+
+  const handleMoveWishlistUp = async (wishlistId: string) => {
+    const currentIndex = wishlists.findIndex((w) => w.id === wishlistId);
+    if (currentIndex <= 0) return;
+
+    try {
+      await wishlistsApi.reorder(wishlistId, currentIndex - 1);
+      await fetchWishlists();
+    } catch (error) {
+      alert('Failed to reorder wishlist');
+    }
+  };
+
+  const handleMoveWishlistDown = async (wishlistId: string) => {
+    const currentIndex = wishlists.findIndex((w) => w.id === wishlistId);
+    if (currentIndex === -1 || currentIndex === wishlists.length - 1) return;
+
+    try {
+      await wishlistsApi.reorder(wishlistId, currentIndex + 1);
+      await fetchWishlists();
+    } catch (error) {
+      alert('Failed to reorder wishlist');
+    }
+  };
+
+  const handleMoveItemUp = async (itemId: string, wishlistId: string) => {
+    const items = wishlistItems[wishlistId] || [];
+    const currentIndex = items.findIndex((item) => item.id === itemId);
+    if (currentIndex <= 0) return;
+
+    try {
+      await itemsApi.reorder(itemId, currentIndex - 1);
+      const updatedItems = await itemsApi.getAll(wishlistId);
+      setWishlistItems((prev) => ({ ...prev, [wishlistId]: updatedItems }));
+    } catch (error) {
+      alert('Failed to reorder item');
+    }
+  };
+
+  const handleMoveItemDown = async (itemId: string, wishlistId: string) => {
+    const items = wishlistItems[wishlistId] || [];
+    const currentIndex = items.findIndex((item) => item.id === itemId);
+    if (currentIndex === -1 || currentIndex === items.length - 1) return;
+
+    try {
+      await itemsApi.reorder(itemId, currentIndex + 1);
+      const updatedItems = await itemsApi.getAll(wishlistId);
+      setWishlistItems((prev) => ({ ...prev, [wishlistId]: updatedItems }));
+    } catch (error) {
+      alert('Failed to reorder item');
     }
   };
 
@@ -292,12 +344,6 @@ export default function AdminPage() {
           subtitle="Manage your wishlists and items"
           actions={
             <>
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all cursor-pointer"
-              >
-                + Create Wishlist
-              </button>
               <Link
                 href="/"
                 className="inline-flex items-center px-6 py-3 border-2 border-indigo-600 dark:border-indigo-500 text-base font-semibold rounded-lg text-indigo-600 dark:text-indigo-400 bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-gray-700 transition-all"
@@ -478,9 +524,17 @@ export default function AdminPage() {
 
                 {/* Wishlists Section */}
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                    Your Wishlists
-                  </h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      Your Wishlists
+                    </h2>
+                    <button
+                      onClick={() => setShowCreateModal(true)}
+                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all cursor-pointer"
+                    >
+                      + Create Wishlist
+                    </button>
+                  </div>
                   {wishlists.length === 0 ? (
                     <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                       <p className="text-gray-500 dark:text-gray-400 mb-6 text-lg">
@@ -509,6 +563,35 @@ export default function AdminPage() {
                                   </div>
                                 )}
                                 <div className="flex items-stretch -m-5">
+                                  {/* Arrow buttons on the left */}
+                                  <div className="flex flex-col w-12 border-r border-gray-200 dark:border-gray-700">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleMoveWishlistUp(wishlist.id);
+                                      }}
+                                      disabled={wishlists.indexOf(wishlist) === 0}
+                                      className="flex-1 flex items-center justify-center text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors border-b border-gray-200 dark:border-gray-700 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                                      title="Move up"
+                                    >
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                      </svg>
+                                    </button>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleMoveWishlistDown(wishlist.id);
+                                      }}
+                                      disabled={wishlists.indexOf(wishlist) === wishlists.length - 1}
+                                      className="flex-1 flex items-center justify-center text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                                      title="Move down"
+                                    >
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                      </svg>
+                                    </button>
+                                  </div>
                                   <div
                                     className="flex-1 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/30 p-5 transition-colors"
                                     onClick={() => editingId !== wishlist.id && toggleWishlistExpand(wishlist.id)}
@@ -1038,6 +1121,35 @@ export default function AdminPage() {
                                           ) : (
                                             // Display Item
                                             <div className="flex items-stretch">
+                                              {/* Arrow buttons on the left */}
+                                              <div className="flex flex-col w-12 border-r border-gray-200 dark:border-gray-700">
+                                                <button
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleMoveItemUp(item.id, wishlist.id);
+                                                  }}
+                                                  disabled={wishlistItems[wishlist.id]?.indexOf(item) === 0}
+                                                  className="flex-1 flex items-center justify-center text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors border-b border-gray-200 dark:border-gray-700 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                                                  title="Move up"
+                                                >
+                                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                                  </svg>
+                                                </button>
+                                                <button
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleMoveItemDown(item.id, wishlist.id);
+                                                  }}
+                                                  disabled={wishlistItems[wishlist.id]?.indexOf(item) === wishlistItems[wishlist.id]?.length - 1}
+                                                  className="flex-1 flex items-center justify-center text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                                                  title="Move down"
+                                                >
+                                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                  </svg>
+                                                </button>
+                                              </div>
                                               <div className="flex-1 p-4 flex gap-3">
                                                 {/* Image on Left */}
                                                 {item.imageUrl && (

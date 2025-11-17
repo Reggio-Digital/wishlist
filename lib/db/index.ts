@@ -60,6 +60,7 @@ export async function initializeDatabase() {
         image_url TEXT,
         notes TEXT,
         is_public INTEGER DEFAULT 0 NOT NULL,
+        sort_order INTEGER DEFAULT 0 NOT NULL,
         created_at INTEGER DEFAULT (unixepoch()) NOT NULL,
         updated_at INTEGER DEFAULT (unixepoch()) NOT NULL
       )
@@ -103,12 +104,20 @@ export async function initializeDatabase() {
 
     // Run migrations for existing databases
     try {
-      // Add image_url column if it doesn't exist
       const columns = sqlite.pragma('table_info(wishlists)') as Array<{ name: string }>;
+
+      // Add image_url column if it doesn't exist
       const hasImageUrl = columns.some((col) => col.name === 'image_url');
       if (!hasImageUrl) {
         sqlite.exec('ALTER TABLE wishlists ADD COLUMN image_url TEXT');
         console.log('✅ Added image_url column to wishlists table');
+      }
+
+      // Add sort_order column if it doesn't exist
+      const hasSortOrder = columns.some((col) => col.name === 'sort_order');
+      if (!hasSortOrder) {
+        sqlite.exec('ALTER TABLE wishlists ADD COLUMN sort_order INTEGER DEFAULT 0 NOT NULL');
+        console.log('✅ Added sort_order column to wishlists table');
       }
     } catch (migrationError) {
       console.log('Migration already applied or not needed');

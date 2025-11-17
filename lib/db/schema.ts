@@ -19,6 +19,7 @@ export const wishlists = sqliteTable('wishlists', {
   description: text('description'),
   imageUrl: text('image_url'),
   isPublic: integer('is_public', { mode: 'boolean' }).notNull().default(false),
+  sortOrder: integer('sort_order').notNull().default(0),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 });

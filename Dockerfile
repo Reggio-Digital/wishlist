@@ -39,6 +39,10 @@ WORKDIR /app
 # Install su-exec for user switching (standard approach)
 RUN apk add --no-cache su-exec
 
+# Create nextjs user and group (for compatibility with systems that expect it)
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001 -G nodejs
+
 # Set production environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1

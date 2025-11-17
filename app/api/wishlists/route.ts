@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { eq, desc } from 'drizzle-orm';
+import { eq, asc } from 'drizzle-orm';
 import { db, wishlists } from '@/lib/db';
 import { verifyAccessToken } from '@/lib/auth/utils';
 
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const allWishlists = await db
       .select()
       .from(wishlists)
-      .orderBy(desc(wishlists.updatedAt));
+      .orderBy(asc(wishlists.sortOrder));
 
     return NextResponse.json({
       success: true,

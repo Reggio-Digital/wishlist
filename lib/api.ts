@@ -62,6 +62,7 @@ export interface Wishlist {
   description: string | null;
   imageUrl: string | null;
   isPublic: boolean;
+  sortOrder: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -153,6 +154,18 @@ export const wishlistsApi = {
     });
     return handleResponse<void>(response);
   },
+
+  async reorder(id: string, newSortOrder: number) {
+    const response = await fetch(`${API_BASE_URL}/wishlists/${id}/reorder`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ newSortOrder }),
+    });
+    return handleResponse<void>(response);
+  },
 };
 
 // Items API
@@ -204,14 +217,14 @@ export const itemsApi = {
     return handleResponse<void>(response);
   },
 
-  async reorder(id: string, newOrder: number) {
+  async reorder(id: string, newSortOrder: number) {
     const response = await fetch(`${API_BASE_URL}/items/${id}/reorder`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ newOrder }),
+      body: JSON.stringify({ newSortOrder }),
     });
     return handleResponse<void>(response);
   },
