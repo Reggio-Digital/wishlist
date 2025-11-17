@@ -9,8 +9,11 @@ export interface ApiError {
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'An error occurred' }));
-    throw { message: error.message || 'An error occurred', status: response.status } as ApiError;
+    const error = await response.json().catch(() => ({ error: 'An error occurred' }));
+    // Extract error message from various possible response formats
+    const message = error.error || error.message || 'An error occurred';
+    console.error('API Error:', { status: response.status, message, fullError: error });
+    throw { message, status: response.status } as ApiError;
   }
 
   // Handle empty responses

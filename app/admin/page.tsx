@@ -55,6 +55,7 @@ export default function AdminPage() {
     imageUrl: '',
     purchaseUrls: [],
   });
+  const [newItemError, setNewItemError] = useState<string>('');
 
   useEffect(() => {
     fetchWishlists();
@@ -234,9 +235,10 @@ export default function AdminPage() {
 
   const handleCreateItem = async (e: React.FormEvent, wishlistId: string) => {
     e.preventDefault();
-    
+    setNewItemError('');
 
     try {
+      console.log('Creating item with data:', newItemForm);
       await itemsApi.create(wishlistId, newItemForm);
       setShowAddItemForm(null);
       setNewItemForm({
@@ -252,7 +254,9 @@ export default function AdminPage() {
       setWishlistItems((prev) => ({ ...prev, [wishlistId]: items }));
       fetchWishlists(); // Refresh counts
     } catch (error: any) {
-      alert(error.message || 'Failed to create item');
+      console.error('Error creating item:', error);
+      const errorMessage = error.message || 'Failed to create item';
+      setNewItemError(errorMessage);
     }
   };
 
@@ -802,7 +806,10 @@ export default function AdminPage() {
                                       Items ({wishlistItems[wishlist.id]?.length || 0})
                                     </h4>
                                     <button
-                                      onClick={() => setShowAddItemForm(wishlist.id)}
+                                      onClick={() => {
+                                        setShowAddItemForm(wishlist.id);
+                                        setNewItemError('');
+                                      }}
                                       className="px-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors cursor-pointer"
                                     >
                                       + Add Item
@@ -818,6 +825,11 @@ export default function AdminPage() {
                                       <h5 className="text-base font-medium text-gray-900 dark:text-white mb-3">
                                         Add New Item
                                       </h5>
+                                      {newItemError && (
+                                        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-400 rounded-lg text-base">
+                                          {newItemError}
+                                        </div>
+                                      )}
                                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div>
                                           <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -949,7 +961,10 @@ export default function AdminPage() {
                                       <div className="mt-3 flex justify-end gap-2">
                                         <button
                                           type="button"
-                                          onClick={() => setShowAddItemForm(null)}
+                                          onClick={() => {
+                                            setShowAddItemForm(null);
+                                            setNewItemError('');
+                                          }}
                                           className="px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
                                         >
                                           Cancel
