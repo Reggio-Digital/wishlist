@@ -79,7 +79,7 @@ export interface Item {
   currency: string;
   quantity: number;
   imageUrl: string | null;
-  purchaseUrls: Array<{ label: string; url: string; isPrimary: boolean }> | null;
+  purchaseUrls: Array<{ label: string; url: string }> | null;
   isArchived: boolean;
   claimedByName: string | null;
   claimedByNote: string | null;

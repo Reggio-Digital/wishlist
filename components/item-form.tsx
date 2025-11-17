@@ -66,7 +66,6 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
             {
               url: formData.purchaseUrl,
               label: formData.purchaseLabel || 'Link',
-              isPrimary: true,
             },
           ]
         : null;
