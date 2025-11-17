@@ -167,7 +167,8 @@ export const wishlistsApi = {
       credentials: 'include',
       body: JSON.stringify({ newSortOrder }),
     });
-    return handleResponse<void>(response);
+    const result = await handleResponse<{ success: boolean; wishlist: Wishlist }>(response);
+    return result.wishlist;
   },
 };
 
@@ -229,7 +230,8 @@ export const itemsApi = {
       credentials: 'include',
       body: JSON.stringify({ newSortOrder }),
     });
-    return handleResponse<void>(response);
+    const result = await handleResponse<{ success: boolean; item: Item }>(response);
+    return result.item;
   },
 };
 

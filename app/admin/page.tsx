@@ -293,8 +293,10 @@ export default function AdminPage() {
     try {
       await wishlistsApi.reorder(wishlistId, currentIndex - 1);
       await fetchWishlists();
-    } catch (error) {
-      alert('Failed to reorder wishlist');
+    } catch (error: any) {
+      console.error('Failed to reorder wishlist:', error);
+      const errorMessage = error?.message || 'Failed to reorder wishlist';
+      alert(`Error: ${errorMessage}`);
     }
   };
 
@@ -305,8 +307,10 @@ export default function AdminPage() {
     try {
       await wishlistsApi.reorder(wishlistId, currentIndex + 1);
       await fetchWishlists();
-    } catch (error) {
-      alert('Failed to reorder wishlist');
+    } catch (error: any) {
+      console.error('Failed to reorder wishlist:', error);
+      const errorMessage = error?.message || 'Failed to reorder wishlist';
+      alert(`Error: ${errorMessage}`);
     }
   };
 
@@ -319,8 +323,10 @@ export default function AdminPage() {
       await itemsApi.reorder(itemId, currentIndex - 1);
       const updatedItems = await itemsApi.getAll(wishlistId);
       setWishlistItems((prev) => ({ ...prev, [wishlistId]: updatedItems }));
-    } catch (error) {
-      alert('Failed to reorder item');
+    } catch (error: any) {
+      console.error('Failed to reorder item:', error);
+      const errorMessage = error?.message || 'Failed to reorder item';
+      alert(`Error: ${errorMessage}`);
     }
   };
 
@@ -333,8 +339,10 @@ export default function AdminPage() {
       await itemsApi.reorder(itemId, currentIndex + 1);
       const updatedItems = await itemsApi.getAll(wishlistId);
       setWishlistItems((prev) => ({ ...prev, [wishlistId]: updatedItems }));
-    } catch (error) {
-      alert('Failed to reorder item');
+    } catch (error: any) {
+      console.error('Failed to reorder item:', error);
+      const errorMessage = error?.message || 'Failed to reorder item';
+      alert(`Error: ${errorMessage}`);
     }
   };
 
