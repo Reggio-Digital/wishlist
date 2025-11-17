@@ -965,21 +965,6 @@ export default function AdminPage() {
                                                   }}
                                                   className="flex-1 px-2 py-1.5 text-base border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
                                                 />
-                                                <label className="flex items-center gap-1 whitespace-nowrap">
-                                                  <input
-                                                    type="checkbox"
-                                                    checked={urlObj.isPrimary}
-                                                    onChange={(e) => {
-                                                      const updated = (newItemForm.purchaseUrls || []).map((u, i) => ({
-                                                        ...u,
-                                                        isPrimary: i === index ? e.target.checked : false,
-                                                      }));
-                                                      setNewItemForm((prev) => ({ ...prev, purchaseUrls: updated }));
-                                                    }}
-                                                    className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                                  />
-                                                  <span className="text-sm text-gray-600 dark:text-gray-400">Primary</span>
-                                                </label>
                                                 <button
                                                   type="button"
                                                   onClick={() => {
@@ -998,7 +983,7 @@ export default function AdminPage() {
                                             <button
                                               type="button"
                                               onClick={() => {
-                                                const updated = [...(newItemForm.purchaseUrls || []), { label: '', url: '', isPrimary: false }];
+                                                const updated = [...(newItemForm.purchaseUrls || []), { label: '', url: '' }];
                                                 setNewItemForm((prev) => ({ ...prev, purchaseUrls: updated }));
                                               }}
                                               className="w-full px-3 py-2 text-base border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
@@ -1130,21 +1115,6 @@ export default function AdminPage() {
                                                           }}
                                                           className="flex-1 px-2 py-1.5 text-base border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
                                                         />
-                                                        <label className="flex items-center gap-1 whitespace-nowrap">
-                                                          <input
-                                                            type="checkbox"
-                                                            checked={urlObj.isPrimary}
-                                                            onChange={(e) => {
-                                                              const updated = (editItemForm.purchaseUrls || []).map((u, i) => ({
-                                                                ...u,
-                                                                isPrimary: i === index ? e.target.checked : false,
-                                                              }));
-                                                              setEditItemForm((prev) => ({ ...prev, purchaseUrls: updated }));
-                                                            }}
-                                                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                                          />
-                                                          <span className="text-sm text-gray-600 dark:text-gray-400">Primary</span>
-                                                        </label>
                                                         <button
                                                           type="button"
                                                           onClick={() => {
@@ -1163,7 +1133,7 @@ export default function AdminPage() {
                                                     <button
                                                       type="button"
                                                       onClick={() => {
-                                                        const updated = [...(editItemForm.purchaseUrls || []), { label: '', url: '', isPrimary: false }];
+                                                        const updated = [...(editItemForm.purchaseUrls || []), { label: '', url: '' }];
                                                         setEditItemForm((prev) => ({ ...prev, purchaseUrls: updated }));
                                                       }}
                                                       className="w-full px-3 py-2 text-base border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"

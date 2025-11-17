@@ -63,7 +63,7 @@ export async function seedDatabase() {
         sortOrder: 0,
         imageUrl: '/images/items/dad1.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $10.00', url: 'https://www.amazon.com/Unusual-Knowledge-Editors-Publications-International/dp/1450845800/ref=sr_1_6', isPrimary: true },
+          { label: 'Amazon - $10.00', url: 'https://www.amazon.com/Unusual-Knowledge-Editors-Publications-International/dp/1450845800/ref=sr_1_6' },
         ],
       },
       {
@@ -76,9 +76,9 @@ export async function seedDatabase() {
         sortOrder: 1,
         imageUrl: '/images/items/dad2.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $26.00', url: 'https://www.amazon.com/Anker-PowerCore-Ultra-Compact-High-Speed-Technology/dp/B0194WDVHI', isPrimary: true },
-          { label: 'Micro Center - $29.99', url: 'https://www.microcenter.com/product/686695/anker-10k-225w-power-bank', isPrimary: false },
-          { label: 'Staples - $34.99', url: 'https://www.staples.com/anker-powercore-power-bank-10000mah-22-5w-portable-charger-with-usb-c-lanyard-cable-black-a1388h11-1/product_24617552', isPrimary: false },
+          { label: 'Amazon - $26.00', url: 'https://www.amazon.com/Anker-PowerCore-Ultra-Compact-High-Speed-Technology/dp/B0194WDVHI' },
+          { label: 'Micro Center - $29.99', url: 'https://www.microcenter.com/product/686695/anker-10k-225w-power-bank' },
+          { label: 'Staples - $34.99', url: 'https://www.staples.com/anker-powercore-power-bank-10000mah-22-5w-portable-charger-with-usb-c-lanyard-cable-black-a1388h11-1/product_24617552' },
         ],
       },
       {
@@ -91,9 +91,9 @@ export async function seedDatabase() {
         sortOrder: 2,
         imageUrl: '/images/items/dad3.webp',
         purchaseUrls: [
-          { label: 'Amazon - $30.00', url: 'https://www.amazon.com/YETI-Rambler-Tumbler-Vacuum-Insulated/dp/B073WKWYJJ', isPrimary: true },
-          { label: 'YETI - $30.00', url: 'https://www.yeti.com/drinkware/tumblers/rambler-20-oz-tumbler.html', isPrimary: false },
-          { label: 'REI - $30.00', url: 'https://www.rei.com/product/113804/yeti-rambler-20-fl-oz-tumbler', isPrimary: false },
+          { label: 'Amazon - $30.00', url: 'https://www.amazon.com/YETI-Rambler-Tumbler-Vacuum-Insulated/dp/B073WKWYJJ' },
+          { label: 'YETI - $30.00', url: 'https://www.yeti.com/drinkware/tumblers/rambler-20-oz-tumbler.html' },
+          { label: 'REI - $30.00', url: 'https://www.rei.com/product/113804/yeti-rambler-20-fl-oz-tumbler' },
         ],
       },
       {
@@ -106,9 +106,9 @@ export async function seedDatabase() {
         sortOrder: 3,
         imageUrl: '/images/items/dad4.webp',
         purchaseUrls: [
-          { label: 'Amazon - $70.00', url: 'https://www.amazon.com/Tile-Mate-4-Pack-Bluetooth-Finder/dp/B09B2WLRWH', isPrimary: true },
-          { label: 'Best Buy - $74.99', url: 'https://www.bestbuy.com/site/tile-mate-bluetooth-tracker-4-pack/6451674.p', isPrimary: false },
-          { label: 'Target - $69.99', url: 'https://www.target.com/p/tile-mate-bluetooth-tracker-4pk/-/A-82215989', isPrimary: false },
+          { label: 'Amazon - $70.00', url: 'https://www.amazon.com/Tile-Mate-4-Pack-Bluetooth-Finder/dp/B09B2WLRWH' },
+          { label: 'Best Buy - $74.99', url: 'https://www.bestbuy.com/site/tile-mate-bluetooth-tracker-4-pack/6451674.p' },
+          { label: 'Target - $69.99', url: 'https://www.target.com/p/tile-mate-bluetooth-tracker-4pk/-/A-82215989' },
         ],
       },
       {
@@ -121,9 +121,9 @@ export async function seedDatabase() {
         sortOrder: 4,
         imageUrl: '/images/items/dad5.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $120.00', url: 'https://www.amazon.com/LEATHERMAN-Wave-Multitool-Black-Molle/dp/B07DD69QN3', isPrimary: true },
-          { label: 'REI - $124.95', url: 'https://www.rei.com/product/766953/leatherman-wave-plus-multitool', isPrimary: false },
-          { label: 'Home Depot - $119.99', url: 'https://www.homedepot.com/p/LEATHERMAN-Wave-Plus-Multi-Tool-832524/305408085', isPrimary: false },
+          { label: 'Amazon - $120.00', url: 'https://www.amazon.com/LEATHERMAN-Wave-Multitool-Black-Molle/dp/B07DD69QN3' },
+          { label: 'REI - $124.95', url: 'https://www.rei.com/product/766953/leatherman-wave-plus-multitool' },
+          { label: 'Home Depot - $119.99', url: 'https://www.homedepot.com/p/LEATHERMAN-Wave-Plus-Multi-Tool-832524/305408085' },
         ],
       },
     ]);
@@ -140,9 +140,9 @@ export async function seedDatabase() {
         sortOrder: 0,
         imageUrl: '/images/items/mom1.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $139.99', url: 'https://www.amazon.com/Kindle-Paperwhite-16-GB/dp/B08N3J8GTX', isPrimary: true },
-          { label: 'Best Buy - $139.99', url: 'https://www.bestbuy.com/site/amazon-kindle-paperwhite-16gb/6522383.p', isPrimary: false },
-          { label: 'Target - $139.99', url: 'https://www.target.com/p/kindle-paperwhite/-/A-84491392', isPrimary: false },
+          { label: 'Amazon - $139.99', url: 'https://www.amazon.com/Kindle-Paperwhite-16-GB/dp/B08N3J8GTX' },
+          { label: 'Best Buy - $139.99', url: 'https://www.bestbuy.com/site/amazon-kindle-paperwhite-16gb/6522383.p' },
+          { label: 'Target - $139.99', url: 'https://www.target.com/p/kindle-paperwhite/-/A-84491392' },
         ],
       },
       {
@@ -155,8 +155,8 @@ export async function seedDatabase() {
         sortOrder: 1,
         imageUrl: '/images/items/mom2.webp',
         purchaseUrls: [
-          { label: 'Lululemon - $98.00', url: 'https://shop.lululemon.com/p/women-pants/Align-Pant-2', isPrimary: true },
-          { label: 'Amazon - $98.00', url: 'https://www.amazon.com/stores/page/lululemon', isPrimary: false },
+          { label: 'Lululemon - $98.00', url: 'https://shop.lululemon.com/p/women-pants/Align-Pant-2' },
+          { label: 'Amazon - $98.00', url: 'https://www.amazon.com/stores/page/lululemon' },
         ],
       },
       {
@@ -169,9 +169,9 @@ export async function seedDatabase() {
         sortOrder: 2,
         imageUrl: '/images/items/mom3.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $44.95', url: 'https://www.amazon.com/Hydro-Flask-Water-Bottle-Stainless/dp/B01ACVS6RE', isPrimary: true },
-          { label: 'REI - $44.95', url: 'https://www.rei.com/product/889468/hydro-flask-wide-mouth-water-bottle-32-fl-oz', isPrimary: false },
-          { label: 'Dick\'s Sporting Goods - $44.99', url: 'https://www.dickssportinggoods.com/p/hydro-flask-32-oz-wide-mouth-bottle/16hflu32zwd', isPrimary: false },
+          { label: 'Amazon - $44.95', url: 'https://www.amazon.com/Hydro-Flask-Water-Bottle-Stainless/dp/B01ACVS6RE' },
+          { label: 'REI - $44.95', url: 'https://www.rei.com/product/889468/hydro-flask-wide-mouth-water-bottle-32-fl-oz' },
+          { label: 'Dick\'s Sporting Goods - $44.99', url: 'https://www.dickssportinggoods.com/p/hydro-flask-32-oz-wide-mouth-bottle/16hflu32zwd' },
         ],
       },
       {
@@ -184,9 +184,9 @@ export async function seedDatabase() {
         sortOrder: 3,
         imageUrl: '/images/items/mom4.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $39.99', url: 'https://www.amazon.com/Revlon-One-Step-Dryer-Volumizer/dp/B01LSUQSB0', isPrimary: true },
-          { label: 'Target - $39.99', url: 'https://www.target.com/p/revlon-one-step-volumizer/-/A-53003976', isPrimary: false },
-          { label: 'Walmart - $39.96', url: 'https://www.walmart.com/ip/Revlon-One-Step-Hair-Dryer-Volumizer/55689116', isPrimary: false },
+          { label: 'Amazon - $39.99', url: 'https://www.amazon.com/Revlon-One-Step-Dryer-Volumizer/dp/B01LSUQSB0' },
+          { label: 'Target - $39.99', url: 'https://www.target.com/p/revlon-one-step-volumizer/-/A-53003976' },
+          { label: 'Walmart - $39.96', url: 'https://www.walmart.com/ip/Revlon-One-Step-Hair-Dryer-Volumizer/55689116' },
         ],
       },
       {
@@ -199,9 +199,9 @@ export async function seedDatabase() {
         sortOrder: 4,
         imageUrl: '/images/items/mom5.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $249.00', url: 'https://www.amazon.com/Apple-Generation-Cancelling-Transparency-Personalized/dp/B0CHWRXH8B', isPrimary: true },
-          { label: 'Best Buy - $249.99', url: 'https://www.bestbuy.com/site/apple-airpods-pro-2nd-generation/6447382.p', isPrimary: false },
-          { label: 'Target - $249.99', url: 'https://www.target.com/p/apple-airpods-pro-2nd-generation/-/A-85978622', isPrimary: false },
+          { label: 'Amazon - $249.00', url: 'https://www.amazon.com/Apple-Generation-Cancelling-Transparency-Personalized/dp/B0CHWRXH8B' },
+          { label: 'Best Buy - $249.99', url: 'https://www.bestbuy.com/site/apple-airpods-pro-2nd-generation/6447382.p' },
+          { label: 'Target - $249.99', url: 'https://www.target.com/p/apple-airpods-pro-2nd-generation/-/A-85978622' },
         ],
       },
     ]);
@@ -218,9 +218,9 @@ export async function seedDatabase() {
         sortOrder: 0,
         imageUrl: '/images/items/child1.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $29.99', url: 'https://www.amazon.com/LEGO-Classic-Medium-Creative-Construction/dp/B00NHQFA3Y', isPrimary: true },
-          { label: 'Target - $29.99', url: 'https://www.target.com/p/lego-classic-medium-creative-brick-box/-/A-14182781', isPrimary: false },
-          { label: 'Walmart - $29.97', url: 'https://www.walmart.com/ip/LEGO-Classic-Medium-Creative-Brick-Box-10696/34611691', isPrimary: false },
+          { label: 'Amazon - $29.99', url: 'https://www.amazon.com/LEGO-Classic-Medium-Creative-Construction/dp/B00NHQFA3Y' },
+          { label: 'Target - $29.99', url: 'https://www.target.com/p/lego-classic-medium-creative-brick-box/-/A-14182781' },
+          { label: 'Walmart - $29.97', url: 'https://www.walmart.com/ip/LEGO-Classic-Medium-Creative-Brick-Box-10696/34611691' },
         ],
       },
       {
@@ -233,9 +233,9 @@ export async function seedDatabase() {
         sortOrder: 1,
         imageUrl: '/images/items/child2.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $19.99', url: 'https://www.amazon.com/Crayola-Ultimate-Crayon-Collection-Colors/dp/B00LH32JDE', isPrimary: true },
-          { label: 'Target - $19.99', url: 'https://www.target.com/p/crayola-ultimate-crayon-collection/-/A-14676404', isPrimary: false },
-          { label: 'Walmart - $19.94', url: 'https://www.walmart.com/ip/Crayola-Ultimate-Crayon-Collection-152-Colors/26228172', isPrimary: false },
+          { label: 'Amazon - $19.99', url: 'https://www.amazon.com/Crayola-Ultimate-Crayon-Collection-Colors/dp/B00LH32JDE' },
+          { label: 'Target - $19.99', url: 'https://www.target.com/p/crayola-ultimate-crayon-collection/-/A-14676404' },
+          { label: 'Walmart - $19.94', url: 'https://www.walmart.com/ip/Crayola-Ultimate-Crayon-Collection-152-Colors/26228172' },
         ],
       },
       {
@@ -248,9 +248,9 @@ export async function seedDatabase() {
         sortOrder: 2,
         imageUrl: '/images/items/child3.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $24.99', url: 'https://www.amazon.com/National-Geographic-Kids-World-Atlas/dp/1426375905', isPrimary: true },
-          { label: 'Barnes & Noble - $24.99', url: 'https://www.barnesandnoble.com/w/national-geographic-kids-world-atlas/1141356542', isPrimary: false },
-          { label: 'Target - $24.99', url: 'https://www.target.com/p/national-geographic-kids-world-atlas/-/A-87621944', isPrimary: false },
+          { label: 'Amazon - $24.99', url: 'https://www.amazon.com/National-Geographic-Kids-World-Atlas/dp/1426375905' },
+          { label: 'Barnes & Noble - $24.99', url: 'https://www.barnesandnoble.com/w/national-geographic-kids-world-atlas/1141356542' },
+          { label: 'Target - $24.99', url: 'https://www.target.com/p/national-geographic-kids-world-atlas/-/A-87621944' },
         ],
       },
       {
@@ -263,9 +263,9 @@ export async function seedDatabase() {
         sortOrder: 3,
         imageUrl: '/images/items/child4.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $39.99', url: 'https://www.amazon.com/Razor-Kick-Scooter-FFP/dp/B00005NBON', isPrimary: true },
-          { label: 'Target - $39.99', url: 'https://www.target.com/p/razor-a-kick-scooter/-/A-10853734', isPrimary: false },
-          { label: 'Walmart - $39.88', url: 'https://www.walmart.com/ip/Razor-A-Kick-Scooter/10314287', isPrimary: false },
+          { label: 'Amazon - $39.99', url: 'https://www.amazon.com/Razor-Kick-Scooter-FFP/dp/B00005NBON' },
+          { label: 'Target - $39.99', url: 'https://www.target.com/p/razor-a-kick-scooter/-/A-10853734' },
+          { label: 'Walmart - $39.88', url: 'https://www.walmart.com/ip/Razor-A-Kick-Scooter/10314287' },
         ],
       },
       {
@@ -278,9 +278,9 @@ export async function seedDatabase() {
         sortOrder: 4,
         imageUrl: '/images/items/child5.jpg',
         purchaseUrls: [
-          { label: 'Amazon - $34.99', url: 'https://www.amazon.com/Melissa-Doug-Standard-Wooden-Building/dp/B00005RF5G', isPrimary: true },
-          { label: 'Target - $34.99', url: 'https://www.target.com/p/melissa-doug-wooden-building-blocks-set/-/A-10917067', isPrimary: false },
-          { label: 'Walmart - $34.97', url: 'https://www.walmart.com/ip/Melissa-Doug-Wooden-Building-Blocks-Set/5024533', isPrimary: false },
+          { label: 'Amazon - $34.99', url: 'https://www.amazon.com/Melissa-Doug-Standard-Wooden-Building/dp/B00005RF5G' },
+          { label: 'Target - $34.99', url: 'https://www.target.com/p/melissa-doug-wooden-building-blocks-set/-/A-10917067' },
+          { label: 'Walmart - $34.97', url: 'https://www.walmart.com/ip/Melissa-Doug-Wooden-Building-Blocks-Set/5024533' },
         ],
       },
     ]);
