@@ -7,6 +7,7 @@ interface ImageUploadProps {
   onImageChange: (url: string) => void;
   type: 'wishlist' | 'item';
   label?: string;
+  onUploadStateChange?: (isUploading: boolean) => void;
 }
 
 export default function ImageUpload({
@@ -14,6 +15,7 @@ export default function ImageUpload({
   onImageChange,
   type,
   label = 'Image',
+  onUploadStateChange,
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
@@ -41,6 +43,7 @@ export default function ImageUpload({
 
     setIsUploading(true);
     setUploadError('');
+    onUploadStateChange?.(true);
 
     try {
       const formData = new FormData();
@@ -71,6 +74,7 @@ export default function ImageUpload({
       setUploadError(error.message || 'Failed to upload image');
     } finally {
       setIsUploading(false);
+      onUploadStateChange?.(false);
     }
   };
 

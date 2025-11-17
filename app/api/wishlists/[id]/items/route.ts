@@ -97,7 +97,7 @@ export async function POST(
       price,
       currency,
       quantity,
-      images,
+      imageUrl,
       purchaseUrls,
     } = body;
 
@@ -143,7 +143,7 @@ export async function POST(
         price: price || null,
         currency: currency || 'USD',
         quantity: quantity || 1,
-        imageUrl: images || null,
+        imageUrl: imageUrl || null,
         purchaseUrls: purchaseUrls || null,
         sortOrder: nextSortOrder,
       })

@@ -28,6 +28,7 @@ export default function AdminPage() {
   });
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState('');
+  const [isNewWishlistImageUploading, setIsNewWishlistImageUploading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({
     name: '',
@@ -37,10 +38,13 @@ export default function AdminPage() {
     isPublic: true,
   });
   const [editError, setEditError] = useState('');
+  const [isWishlistImageUploading, setIsWishlistImageUploading] = useState(false);
   const [expandedWishlistId, setExpandedWishlistId] = useState<string | null>(null);
   const [wishlistItems, setWishlistItems] = useState<Record<string, Item[]>>({});
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [editItemForm, setEditItemForm] = useState<Partial<Item>>({});
+  const [isItemImageUploading, setIsItemImageUploading] = useState(false);
+  const [isNewItemImageUploading, setIsNewItemImageUploading] = useState(false);
   const [showAddItemForm, setShowAddItemForm] = useState<string | null>(null);
   const [newItemForm, setNewItemForm] = useState<Partial<Item>>({
     name: '',
@@ -605,6 +609,7 @@ export default function AdminPage() {
                                           onImageChange={(url) =>
                                             setEditForm((prev) => ({ ...prev, imageUrl: url }))
                                           }
+                                          onUploadStateChange={setIsWishlistImageUploading}
                                           type="wishlist"
                                           label="Wishlist Image"
                                         />
@@ -720,8 +725,9 @@ export default function AdminPage() {
                                             e.preventDefault();
                                             handleUpdateWishlist(e as any);
                                           }}
-                                          className="flex-1 flex items-center justify-center text-base font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
-                                          title="Save"
+                                          disabled={isWishlistImageUploading}
+                                          className="flex-1 flex items-center justify-center text-base font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                          title={isWishlistImageUploading ? "Uploading..." : "Save"}
                                         >
                                           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -863,6 +869,7 @@ export default function AdminPage() {
                                             onImageChange={(url) =>
                                               setNewItemForm((prev) => ({ ...prev, imageUrl: url }))
                                             }
+                                            onUploadStateChange={setIsNewItemImageUploading}
                                             type="item"
                                             label="Item Image"
                                           />
@@ -949,9 +956,10 @@ export default function AdminPage() {
                                         </button>
                                         <button
                                           type="submit"
-                                          className="px-4 py-2 text-base bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer"
+                                          disabled={isNewItemImageUploading}
+                                          className="px-4 py-2 text-base bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                          Add Item
+                                          {isNewItemImageUploading ? 'Uploading...' : 'Add Item'}
                                         </button>
                                       </div>
                                     </form>
@@ -1023,6 +1031,7 @@ export default function AdminPage() {
                                                     onImageChange={(url) =>
                                                       setEditItemForm((prev) => ({ ...prev, imageUrl: url }))
                                                     }
+                                                    onUploadStateChange={setIsItemImageUploading}
                                                     type="item"
                                                     label="Item Image"
                                                   />
@@ -1109,9 +1118,10 @@ export default function AdminPage() {
                                                 </button>
                                                 <button
                                                   type="submit"
-                                                  className="px-4 py-2 text-base bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer"
+                                                  disabled={isItemImageUploading}
+                                                  className="px-4 py-2 text-base bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
-                                                  Save
+                                                  {isItemImageUploading ? 'Uploading...' : 'Save'}
                                                 </button>
                                               </div>
                                             </form>
@@ -1270,6 +1280,7 @@ export default function AdminPage() {
                   <ImageUpload
                     currentImageUrl={newWishlist.imageUrl}
                     onImageChange={(url) => setNewWishlist((prev) => ({ ...prev, imageUrl: url }))}
+                    onUploadStateChange={setIsNewWishlistImageUploading}
                     type="wishlist"
                     label="Wishlist Image"
                   />
@@ -1308,10 +1319,10 @@ export default function AdminPage() {
                   </button>
                   <button
                     type="submit"
-                    disabled={isCreating}
-                    className="px-6 py-3 border border-transparent rounded-lg text-base font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all disabled:opacity-50"
+                    disabled={isCreating || isNewWishlistImageUploading}
+                    className="px-6 py-3 border border-transparent rounded-lg text-base font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isCreating ? 'Creating...' : 'Create'}
+                    {isNewWishlistImageUploading ? 'Uploading...' : isCreating ? 'Creating...' : 'Create'}
                   </button>
                 </div>
               </form>
