@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface ImageUploadProps {
   currentImageUrl?: string;
@@ -18,15 +18,14 @@ export default function ImageUpload({
   onUploadStateChange,
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState('');
   const [imageUrl, setImageUrl] = useState(currentImageUrl || '');
   const [useUrl, setUseUrl] = useState(!!currentImageUrl);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const pasteAreaRef = useRef<HTMLDivElement>(null);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const uploadFile = (file: File) => {
     // Client-side validation
     const maxSize = 5 * 1024 * 1024; // 5MB
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
@@ -42,41 +41,118 @@ export default function ImageUpload({
     }
 
     setIsUploading(true);
+    setUploadProgress(0);
     setUploadError('');
     onUploadStateChange?.(true);
 
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', type);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', type);
 
-      const response = await fetch('/uploads', {
-        method: 'POST',
-        body: formData,
-      });
+    const xhr = new XMLHttpRequest();
 
-      // Check if response is JSON before parsing
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error(`Server returned non-JSON response (${response.status}): ${response.statusText}`);
+    // Track upload progress
+    xhr.upload.addEventListener('progress', (e) => {
+      if (e.lengthComputable) {
+        const percentComplete = (e.loaded / e.total) * 100;
+        setUploadProgress(percentComplete);
       }
+    });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Upload failed');
+    // Handle completion
+    xhr.addEventListener('load', () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          setImageUrl(data.url);
+          onImageChange(data.url);
+          setUploadProgress(100);
+        } catch (error) {
+          console.error('Failed to parse response:', error);
+          setUploadError('Failed to parse server response');
+        }
+      } else {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          setUploadError(data.error || 'Upload failed');
+        } catch {
+          setUploadError(`Upload failed with status ${xhr.status}`);
+        }
       }
-
-      setImageUrl(data.url);
-      onImageChange(data.url);
-    } catch (error: any) {
-      console.error('Image upload error:', error);
-      setUploadError(error.message || 'Failed to upload image');
-    } finally {
       setIsUploading(false);
       onUploadStateChange?.(false);
+    });
+
+    // Handle errors
+    xhr.addEventListener('error', () => {
+      console.error('Upload error');
+      setUploadError('Network error occurred during upload');
+      setIsUploading(false);
+      onUploadStateChange?.(false);
+    });
+
+    // Handle abort
+    xhr.addEventListener('abort', () => {
+      setUploadError('Upload was cancelled');
+      setIsUploading(false);
+      onUploadStateChange?.(false);
+    });
+
+    xhr.open('POST', '/uploads');
+    xhr.send(formData);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    uploadFile(file);
+  };
+
+  const handlePaste = (e: ClipboardEvent) => {
+    // Only handle paste if we're in upload mode (not URL mode)
+    if (useUrl || imageUrl) return;
+
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+
+      // Check if the item is an image
+      if (item.type.indexOf('image') !== -1) {
+        e.preventDefault();
+
+        const file = item.getAsFile();
+        if (file) {
+          uploadFile(file);
+        }
+        break;
+      }
     }
   };
+
+  // Add paste event listener
+  useEffect(() => {
+    const handlePasteEvent = (e: Event) => handlePaste(e as ClipboardEvent);
+
+    // Listen for paste events on the component's container
+    const pasteArea = pasteAreaRef.current;
+    if (pasteArea) {
+      pasteArea.addEventListener('paste', handlePasteEvent);
+    }
+
+    // Also listen globally when in upload mode and no image is set
+    if (!useUrl && !imageUrl) {
+      document.addEventListener('paste', handlePasteEvent);
+    }
+
+    return () => {
+      if (pasteArea) {
+        pasteArea.removeEventListener('paste', handlePasteEvent);
+      }
+      document.removeEventListener('paste', handlePasteEvent);
+    };
+  }, [useUrl, imageUrl]);
 
   const handleUrlChange = (url: string) => {
     setImageUrl(url);
@@ -92,7 +168,7 @@ export default function ImageUpload({
   };
 
   return (
-    <div className="space-y-3">
+    <div ref={pasteAreaRef} className="space-y-3" tabIndex={-1}>
       {label && (
         <label className="block text-base font-medium text-gray-700 dark:text-gray-300">
           {label}
@@ -174,6 +250,9 @@ export default function ImageUpload({
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 Max 5MB. Allowed: JPEG, PNG, WebP, GIF. Images will be resized to max 800x800px and optimized.
               </p>
+              <p className="mt-1 text-sm text-indigo-600 dark:text-indigo-400 font-medium">
+                💡 Tip: You can also paste an image directly (Ctrl+V / Cmd+V)
+              </p>
             </div>
           )}
 
@@ -184,10 +263,19 @@ export default function ImageUpload({
             </div>
           )}
 
-          {/* Uploading Status */}
+          {/* Upload Progress Bar */}
           {isUploading && (
-            <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400 rounded text-base">
-              Uploading...
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300">
+                <span>Uploading...</span>
+                <span className="font-medium">{Math.round(uploadProgress)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                <div
+                  className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
             </div>
           )}
         </>
