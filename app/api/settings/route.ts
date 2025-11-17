@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const settingsObj = allSettings.reduce((acc, setting) => {
       acc[setting.key] = setting.value;
       return acc;
-    }, {} as Record<string, string>);
+    }, {} as Record<string, string | boolean>);
 
     // Set defaults if not found
     if (!settingsObj.siteTitle) {
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Convert passwordLockEnabled to boolean
-    settingsObj.passwordLockEnabled = settingsObj.passwordLockEnabled === 'true';
+    (settingsObj as any).passwordLockEnabled = settingsObj.passwordLockEnabled === 'true';
 
     return NextResponse.json({
       success: true,
