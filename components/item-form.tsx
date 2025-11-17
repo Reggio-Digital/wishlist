@@ -163,9 +163,16 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
           <input
             type="number"
             step="0.01"
+            min="0"
             className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             value={formData.price}
-            onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value }))}
+            onChange={(e) => {
+              const value = e.target.value;
+              // Only allow empty string or valid numbers (including decimals)
+              if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                setFormData((prev) => ({ ...prev, price: value }));
+              }
+            }}
           />
         </div>
         <div>
