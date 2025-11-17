@@ -57,6 +57,7 @@ export async function initializeDatabase() {
         name TEXT NOT NULL,
         slug TEXT NOT NULL UNIQUE,
         description TEXT,
+        preferences TEXT,
         image_url TEXT,
         notes TEXT,
         is_public INTEGER DEFAULT 0 NOT NULL,
@@ -118,6 +119,13 @@ export async function initializeDatabase() {
       if (!hasSortOrder) {
         sqlite.exec('ALTER TABLE wishlists ADD COLUMN sort_order INTEGER DEFAULT 0 NOT NULL');
         console.log('✅ Added sort_order column to wishlists table');
+      }
+
+      // Add preferences column if it doesn't exist
+      const hasPreferences = columns.some((col) => col.name === 'preferences');
+      if (!hasPreferences) {
+        sqlite.exec('ALTER TABLE wishlists ADD COLUMN preferences TEXT');
+        console.log('✅ Added preferences column to wishlists table');
       }
     } catch (migrationError) {
       console.log('Migration already applied or not needed');

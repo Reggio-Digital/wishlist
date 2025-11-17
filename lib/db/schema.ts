@@ -17,6 +17,7 @@ export const wishlists = sqliteTable('wishlists', {
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
   description: text('description'),
+  preferences: text('preferences'), // General interests/likes section
   imageUrl: text('image_url'),
   isPublic: integer('is_public', { mode: 'boolean' }).notNull().default(false),
   sortOrder: integer('sort_order').notNull().default(0),

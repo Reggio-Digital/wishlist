@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import ImageUpload from '@/components/image-upload';
+import RichTextEditor from '@/components/RichTextEditor';
 
 interface WishlistFormData {
   name: string;
   slug: string;
   description: string;
+  preferences: string;
   imageUrl: string;
   isPublic: boolean;
 }
@@ -28,6 +30,7 @@ export default function CreateWishlistModal({
     name: '',
     slug: '',
     description: '',
+    preferences: '',
     imageUrl: '',
     isPublic: true,
   });
@@ -51,14 +54,14 @@ export default function CreateWishlistModal({
 
     try {
       await onCreate(formData);
-      setFormData({ name: '', slug: '', description: '', imageUrl: '', isPublic: true });
+      setFormData({ name: '', slug: '', description: '', preferences: '', imageUrl: '', isPublic: true });
     } finally {
       setIsCreating(false);
     }
   };
 
   const handleClose = () => {
-    setFormData({ name: '', slug: '', description: '', imageUrl: '', isPublic: true });
+    setFormData({ name: '', slug: '', description: '', preferences: '', imageUrl: '', isPublic: true });
     onClose();
   };
 
@@ -117,6 +120,19 @@ export default function CreateWishlistModal({
                     description: e.target.value,
                   }))
                 }
+              />
+            </div>
+            <div>
+              <label className="block text-base font-medium text-gray-900 dark:text-gray-200 mb-2">
+                General Interests & Preferences
+              </label>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                Share general things you like - hobbies, styles, colors, brands, etc. This appears before your wishlist items.
+              </p>
+              <RichTextEditor
+                value={formData.preferences}
+                onChange={(html) => setFormData((prev) => ({ ...prev, preferences: html }))}
+                placeholder="e.g., I love anything purple, enjoy sci-fi books, prefer sustainable brands..."
               />
             </div>
             <ImageUpload

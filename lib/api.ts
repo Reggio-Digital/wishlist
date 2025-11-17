@@ -63,6 +63,7 @@ export interface Wishlist {
   name: string;
   slug: string;
   description: string | null;
+  preferences: string | null;
   imageUrl: string | null;
   isPublic: boolean;
   sortOrder: number;
