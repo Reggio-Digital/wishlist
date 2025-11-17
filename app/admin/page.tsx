@@ -11,6 +11,7 @@ import StatsGrid from '@/components/admin/StatsGrid';
 import SettingsSection from '@/components/admin/SettingsSection';
 import WishlistCard from '@/components/admin/WishlistCard';
 import CreateWishlistModal from '@/components/admin/CreateWishlistModal';
+import ShareButton from '@/components/share-button';
 
 export default function AdminPage() {
   const { logout } = useAuth();
@@ -131,6 +132,11 @@ export default function AdminPage() {
           subtitle="Manage your wishlists and items"
           actions={
             <>
+              <ShareButton
+                title="Check out my wishlist site!"
+                text="I wanted to share my wishlist site with you."
+                url="https://wishlist.tieso.co/"
+              />
               <Link
                 href="/"
                 className="inline-flex items-center px-6 py-3 border-2 border-indigo-600 dark:border-indigo-500 text-base font-semibold rounded-lg text-indigo-600 dark:text-indigo-400 bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-gray-700 transition-all"

@@ -6,6 +6,7 @@ import { wishlistsApi, itemsApi, settingsApi, type Wishlist, type Settings } fro
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import PasswordLockGuard from '@/components/password-lock-guard';
+import ShareButton from '@/components/share-button';
 
 export default function Home() {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
@@ -54,6 +55,12 @@ export default function Home() {
         <Header
           title={settings.siteTitle}
           subtitle={settings.homepageSubtext}
+          actions={
+            <ShareButton
+              title="Check out this wishlist!"
+              text="I thought you might be interested in this wishlist."
+            />
+          }
         />
 
         {/* Main Content */}
