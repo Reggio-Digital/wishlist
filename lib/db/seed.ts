@@ -1,5 +1,5 @@
 import { db } from './index';
-import { wishlists, wishlistItems } from './schema';
+import { wishlists, wishlistItems, settings } from './schema';
 import { eq } from 'drizzle-orm';
 
 /**
@@ -13,6 +13,18 @@ export async function seedDatabase() {
     if (existingWishlists.length > 0) {
       return;
     }
+
+    // Seed settings
+    await db.insert(settings).values([
+      {
+        key: 'siteTitle',
+        value: 'Wishlist',
+      },
+      {
+        key: 'homepageSubtext',
+        value: 'Hello! Thank you so much for thinking of us! When you purchase something from our list, just click "Claim" to mark it. We promise not to peek at what\'s been claimed. This works on the honor system, so please only claim items you\'ve actually bought. We appreciate you!',
+      },
+    ]);
 
     // Create sample wishlists
     const [dadWishlist] = await db.insert(wishlists).values({
