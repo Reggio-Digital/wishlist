@@ -10,10 +10,11 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
-import { $getRoot, $insertNodes, $getSelection, $isRangeSelection } from 'lexical';
+import { $getRoot, $insertNodes, $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND } from 'lexical';
 import { ListNode, ListItemNode } from '@lexical/list';
 import { LinkNode, AutoLinkNode, $createLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
+import { HeadingNode, QuoteNode, $createHeadingNode } from '@lexical/rich-text';
+import { $setBlocksType } from '@lexical/selection';
 import { useEffect, useState } from 'react';
 
 // Toolbar Component
@@ -24,11 +25,24 @@ function ToolbarPlugin() {
   const [linkText, setLinkText] = useState('');
 
   const formatBold = () => {
-    editor.dispatchCommand({ type: 'FORMAT_TEXT_COMMAND', payload: 'bold' } as any, undefined);
+    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
   };
 
   const formatItalic = () => {
-    editor.dispatchCommand({ type: 'FORMAT_TEXT_COMMAND', payload: 'italic' } as any, undefined);
+    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
+  };
+
+  const formatUnderline = () => {
+    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
+  };
+
+  const formatHeading = (level: 'h2' | 'h3') => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        $setBlocksType(selection, () => $createHeadingNode(level));
+      }
+    });
   };
 
   const formatBulletList = () => {
@@ -77,7 +91,7 @@ function ToolbarPlugin() {
 
   return (
     <>
-      <div className="flex items-center gap-1 p-2 border-b border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 rounded-t-lg">
+      <div className="flex items-center gap-1 p-2 border-b border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 rounded-t-lg flex-wrap">
         <button
           type="button"
           onClick={formatBold}
@@ -93,6 +107,31 @@ function ToolbarPlugin() {
           title="Italic"
         >
           I
+        </button>
+        <button
+          type="button"
+          onClick={formatUnderline}
+          className="px-3 py-1.5 text-sm underline hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+          title="Underline"
+        >
+          U
+        </button>
+        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+        <button
+          type="button"
+          onClick={() => formatHeading('h2')}
+          className="px-3 py-1.5 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+          title="Heading 2"
+        >
+          H2
+        </button>
+        <button
+          type="button"
+          onClick={() => formatHeading('h3')}
+          className="px-3 py-1.5 text-sm font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+          title="Heading 3"
+        >
+          H3
         </button>
         <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
         <button
@@ -209,11 +248,20 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Enter t
     namespace: 'WishlistPreferences',
     theme: {
       paragraph: 'mb-2',
+      heading: {
+        h2: 'text-2xl font-bold mb-3 mt-4 text-gray-900 dark:text-white',
+        h3: 'text-xl font-semibold mb-2 mt-3 text-gray-900 dark:text-white',
+      },
       list: {
         ul: 'list-disc list-inside mb-2',
         ol: 'list-decimal list-inside mb-2',
       },
       link: 'text-indigo-600 dark:text-indigo-400 hover:underline',
+      text: {
+        bold: 'font-bold',
+        italic: 'italic',
+        underline: 'underline',
+      },
     },
     onError: (error: Error) => {
       console.error(error);

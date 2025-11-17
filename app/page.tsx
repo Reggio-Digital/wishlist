@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { wishlistsApi, itemsApi, settingsApi, type Wishlist, type Settings } from '@/lib/api';
+import { wishlistsApi, settingsApi, type Wishlist, type Settings } from '@/lib/api';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import PasswordLockGuard from '@/components/password-lock-guard';
@@ -10,7 +10,6 @@ import ShareButton from '@/components/share-button';
 
 export default function Home() {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
-  const [itemCounts, setItemCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [settings, setSettings] = useState<Settings>({ siteTitle: 'Wishlist', homepageSubtext: 'Browse and explore available wishlists' });
 
@@ -32,16 +31,7 @@ export default function Home() {
     try {
       const data = await wishlistsApi.getAllPublic();
       setWishlists(data);
-
-      // Fetch item counts for each wishlist
-      const counts: Record<string, number> = {};
-      await Promise.all(
-        data.map(async (w) => {
-          const items = await itemsApi.getAll(w.id);
-          counts[w.id] = items.length;
-        })
-      );
-      setItemCounts(counts);
+      // Item counts removed - requires authentication
     } catch (error) {
       console.error('Failed to fetch wishlists:', error);
     } finally {
@@ -101,9 +91,6 @@ export default function Home() {
                             {wishlist.description}
                           </p>
                         )}
-                        <p className="text-base text-gray-500 dark:text-gray-400 font-medium">
-                          {itemCounts[wishlist.id] || 0} items
-                        </p>
                       </div>
                     </div>
                   </Link>

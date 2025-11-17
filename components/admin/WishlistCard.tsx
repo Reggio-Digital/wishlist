@@ -218,51 +218,66 @@ export default function WishlistCard({
                   type="wishlist"
                   label="Wishlist Image"
                 />
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Wishlist Name *
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editForm.name}
+                        onChange={(e) => handleEditNameChange(e.target.value)}
+                        className="text-lg font-bold px-2 py-1 border-2 border-indigo-500 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white flex-1"
+                        placeholder="Wishlist name"
+                      />
+                      <label className="flex items-center gap-2 text-base">
+                        <input
+                          type="checkbox"
+                          checked={editForm.isPublic}
+                          onChange={(e) =>
+                            setEditForm((prev) => ({
+                              ...prev,
+                              isPublic: e.target.checked,
+                            }))
+                          }
+                          className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        />
+                        <span className="text-gray-700 dark:text-gray-300">Public</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      URL Slug *
+                    </label>
                     <input
                       type="text"
-                      value={editForm.name}
-                      onChange={(e) => handleEditNameChange(e.target.value)}
-                      className="text-lg font-bold px-2 py-1 border-2 border-indigo-500 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white flex-1"
-                      placeholder="Wishlist name"
+                      value={editForm.slug}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({ ...prev, slug: e.target.value }))
+                      }
+                      className="text-base px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white w-full"
+                      placeholder="url-slug"
                     />
-                    <label className="flex items-center gap-2 text-base">
-                      <input
-                        type="checkbox"
-                        checked={editForm.isPublic}
-                        onChange={(e) =>
-                          setEditForm((prev) => ({
-                            ...prev,
-                            isPublic: e.target.checked,
-                          }))
-                        }
-                        className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                      <span className="text-gray-700 dark:text-gray-300">Public</span>
-                    </label>
                   </div>
-                  <input
-                    type="text"
-                    value={editForm.slug}
-                    onChange={(e) =>
-                      setEditForm((prev) => ({ ...prev, slug: e.target.value }))
-                    }
-                    className="text-base px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white w-full"
-                    placeholder="url-slug"
-                  />
-                  <textarea
-                    value={editForm.description}
-                    onChange={(e) =>
-                      setEditForm((prev) => ({
-                        ...prev,
-                        description: e.target.value,
-                      }))
-                    }
-                    className="text-base px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white w-full"
-                    placeholder="Description"
-                    rows={2}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      value={editForm.description}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
+                      }
+                      className="text-base px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white w-full"
+                      placeholder="Description"
+                      rows={2}
+                    />
+                  </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Preferences
