@@ -282,6 +282,8 @@ export const scrapingApi = {
 export interface Settings {
   siteTitle: string;
   homepageSubtext: string;
+  passwordLockEnabled?: boolean;
+  passwordLock?: string;
 }
 
 export const settingsApi = {

@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { wishlistsApi, itemsApi, claimingApi, type Wishlist, type Item } from '@/lib/api';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import PasswordLockGuard from '@/components/password-lock-guard';
 
 export default function PublicWishlistPage() {
   const params = useParams();
@@ -124,13 +125,14 @@ export default function PublicWishlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header
-        title={wishlist.name}
-        subtitle={wishlist.description || undefined}
-        imageUrl={wishlist.imageUrl || undefined}
-        maxWidth="max-w-5xl"
-      />
+    <PasswordLockGuard>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Header
+          title={wishlist.name}
+          subtitle={wishlist.description || undefined}
+          imageUrl={wishlist.imageUrl || undefined}
+          maxWidth="max-w-5xl"
+        />
 
       {/* Main Content */}
       <div className="max-w-5xl mx-auto py-12 sm:px-6 lg:px-8">
@@ -333,7 +335,8 @@ export default function PublicWishlistPage() {
         </div>
       </div>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </PasswordLockGuard>
   );
 }

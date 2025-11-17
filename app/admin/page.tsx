@@ -14,9 +14,9 @@ export default function AdminPage() {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [itemCounts, setItemCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [settings, setSettings] = useState<Settings>({ siteTitle: 'Wishlist', homepageSubtext: 'Browse and explore available wishlists' });
+  const [settings, setSettings] = useState<Settings>({ siteTitle: 'Wishlist', homepageSubtext: 'Browse and explore available wishlists', passwordLockEnabled: false });
   const [editingSettings, setEditingSettings] = useState(false);
-  const [settingsForm, setSettingsForm] = useState<Settings>({ siteTitle: '', homepageSubtext: '' });
+  const [settingsForm, setSettingsForm] = useState<Settings>({ siteTitle: '', homepageSubtext: '', passwordLockEnabled: false, passwordLock: '' });
   const [settingsError, setSettingsError] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newWishlist, setNewWishlist] = useState({
@@ -498,6 +498,44 @@ export default function AdminPage() {
                               This appears below the title on the homepage
                             </p>
                           </div>
+                          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center mb-3">
+                              <input
+                                type="checkbox"
+                                id="passwordLockEnabled"
+                                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                checked={settingsForm.passwordLockEnabled}
+                                onChange={(e) =>
+                                  setSettingsForm((prev) => ({ ...prev, passwordLockEnabled: e.target.checked }))
+                                }
+                              />
+                              <label htmlFor="passwordLockEnabled" className="ml-2 block text-base font-medium text-gray-700 dark:text-gray-300">
+                                Enable Password Lock
+                              </label>
+                            </div>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                              When enabled, visitors must enter a password to access the website
+                            </p>
+                            {settingsForm.passwordLockEnabled && (
+                              <div>
+                                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                  Site Password
+                                </label>
+                                <input
+                                  type="password"
+                                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                  value={settingsForm.passwordLock || ''}
+                                  onChange={(e) =>
+                                    setSettingsForm((prev) => ({ ...prev, passwordLock: e.target.value }))
+                                  }
+                                  placeholder="Enter password (leave blank to keep current)"
+                                />
+                                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                  Leave blank to keep the current password unchanged
+                                </p>
+                              </div>
+                            )}
+                          </div>
                           <div className="flex justify-end gap-2">
                             <button
                               type="button"
@@ -523,6 +561,20 @@ export default function AdminPage() {
                           <div>
                             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Homepage Subtext</p>
                             <p className="text-base text-gray-900 dark:text-white">{settings.homepageSubtext}</p>
+                          </div>
+                          <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Password Lock</p>
+                            <p className="text-base text-gray-900 dark:text-white">
+                              {settings.passwordLockEnabled ? (
+                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-base font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                                  Enabled
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-base font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300">
+                                  Disabled
+                                </span>
+                              )}
+                            </p>
                           </div>
                         </div>
                       )}
