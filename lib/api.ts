@@ -244,6 +244,15 @@ export const claimingApi = {
     });
     return handleResponse<{ claimToken: string; message: string }>(response);
   },
+
+  async unclaim(itemId: string) {
+    const response = await fetch(`${API_BASE_URL}/public/items/${itemId}/unclaim`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    return handleResponse<{ success: boolean; message: string }>(response);
+  },
 };
 
 // Scraping API

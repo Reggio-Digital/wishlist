@@ -22,6 +22,10 @@ export default function PublicWishlistPage() {
   const [justClaimedItemId, setJustClaimedItemId] = useState<string | null>(null);
   const [justClaimedNote, setJustClaimedNote] = useState('');
 
+  // Unclaim state
+  const [isUnclaiming, setIsUnclaiming] = useState(false);
+  const [unclaimError, setUnclaimError] = useState('');
+
   useEffect(() => {
     fetchWishlist();
   }, [params.slug]);
@@ -67,6 +71,24 @@ export default function PublicWishlistPage() {
       setClaimError(err.message || 'Failed to claim item');
     } finally {
       setIsClaiming(false);
+    }
+  };
+
+  const handleUnclaim = async (itemId: string) => {
+    if (!confirm('Are you sure you want to unclaim this item?')) {
+      return;
+    }
+
+    setIsUnclaiming(true);
+    setUnclaimError('');
+
+    try {
+      await claimingApi.unclaim(itemId);
+      fetchWishlist();
+    } catch (err: any) {
+      setUnclaimError(err.message || 'Failed to unclaim item');
+    } finally {
+      setIsUnclaiming(false);
     }
   };
 
@@ -250,6 +272,15 @@ export default function PublicWishlistPage() {
                             <p className="text-xs text-green-700 dark:text-green-300 mt-1 font-medium">
                               ✓ Purchased
                             </p>
+                          )}
+                          {showClaimed && (
+                            <button
+                              onClick={() => handleUnclaim(item.id)}
+                              disabled={isUnclaiming}
+                              className="mt-3 w-full px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 font-medium disabled:opacity-50 transition-colors cursor-pointer text-sm"
+                            >
+                              {isUnclaiming ? 'Unclaiming...' : 'Unclaim Item'}
+                            </button>
                           )}
                         </div>
                       ) : claimingItemId === item.id ? (
