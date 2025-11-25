@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 import { db, wishlistItems, wishlists } from '@/lib/db';
 import { verifyAccessToken } from '@/lib/auth/utils';
 
@@ -128,7 +128,7 @@ export async function POST(
       .select()
       .from(wishlistItems)
       .where(eq(wishlistItems.wishlistId, id))
-      .orderBy(wishlistItems.sortOrder)
+      .orderBy(desc(wishlistItems.sortOrder))
       .limit(1);
 
     const nextSortOrder = lastItem.length > 0 ? lastItem[0].sortOrder + 1 : 0;

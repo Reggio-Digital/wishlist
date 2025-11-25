@@ -57,6 +57,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setSubmitError('');
     setIsSubmitting(true);
 
@@ -81,6 +82,7 @@ export default function ItemForm({ initialData, onSubmit, onCancel, isEditing = 
       });
     } catch (error: any) {
       setSubmitError(error.message || 'Failed to save item');
+    } finally {
       setIsSubmitting(false);
     }
   };

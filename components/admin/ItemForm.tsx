@@ -26,10 +26,17 @@ export default function ItemForm({ item, onSubmit, onCancel, mode, error }: Item
     }
   );
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await onSubmit(formData);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -120,10 +127,10 @@ export default function ItemForm({ item, onSubmit, onCancel, mode, error }: Item
         </button>
         <button
           type="submit"
-          disabled={isImageUploading}
+          disabled={isImageUploading || isSubmitting}
           className="px-4 py-2 text-base bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isImageUploading ? 'Uploading...' : mode === 'create' ? 'Add Item' : 'Save'}
+          {isImageUploading ? 'Uploading...' : isSubmitting ? 'Saving...' : mode === 'create' ? 'Add Item' : 'Save'}
         </button>
       </div>
     </form>
