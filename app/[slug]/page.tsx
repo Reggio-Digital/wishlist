@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import DOMPurify from 'dompurify';
 import { wishlistsApi, itemsApi, claimingApi, type Wishlist, type Item } from '@/lib/api';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -165,7 +166,7 @@ export default function PublicWishlistPage() {
               </h2>
               <div
                 className="prose prose-indigo dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 [&_a]:text-indigo-600 [&_a]:dark:text-indigo-400 [&_a]:hover:underline"
-                dangerouslySetInnerHTML={{ __html: wishlist.preferences }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(wishlist.preferences) }}
                 onClick={(e) => {
                   // Make all links open in new tab
                   const target = e.target as HTMLElement;
