@@ -14,22 +14,22 @@
     "db:seed": "tsx lib/db/seed.ts"
   },
   "dependencies": {
-    "@lexical/html": "^0.38.2",
-    "@lexical/link": "^0.38.2",
-    "@lexical/list": "^0.38.2",
-    "@lexical/react": "^0.38.2",
-    "@lexical/rich-text": "^0.38.2",
+    "@lexical/html": "^0.39.0",
+    "@lexical/link": "^0.39.0",
+    "@lexical/list": "^0.39.0",
+    "@lexical/react": "^0.39.0",
+    "@lexical/rich-text": "^0.39.0",
     "@paralleldrive/cuid2": "^3.0.4",
     "axios": "^1.13.2",
     "better-sqlite3": "^12.4.1",
     "cheerio": "^1.1.2",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^0.45.1",
     "jsonwebtoken": "^9.0.2",
-    "lexical": "^0.38.2",
-    "next": "16.0.1",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "sharp": "^0.33.5"
+    "lexical": "^0.39.0",
+    "next": "^16.1.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -39,7 +39,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.0.1",
+    "eslint-config-next": "^16.1.1",
     "tailwindcss": "^4",
     "tsx": "^4.20.6",
     "typescript": "^5"
