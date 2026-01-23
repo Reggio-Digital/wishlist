@@ -101,24 +101,24 @@ export async function POST(
     allWishlists.splice(newSortOrder, 0, movingWishlist);
 
     // Update all sortOrders in a transaction for atomicity
-    const updatedWishlist = await db.transaction(async (tx) => {
-      // Update all sortOrders
+    // Note: better-sqlite3 is synchronous, so no async/await in transaction
+    const updatedWishlist = db.transaction((tx) => {
       for (let i = 0; i < allWishlists.length; i++) {
-        await tx
-          .update(wishlists)
+        tx.update(wishlists)
           .set({
             sortOrder: i,
             updatedAt: new Date(),
           })
-          .where(eq(wishlists.id, allWishlists[i].id));
+          .where(eq(wishlists.id, allWishlists[i].id))
+          .run();
       }
 
-      // Get the updated wishlist
-      const result = await tx
+      const result = tx
         .select()
         .from(wishlists)
         .where(eq(wishlists.id, id))
-        .limit(1);
+        .limit(1)
+        .all();
 
       return result[0];
     });
