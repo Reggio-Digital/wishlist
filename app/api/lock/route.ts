@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { db, settings } from '@/lib/db';
 import crypto from 'crypto';
+import { isSecureCookie } from '@/lib/auth/utils';
 
 // POST /api/lock - Verify password
 export async function POST(request: NextRequest) {
@@ -41,12 +42,11 @@ export async function POST(request: NextRequest) {
         message: 'Password verified',
       });
 
-      // Set an unlock cookie that expires in 24 hours
       response.cookies.set('site_unlocked', 'true', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: isSecureCookie(request),
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24, // 24 hours
+        maxAge: 60 * 60 * 24,
         path: '/',
       });
 

@@ -128,3 +128,16 @@ export function validateAdminCredentials(username: string, password: string): bo
 
   return username === adminUsername && password === adminPassword;
 }
+
+export function isSecureCookie(request: { headers: { get(name: string): string | null }; url: string }): boolean {
+  if (process.env.COOKIE_SECURE !== undefined) {
+    return process.env.COOKIE_SECURE === 'true';
+  }
+  if (process.env.NODE_ENV === 'production') {
+    return (
+      request.headers.get('x-forwarded-proto') === 'https' ||
+      request.url.startsWith('https://')
+    );
+  }
+  return false;
+}

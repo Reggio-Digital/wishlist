@@ -102,6 +102,11 @@ PGID=1000
 # Optional - JWT Secret (auto-generated if not provided)
 # Generate with: openssl rand -base64 32
 SECRET=
+
+# Optional - Cookie Security
+# Set to 'false' for HTTP access (e.g., local LAN without HTTPS)
+# When unset, auto-detects HTTPS via X-Forwarded-Proto header
+COOKIE_SECURE=false
 ```
 
 ### User Permissions (PUID/PGID)

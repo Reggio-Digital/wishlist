@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '@/lib/auth/utils';
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken, isSecureCookie } from '@/lib/auth/utils';
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     // Set new cookies
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isSecureCookie(request),
       sameSite: 'lax' as const,
       path: '/',
     };
